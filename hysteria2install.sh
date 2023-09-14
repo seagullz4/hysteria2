@@ -68,6 +68,9 @@ chmod +x hysteria-linux-amd64-avx
 # 获取当前用户名
 current_user=$(whoami)
 
+line_animation
+
+
 # 创建 config.yaml 文件并写入默认内容
 cat <<EOL > config.yaml
 listen: :443
@@ -87,8 +90,6 @@ masquerade:
     url: https://news.ycombinator.com/
     rewriteHost: true
 EOL
-
-line_animation
 
 # 用户输入端口号
 echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，输入1-65630为指定端口号）: ')"
