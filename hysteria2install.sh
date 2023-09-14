@@ -6,16 +6,6 @@ random_color() {
   echo -e "\e[${colors[$((RANDOM % 6))]}m$1\e[0m"
 }
 
-# 风格的时间动画函数
-hacker_time_animation() {
-  seconds=5
-  while [ $seconds -gt 5 ]; do
-    echo -ne "$(random_color '>>>>>>>>>>>>>>>>>>>>>>>> ')"  # 随机颜色的箭头
-    sleep 1
-    seconds=$((seconds - 1))
-  done
-}
-
 # 横线动画函数
 line_animation() {
   lines=0
@@ -154,7 +144,6 @@ sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64-avx
 # 后台运行Hysteria服务器
 nohup ./hysteria-linux-amd64-avx server &
 
-hacker_time_animation
 
 line_animation
 
