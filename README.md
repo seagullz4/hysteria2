@@ -7,8 +7,7 @@ Hysteria 由定制 QUIC 协议提供支持，即使在最不可靠和有损的�
 hysteria2的协议旨在伪装成标准 HTTP/3 流量，因此在不造成广泛附带损害的情况下很难检测和阻止。
 
 
-安装脚本: curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2install.sh | sudo bash
-
+安装脚本: <curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2install.sh -o hysteria2install.sh && chmod +x hysteria2install.sh && sudo ./hysteria2install.sh>
 
 
 本项目原hysteria2地址请点击https://github.com/apernet/hysteria
