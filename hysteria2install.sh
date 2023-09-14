@@ -6,7 +6,7 @@ random_color() {
   echo -e "\e[${colors[$((RANDOM % 6))]}m$1\e[0m"
 }
 
-# 黑客风格的时间动画函数
+# 风格的时间动画函数
 hacker_time_animation() {
   seconds=5
   while [ $seconds -gt 0 ]; do
@@ -20,7 +20,7 @@ hacker_time_animation() {
 line_animation() {
   lines=0
   while [ $lines -lt 6 ]; do
-    echo -e "$(random_color '——————————————————————————————————')"
+    echo -e "$(random_color '***************************************************')"
     sleep 1
     lines=$((lines + 1))
   done
@@ -28,8 +28,8 @@ line_animation() {
 
 # 提示用户选择操作
 echo "$(random_color '选择一个操作：')"
-echo "1. 默认安装"
-echo "2. 重装并清除配置"
+echo "1. 安装"
+echo "2. 重装"
 echo "3. 退出脚本"
 
 read -p "输入操作编号 (1/2/3): " choice
@@ -154,10 +154,8 @@ sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64-avx
 # 后台运行Hysteria服务器
 nohup ./hysteria-linux-amd64-avx server &
 
-# 启动黑客时间动画（可选）
 hacker_time_animation
 
-# 启动横线动画（可选）
 line_animation
 
 # 输出Hysteria链接
