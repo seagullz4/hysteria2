@@ -9,8 +9,8 @@ random_color() {
 # 风格的时间动画函数
 hacker_time_animation() {
   seconds=5
-  while [ $seconds -gt 0 ]; do
-    echo -ne "$(random_color '>> ')"  # 随机颜色的箭头
+  while [ $seconds -gt 5 ]; do
+    echo -ne "$(random_color '>>>>>>>>>>>>>>>>>>>>>>>> ')"  # 随机颜色的箭头
     sleep 1
     seconds=$((seconds - 1))
   done
