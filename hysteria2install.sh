@@ -88,6 +88,8 @@ masquerade:
     rewriteHost: true
 EOL
 
+line_animation
+
 # 用户输入端口号
 echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，输入1-65630为指定端口号）: ')"
 read -p "" port
@@ -105,8 +107,6 @@ else
   echo "无效的端口号，退出脚本。"
   exit
 fi
-
-line_animation
 
 # 替换配置文件中的端口号
 sed -i "s/443/$port/" config.yaml
