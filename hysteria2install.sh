@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 生成随机颜色的 ANSI 转义序列
+# ANSI escape sequence that generates random colors
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
   echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
@@ -10,12 +10,12 @@ line_animation() {
   lines=0
   while [ $lines -lt 8 ]; do
     echo -e "$(random_color '********************************************************************************')"
-    sleep 0.375  # 每次休眠0.375秒 (3秒总时间 / 8行)
+    sleep 0.375  # Sleep for 0.375 seconds each time (3 seconds total time / 8 lines)
     lines=$((lines + 1))
   done
 }
 
-# 提示用户选择操作
+# Prompt user to select an action
 echo "$(random_color '选择一个操作：')"
 echo "1. 安装"
 echo "2. 重装"
@@ -25,13 +25,13 @@ read -p "输入操作编号 (1/2/3): " choice
 
 case $choice in
   1)
-    # 默认安装操作
+    # Default installation operation
     ;;
   2)
-    # 重装并清除配置操作
+    # Reinstall and clear configuration operations
     echo "执行重装并清除配置操作..."
 
-    # 查找 Hysteria 服务器的进程并杀死它
+    # Find the Hysteria server process and kill it
     process_name="hysteria-linux-amd64-avx"
     pid=$(pgrep -f "$process_name")
 
@@ -43,34 +43,40 @@ case $choice in
       echo "未找到 $process_name 进程。"
     fi
 
-    # 在这里执行删除配置文件等操作
+    # Perform operations such as deleting configuration files here
     ;;
+
   3)
-    # 退出脚本
+    # Exit script
     exit
     ;;
+
   *)
-    echo "无效的选择，退出脚本。"
+    echo "$(random_color '无效的选择，退出脚本。')"
     exit
     ;;
 esac
 
-# 以下是默认安装操作，你可以在这里添加安装代码
+# The following is the default installation operation, you can add installation code here
 
 line_animation
 
-# 创建 hy3 文件夹并进入
+# Create hy3 folder and enter
 mkdir -p ~/hy3
 cd ~/hy3
 
-# 下载 Hysteria 二进制文件并授予最高权限
-wget -O hysteria-linux-amd64-avx https://github.com/apernet/hysteria/releases/download/app/v2.0.1/hysteria-linux-amd64-avx
-chmod +x hysteria-linux-amd64-avx
+# Download the Hysteria binary and grant highest permissions
+if wget -O hysteria-linux-amd64-avx https://github.com/apernet/hysteria/releases/download/app/v2.0.1/hysteria-linux-amd64-avx; then
+  chmod +x hysteria-linux-amd64-avx
+else
+  echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
+  exit 1
+fi
 
-# 获取当前用户名
+# Get current username
 current_user=$(whoami)
 
-# 创建 config.yaml 文件并写入默认内容
+# Create a config.yaml file and write default content
 cat <<EOL > config.yaml
 listen: :443
 
@@ -90,86 +96,121 @@ masquerade:
     rewriteHost: true
 EOL
 
-# 用户输入端口号
+# User enters port number
 echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，输入1-65630为指定端口号）: ')"
 read -p "" port
 
-# 如果端口号为空，则默认为443
+# If the port number is empty, it defaults to 443
 if [ -z "$port" ]; then
   port=443
 elif [ "$port" -eq "0" ]; then
-  # 如果端口号为0，则随机生成2000-60000之间的端口号
+  # If the port number is 0, a port number between 2000-60000 is randomly generated.
   port=$((RANDOM % 58001 + 2000))
 elif [ "$port" -ge 1 ] && [ "$port" -le 65630 ]; then
-  # 如果端口号在1-65630之间，则使用用户输入的端口号
+  # If the port number is between 1-65630, the port number entered by the user is used
   :
 else
-  echo "无效的端口号，退出脚本。"
-  exit
+  echo "$(random_color '无效的端口号，退出脚本。')"
+  exit 1
 fi
 
-# 替换配置文件中的端口号
-sed -i "s/443/$port/" config.yaml
+# Replace the port number in the configuration file
+if sed -i "s/443/$port/" config.yaml; then
+  echo "$(random_color '端口号已设置为：')" $port
+else
+  echo "$(random_color '替换端口号失败，退出脚本。')"
+  exit 1
+fi
 
-# 提示用户输入域名
+# Prompt user to enter domain name
 echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
 read -p "" domain
 
-# 检查输入是否为空，如果为空则提示重新输入
+# Check whether the input is empty, if it is empty, prompt to re-enter
 while [ -z "$domain" ]; do
   echo "$(random_color '域名不能为空，请重新输入: ')"
   read -p "" domain
 done
 
-# 替换配置文件中的域名
-sed -i "s/your.domain.net/$domain/" config.yaml
+# Replace the domain name in the configuration file
+if sed -i "s/your.domain.net/$domain/" config.yaml; then
+  echo "$(random_color '域名已设置为：')" $domain
+else
+  echo "$(random_color '替换域名失败，退出脚本。')"
+  exit 1
+fi
 
-# 提示用户输入邮箱
+# Prompt user to enter email address
 echo "$(random_color '请输入你的邮箱（默认随机邮箱）: ')"
 read -p "" email
 
-# 如果邮箱为空，则使用随机邮箱
+# If the mailbox is empty, use a random mailbox
 if [ -z "$email" ]; then
   email="your@email.com"
 fi
 
-# 替换配置文件中的邮箱
-sed -i "s/your@email.com/$email/" config.yaml
+# Replace email in profile
+if sed -i "s/your@email.com/$email/" config.yaml; then
+  echo "$(random_color '邮箱已设置为：')" $email
+else
+  echo "$(random_color '替换邮箱失败，退出脚本。')"
+  exit 1
+fi
 
-# 提示用户输入密码
+# Prompt user for password
 echo "$(random_color '请输入你的密码（留空将生成随机密码，不超过20个字符）: ')"
 read -p "" password
 
-# 如果密码为空，则生成随机密码
+# If the password is empty, generate a random password
 if [ -z "$password" ]; then
   password=$(openssl rand -base64 20 | tr -dc 'a-zA-Z0-9')
 fi
 
-# 替换配置文件中的密码
-sed -i "s/Se7RAuFZ8Lzg/$password/" config.yaml
+# Replace password in configuration file
+if sed -i "s/Se7RAuFZ8Lzg/$password/" config.yaml; then
+  echo "$(random_color '密码已设置为：')" $password
+else
+  echo "$(random_color '替换密码失败，退出脚本。')"
+  exit 1
+fi
 
-# 提示用户输入伪装域名
+# Prompt the user to enter the disguised domain name
 echo "$(random_color '请输入伪装域名（默认https://news.ycombinator.com/）: ')"
 read -p "" masquerade_url
 
-# 如果伪装域名为空，则使用默认值
+# If the disguised domain name is empty, the default value is used
 if [ -z "$masquerade_url" ]; then
   masquerade_url="https://news.ycombinator.com/"
 fi
 
-# 替换配置文件中的伪装域名
-sed -i "s|https://news.ycombinator.com/|$masquerade_url|" config.yaml
+# Replace the disguised domain name in the configuration file
+if sed -i "s|https://news.ycombinator.com/|$masquerade_url|" config.yaml; then
+  echo "$(random_color '伪装域名已设置为：')" $masquerade_url
+else
+  echo "$(random_color '替换伪装域名失败，退出脚本。')"
+  exit 1
+fi
 
-# 授予 Hysteria 二进制文件权限
-sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64-avx
+# Grant permissions to the Hysteria binary
+if sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64-avx; then
+  echo "$(random_color '授予权限成功。')"
+else
+  echo "$(random_color '授予权限失败，退出脚本。')"
+  exit 1
+fi
 
-# 后台运行 Hysteria 服务器
-nohup ./hysteria-linux-amd64-avx server &
+# Running the Hysteria server in the background
+if nohup ./hysteria-linux-amd64-avx server & then
+  echo "$(random_color 'Hysteria 服务器已启动。')"
+else
+  echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
+  exit 1
+fi
 
 line_animation
 
-# 输出 Hysteria 链接
+# Output Hysteria link
 echo -e "$(random_color '这是你的Hysteria2节点链接，请注意保存哦宝宝: ')hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
 
-# 输出安装成功信息
+# Output installation success information
 echo -e "$(random_color 'Hysteria2安装成功，请合理使用哦。')"
