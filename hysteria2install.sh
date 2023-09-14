@@ -83,7 +83,7 @@ listen: :443
 acme:
   domains:
     - your.domain.net
-  email: zzx01@gamil.com
+  email: your@email.com
 
 auth:
   type: password
@@ -144,9 +144,13 @@ fi
 echo "$(random_color '请输入你的邮箱（默认随机邮箱）: ')"
 read -p "" email
 
-# If the mailbox is empty, use a random mailbox
+# If the mailbox is empty, generate a random mailbox in the format xxxx@gmail.com
 if [ -z "$email" ]; then
-  email="your@email.com"
+  # Generate a random string of 4 characters (xxxx part)
+  random_part=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 4 ; echo '')
+
+  # Set the email variable in the format xxxx@gmail.com
+  email="${random_part}@gmail.com"
 fi
 
 # Replace email in profile
