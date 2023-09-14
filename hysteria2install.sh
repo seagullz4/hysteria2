@@ -97,7 +97,7 @@ masquerade:
 EOL
 
 # User enters port number
-echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，输入1-65630为指定端口号）: ')"
+echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')"
 read -p "" port
 
 # If the port number is empty, it defaults to 443
