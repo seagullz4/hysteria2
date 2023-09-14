@@ -83,7 +83,7 @@ listen: :443
 acme:
   domains:
     - your.domain.net
-  email: your@email.com
+  email: zzx01@gamil.com
 
 auth:
   type: password
