@@ -6,12 +6,11 @@ random_color() {
   echo -e "\e[${colors[$((RANDOM % 6))]}m$1\e[0m"
 }
 
-# 横线动画函数
 line_animation() {
   lines=0
-  while [ $lines -lt 6 ]; do
-    echo -e "$(random_color '***************************************************')"
-    sleep 1
+  while [ $lines -lt 8 ]; do
+    echo -e "$(random_color '********************************************************************************')"
+    sleep 0.375  # 每次休眠0.375秒 (3秒总时间 / 8行)
     lines=$((lines + 1))
   done
 }
@@ -106,6 +105,8 @@ else
   echo "无效的端口号，退出脚本。"
   exit
 fi
+
+line_animation
 
 # 替换配置文件中的端口号
 sed -i "s/443/$port/" config.yaml
