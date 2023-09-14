@@ -2,8 +2,8 @@
 
 # 生成随机颜色的 ANSI 转义序列
 random_color() {
-  colors=("31" "32" "33" "34" "35" "36")
-  echo -e "\e[${colors[$((RANDOM % 6))]}m$1\e[0m"
+  colors=("31" "32" "33" "34" "35" "36" "37")
+  echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
 }
 
 line_animation() {
@@ -57,6 +57,8 @@ esac
 
 # 以下是默认安装操作，你可以在这里添加安装代码
 
+line_animation
+
 # 创建 hy3 文件夹并进入
 mkdir -p ~/hy3
 cd ~/hy3
@@ -67,9 +69,6 @@ chmod +x hysteria-linux-amd64-avx
 
 # 获取当前用户名
 current_user=$(whoami)
-
-line_animation
-
 
 # 创建 config.yaml 文件并写入默认内容
 cat <<EOL > config.yaml
