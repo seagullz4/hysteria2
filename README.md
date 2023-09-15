@@ -35,6 +35,7 @@ curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2in
 
 
 必须客户端支持hysteria2才行，否则就是你安装了也无法使用。
+
 安卓端强烈推荐**[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)**
 
 电脑端推荐**[nekoray](https://github.com/MatsuriDayo/nekoray)**
