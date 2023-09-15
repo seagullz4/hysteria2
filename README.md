@@ -24,7 +24,7 @@ hysteria2一键安装
 curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2install.sh -o hysteria2install.sh && chmod +x hysteria2install.sh && sudo ./hysteria2install.sh
 ```
 
-**注意**: 只支持amd架构服务器，后期可能会支持其他架构
+**注意**: 只支持amd，x86架构服务器，后期可能会支持其他架构比如arm
 
 本项目原hysteria2地址请点击[hysteria](https://github.com/apernet/hysteria)
 
