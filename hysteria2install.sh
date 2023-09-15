@@ -16,11 +16,11 @@ line_animation() {
 }
 
 # Prompt user to select an action
-echo "$(random_color '选择一个操作：')"
-echo "1. 安装"
-echo "2. 重装"
-echo "3. 卸载"
-echo "4. 退出脚本"
+echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
+echo "1. 安装(世界和谐)"
+echo "2. 重装(世界进步)"
+echo "3. 卸载(世界美好)"
+echo "4. 退出脚本(回到未来)"
 
 read -p "输入操作编号 (1/2/3/4): " choice
 
