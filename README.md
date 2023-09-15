@@ -42,4 +42,4 @@ curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2in
 
 ### **如需搬运本脚本内容，请注明远处谢谢**
 
-     **么么哒😀😀😀ᕕ༼ ͠ຈ Ĺ̯ ͠ຈ ༽┌∩┐**
+   **么么哒😀😀😀ᕕ༼ ͠ຈ Ĺ̯ ͠ຈ ༽┌∩┐೭(˵ˉ̴͒ꇴˉ̴͒˵)౨˛三っ•̀.̫•́)っ**
