@@ -255,8 +255,9 @@ echo -e "\n# 输入hy2即可快捷启动" >> ~/.bashrc  # 或者 >> ~/.zshrc（�
 echo "alias hy2=\"$SCRIPT_DIR/hysteria2install.sh\"" >> ~/.bashrc  # 或者 >> ~/.zshrc（根据你的shell配置文件）
 
 # 输出提示信息
-echo "Hysteria2安装成功，请合理使用哦。"
-echo "输入hy2即可快捷启动"
+
+echo "
+输入hy2即可快捷启动"
 
 # 让当前会话中的别名配置立即生效
 source ~/.bashrc  # 或者 source ~/.zshrc（根据你的shell配置文件）
