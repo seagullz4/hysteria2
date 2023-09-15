@@ -20,9 +20,10 @@ line_animation() {
 echo "$(random_color '选择一个操作：')"
 echo "1. 安装"
 echo "2. 重装"
-echo "3. 退出脚本"
+echo "3. 卸载"
+echo "4. 退出脚本"
 
-read -p "输入操作编号 (1/2/3): " choice
+read -p "输入操作编号 (1/2/3/4): " choice
 
 case $choice in
   1)
@@ -48,6 +49,30 @@ case $choice in
     ;;
 
   3)
+    # Uninstallation operation
+    echo "执行卸载操作..."
+
+    # Find the Hysteria server process and kill it
+    process_name="hysteria-linux-amd64-avx"
+    pid=$(pgrep -f "$process_name")
+
+    if [ -n "$pid" ]; then
+      echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
+      kill "$pid"
+      echo "$process_name 进程已被杀死。"
+    else
+      echo "未找到 $process_name 进程。"
+    fi
+
+    # Remove the Hysteria binary and configuration files (adjust file paths as needed)
+    rm -f ~/hy3/hysteria-linux-amd64-avx
+    rm -f ~/hy3/config.yaml
+
+    echo "卸载完成。"
+
+    ;;
+
+  4)
     # Exit script
     exit
     ;;
