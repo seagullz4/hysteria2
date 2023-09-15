@@ -130,14 +130,14 @@ read -p "" port
 if [ -z "$port" ]; then
   port=443
 elif [ "$port" -eq "0" ]; then
-  # If the port number is 0, a port number between 2000-60000 is randomly generated.
+  # Randomly generate a port number between 2000-60000
   port=$((RANDOM % 58001 + 2000))
-elif [ "$port" -ge 1 ] && [ "$port" -le 65630 ]; then
-  # If the port number is between 1-65630, the port number entered by the user is used
-  :
 else
-  echo "$(random_color '无效的端口号，退出脚本。')"
-  exit 1
+  # Check if the entered port is in use
+  while netstat -tuln | grep -q ":$port "; do
+    echo "$(random_color '端口已被占用，请重新输入端口号：')"
+    read -p "" port
+  done
 fi
 
 # Replace the port number in the configuration file
