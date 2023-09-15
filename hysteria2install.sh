@@ -70,6 +70,8 @@ case $choice in
 
     echo "卸载完成。"
 
+    # Exit script after uninstallation
+    exit
     ;;
 
   4)
