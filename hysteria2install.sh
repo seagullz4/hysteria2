@@ -83,6 +83,7 @@ case $choice in
      # Remove the Hysteria binary and configuration files (adjust file paths as needed)
      rm -f ~/hy3/hysteria-linux-amd64-avx
      rm -f ~/hy3/config.yaml
+     rm -rf ~/hy3
      echo "卸载完成."
 
      # Exit script after uninstallation
