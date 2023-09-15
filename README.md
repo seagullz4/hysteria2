@@ -34,6 +34,6 @@ curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2in
 本项目原hysteria2地址请点击[hysteria](https://github.com/apernet/hysteria)
 
 
-必须客户端支持hysteria2才行，否则就是你安装了也无法使用，安卓端推荐**[nekobox]**(https://github.com/MatsuriDayo/NekoBoxForAndroid)
+必须客户端支持hysteria2才行，否则就是你安装了也无法使用，安卓端推荐**[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)**
 
 ### **如需搬运本脚本内容，请注明远处谢谢**
