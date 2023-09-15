@@ -84,7 +84,7 @@ case $choice in
      rm -f ~/hy3/hysteria-linux-amd64-avx
      rm -f ~/hy3/config.yaml
      rm -rf ~/hy3
-     echo "卸载完成."
+     echo "卸载完成(ง ื▿ ื)ว."
 
      # Exit script after uninstallation
      exit
