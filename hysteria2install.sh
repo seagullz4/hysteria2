@@ -267,4 +267,3 @@ echo -e "$(random_color '
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦。')"
-
