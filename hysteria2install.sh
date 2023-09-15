@@ -15,6 +15,22 @@ line_animation() {
   done
 }
 
+# 获取系统架构
+architecture=$(uname -m)
+
+# 判断服务器架构
+if [ "$architecture" = "amr" ]; then
+  echo "服务器架构为 amr，退出脚本。"
+  exit 1
+elif [ "$architecture" = "amd64" ]; then
+  # 在这里执行您希望在amd架构上执行的代码
+  echo "服务器架构为 amd64，继续执行脚本。"
+  # 添加您的代码
+else
+  echo "未知的服务器架构: $architecture"
+  exit 1
+fi
+
 # Prompt user to select an action
 echo "$(random_color '选择一个操作：')"
 echo "1. 安装"
