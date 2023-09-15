@@ -41,3 +41,5 @@ curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2in
 电脑端推荐**[nekoray](https://github.com/MatsuriDayo/nekoray)**
 
 ### **如需搬运本脚本内容，请注明远处谢谢**
+
+     **么么哒😀😀😀ᕕ༼ ͠ຈ Ĺ̯ ͠ຈ ༽┌∩┐**
