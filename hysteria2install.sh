@@ -47,6 +47,7 @@ case $choice in
      # Perform operations such as deleting configuration files here
      ;;
    3)
+line_animation
      # Uninstallation operation
      echo "执行卸载操作..."
 
