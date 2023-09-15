@@ -48,7 +48,7 @@ case $choice in
      ;;
    3)
      # Uninstallation operation
-     echo "执行卸载操作..."
+     echo "执行卸载操作请稍等..."
 
      # Find the Hysteria server process and kill it
      process_name="hysteria-linux-amd64-avx"
@@ -65,7 +65,6 @@ case $choice in
      # Remove the Hysteria binary and configuration files (adjust file paths as needed)
      rm -f ~/hy3/hysteria-linux-amd64-avx
      rm -f ~/hy3/config.yaml
-     line_animation
      echo "卸载完成."
 
      # Exit script after uninstallation
