@@ -47,7 +47,6 @@ case $choice in
      # Perform operations such as deleting configuration files here
      ;;
    3)
-line_animation
      # Uninstallation operation
      echo "执行卸载操作..."
 
@@ -66,7 +65,7 @@ line_animation
      # Remove the Hysteria binary and configuration files (adjust file paths as needed)
      rm -f ~/hy3/hysteria-linux-amd64-avx
      rm -f ~/hy3/config.yaml
-
+     line_animation
      echo "卸载完成."
 
      # Exit script after uninstallation
