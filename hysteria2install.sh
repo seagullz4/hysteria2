@@ -61,7 +61,11 @@ case $choice in
      else
        echo "未找到 $process_name 进程。"
      fi
-
+     
+     rm -f ~/hy3/hysteria-linux-amd64-avx 
+     rm -f ~/hy3/config.yaml 
+     rm -rf ~/hy3
+     echo "删除配置文件成功"
      # Perform operations such as deleting configuration files here
      ;;
    3)
