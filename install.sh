@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# 检测当前用户是否为 root 用户
+if [ "$EUID" -ne 0 ]; then
+  echo "请使用 root 用户执行此脚本！"
+  echo "你可以使用 'sudo -i' 进入 root 用户模式。"
+  exit 1
+fi
+
+# 如果是 root 用户，继续执行下面的命令
+echo "好的，你可以执行了"
+
+# 在这里添加你的其他命令
+
 # Define commands to install
 commands=("wget" "netstat" "sed" "openssl")
 
