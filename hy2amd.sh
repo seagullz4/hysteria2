@@ -259,6 +259,26 @@ else
   exit 1
 fi
 
+cat <<EOF > /etc/systemd/system/hy3.service
+[Unit]
+Description=Hy3 Server
+
+[Service]
+ExecStart=/root/hy3/hysteria-linux-amd64 server
+WorkingDirectory=/root/hy3
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# 启用并启动服务
+systemctl enable hy3.service
+systemctl start hy3.service
+
+echo "Hy3 服务已设置并启动。"
+
 line_animation
 
 # Output Hysteria link
