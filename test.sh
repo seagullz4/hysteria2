@@ -1,49 +1,44 @@
-# Define commands to install
+#!/bin/bash
 
+# Define commands to install
 commands=("wget" "netstat" "sed" "openssl")
 
-# Function to install missing commands on CentOS
-install_on_centos() {
+# Function to install missing commands
+install_missing_commands() {
   for cmd in "${commands[@]}"; do
-    if ! command -v "$cmd" &> /dev/null; then
-      echo "Installing $cmd on CentOS..."
-      sudo yum install -y "$cmd"
-      echo "$cmd installed successfully."
+    if ! command -v "$cmd" &>/dev/null; then
+      echo "Installing $cmd..."
+      if [ "$(id -u)" -ne 0 ]; then
+        sudo_cmd="sudo"
+      else
+        sudo_cmd=""
+      fi
+
+      if [ -x "$(command -v apt)" ]; then
+        # Ubuntu/Debian
+        $sudo_cmd apt update
+        $sudo_cmd apt install -y "$cmd"
+      elif [ -x "$(command -v yum)" ]; then
+        # CentOS/RHEL
+        $sudo_cmd yum install -y "$cmd"
+      else
+        echo "Unsupported package manager."
+        exit 1
+      fi
+
+      if [ $? -eq 0 ]; then
+        echo "$cmd installed successfully."
+      else
+        echo "Failed to install $cmd."
+      fi
     else
-      echo "$cmd is already installed on CentOS."
+      echo "$cmd is already installed."
     fi
   done
 }
 
-# Function to install missing commands on Ubuntu
-install_on_ubuntu() {
-  for cmd in "${commands[@]}"; do
-    if ! command -v "$cmd" &> /dev/null; then
-      echo "Installing $cmd on Ubuntu..."
-      sudo apt update
-      sudo apt install -y "$cmd"
-      echo "$cmd installed successfully."
-    else
-      echo "$cmd is already installed on Ubuntu."
-    fi
-  done
-}
-
-# Detect the Linux distribution
-if [ -f "/etc/os-release" ]; then
-  source /etc/os-release
-  if [ "$ID" == "centos" ] || [ "$ID" == "rhel" ]; then
-    install_on_centos
-  elif [ "$ID" == "ubuntu" ]; then
-    install_on_ubuntu
-  else
-    echo "Unsupported Linux distribution: $ID"
-    exit 1
-  fi
-else
-  echo "Unable to detect Linux distribution."
-  exit 1
-fi
+# Install missing commands
+install_missing_commands
 
 echo "Command installation complete."
 
