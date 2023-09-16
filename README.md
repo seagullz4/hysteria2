@@ -26,7 +26,7 @@ hysteria2一键安装
 
 **🙃安装脚本:**
 ```
-curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2install.sh -o hysteria2install.sh && chmod +x hysteria2install.sh && sudo ./hysteria2install.sh
+curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && sudo ./install.sh
 ```
 
 **注意**: 只支持amd，x86架构服务器，后期可能会支持其他架构比如arm
