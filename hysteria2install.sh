@@ -51,7 +51,7 @@ case $choice in
      echo "执行重装并清除配置操作..."
 
      # Find the Hysteria server process and kill it
-     process_name="hysteria-linux-amd64-avx"
+     process_name="hysteria-linux-amd64"
      pid=$(pgrep -f "$process_name")
 
      if [ -n "$pid" ]; then
@@ -62,7 +62,7 @@ case $choice in
        echo "未找到 $process_name 进程。"
      fi
      
-     rm -f ~/hy3/hysteria-linux-amd64-avx 
+     rm -f ~/hy3/hysteria-linux-amd64 
      rm -f ~/hy3/config.yaml 
      rm -rf ~/hy3
      echo "删除配置文件成功"
@@ -73,7 +73,7 @@ case $choice in
      echo "执行卸载操作请稍等..."
 
      # Find the Hysteria server process and kill it
-     process_name="hysteria-linux-amd64-avx"
+     process_name="hysteria-linux-amd64"
      pid=$(pgrep -f "$process_name")
 
      if [ -n "$pid" ]; then
@@ -85,7 +85,7 @@ case $choice in
      fi
 
      # Remove the Hysteria binary and configuration files (adjust file paths as needed)
-     rm -f ~/hy3/hysteria-linux-amd64-avx
+     rm -f ~/hy3/hysteria-linux-amd64
      rm -f ~/hy3/config.yaml
      rm -rf ~/hy3
      echo "卸载完成(ง ื▿ ื)ว."
@@ -114,8 +114,8 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-amd64-avx https://github.com/apernet/hysteria/releases/download/app/v2.0.2/hysteria-linux-amd64-avx; then
-  chmod +x hysteria-linux-amd64-avx
+if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.0.2/hysteria-linux-amd64; then
+  chmod +x hysteria-linux-amd64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
   exit 1
@@ -244,7 +244,7 @@ else
 fi
 
 # Grant permissions to the Hysteria binary
-if sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64-avx; then
+if sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64; then
   echo "$(random_color '授予权限成功。')"
 else
   echo "$(random_color '授予权限失败，退出脚本。')"
@@ -252,7 +252,7 @@ else
 fi
 
 # Running the Hysteria server in the background
-if nohup ./hysteria-linux-amd64-avx server & then
+if nohup ./hysteria-linux-amd64 server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
 else
   echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
