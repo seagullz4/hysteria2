@@ -1,4 +1,5 @@
 # Define commands to install
+
 commands=("wget" "netstat" "sed" "openssl")
 
 # Function to install missing commands on CentOS
