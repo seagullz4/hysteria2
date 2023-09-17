@@ -64,7 +64,6 @@ case $choice in
      
      rm -f ~/hy3/hysteria-linux-amr64 
      rm -f ~/hy3/config.yaml 
-     rm -rf ~/hy3
      echo "删除配置文件成功"
      # Perform operations such as deleting configuration files here
      ;;
@@ -87,7 +86,6 @@ case $choice in
      # Remove the Hysteria binary and configuration files (adjust file paths as needed)
      rm -f ~/hy3/hysteria-linux-amr64
      rm -f ~/hy3/config.yaml
-     rm -rf ~/hy3
      echo "卸载完成(ง ื▿ ื)ว."
 
      # Exit script after uninstallation
