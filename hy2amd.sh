@@ -280,3 +280,10 @@ echo -e "$(random_color '
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦。')"
+
+echo "$(random_color '
+高速机场推荐，国内中转优质线路:
+
+https://web.coo.wiki/#/register?code=TpJsPMCD
+
+')"
