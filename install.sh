@@ -66,7 +66,7 @@ esac
 
 # Download the script
 if wget -O hysteria2-install-script.sh "$script_url"; then
-  chmod +x hysteria2-install-script.sh  # 授予下载的脚本执行权限
+  chmod +777 hysteria2-install-script.sh  # 授予下载的脚本执行权限
   echo "下载并授予脚本执行权限成功。"
 else
   echo "下载脚本失败。退出。"
@@ -74,7 +74,7 @@ else
 fi
 
 # Execute the downloaded script with elevated privileges
-if sudo ./hysteria2-install-script.sh; then
+if ./hysteria2-install-script.sh; then
   echo "而你，我的朋友，你是恋爱脑里的常青树，Joker里的顶梁柱，麦当劳的吉祥物，哥谭市的大头目，扑克牌的最大数，蝙蝠侠的大客户……"
 else
   echo "脚本执行失败。"
