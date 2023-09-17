@@ -11,24 +11,27 @@ fi
 
 # Define commands to install
 commands=("wget" "netstat" "sed" "openssl")
+package_manager=""
+install_command=""
+
+# Determine the package manager and install command
+if [ -x "$(command -v apt)" ]; then
+  package_manager="apt"
+  install_command="sudo apt install -y"
+elif [ -x "$(command -v yum)" ]; then
+  package_manager="yum"
+  install_command="sudo yum install -y"
+else
+  echo "Unsupported package manager."
+  exit 1
+fi
 
 # Function to install missing commands
 install_missing_commands() {
   for cmd in "${commands[@]}"; do
     if ! command -v "$cmd" &>/dev/null; then
       echo "Installing $cmd..."
-      if [ -x "$(command -v apt)" ]; then
-        # Ubuntu/Debian
-        sudo apt update
-        sudo apt install -y "$cmd"
-      elif [ -x "$(command -v yum)" ]; then
-        # CentOS/RHEL
-        sudo yum install -y "$cmd"
-      else
-        echo "Unsupported package manager."
-        exit 1
-      fi
-
+      $install_command "$cmd"
       if [ $? -eq 0 ]; then
         echo "$cmd installed successfully."
       else
@@ -40,10 +43,8 @@ install_missing_commands() {
   done
 }
 
-# Install missing commands
+# Call the function to install missing commands
 install_missing_commands
-
-echo "Command installation complete."
 
 # Detect system architecture
 echo "正在识别系统架构中，请稍候……"
