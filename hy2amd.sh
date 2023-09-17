@@ -272,7 +272,7 @@ line_animation
 # Output Hysteria link
 echo -e "$(random_color '
 
-这是你的Hysteria2节点链接，请注意保存哦宝宝: 
+这是你的Hysteria2节点链接信息，请注意保存哦宝宝: 
 
 ')hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
 
