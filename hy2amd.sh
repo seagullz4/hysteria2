@@ -155,7 +155,7 @@ while true; do
     # Randomly generate a port number between 2000-60000
     port=$((RANDOM % 58001 + 2000))
   elif ! [[ "$port" =~ ^[0-9]+$ ]]; then
-    echo "$(random_color '端口号必须是数字，请重新输入端口号：')"
+    echo "$(random_color '我的朋友，请输入数字好吧，请重新输入端口号：')"
     continue
   fi
 
