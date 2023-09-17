@@ -74,6 +74,10 @@ else
   exit 1
 fi
 
+# 将发送、接收两个缓冲区都设置为 16 MB
+sysctl -w net.core.rmem_max=16777216
+sysctl -w net.core.wmem_max=16777216
+
 # Execute the downloaded script with elevated privileges
 if ./hysteria2-install-script.sh; then
   echo "而你，我的朋友，你是恋爱脑里的常青树，Joker里的顶梁柱，麦当劳的吉祥物，哥谭市的大头目，扑克牌的最大数，蝙蝠侠的大客户……"
