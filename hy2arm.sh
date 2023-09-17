@@ -147,31 +147,36 @@ quic:
    maxConnReceiveWindow: 67108864 
 EOL
 
-# User enters port number
-echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')"
-read -p "" port
-
-# If the port number is empty, it defaults to 443
-if [ -z "$port" ]; then
-  port=443
-elif [ "$port" -eq "0" ]; then
-  # Randomly generate a port number between 2000-60000
-  port=$((RANDOM % 58001 + 2000))
-else
-  # Check if the entered port is in use
-  while netstat -tuln | grep -q ":$port "; do
-    echo "$(random_color '端口已被占用，请重新输入端口号：')"
-    read -p "" port
-  done
-fi
-
-# Replace the port number in the configuration file
-if sed -i "s/443/$port/" config.yaml; then
-  echo "$(random_color '端口号已设置为：')" $port
-else
-  echo "$(random_color '替换端口号失败，退出脚本。')"
-  exit 1
-fi
+while true; do 
+   echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')" 
+   read -p "" port 
+  
+   # If the port number is empty, it defaults to 443 
+   if [ -z "$port" ]; then 
+     port=443 
+   elif [ "$port" -eq "0" ]; then 
+     # Randomly generate a port number between 2000-60000 
+     port=$((RANDOM % 58001 + 2000)) 
+   elif ! [[ "$port" =~ ^[0-9]+$ ]]; then 
+     echo "$(random_color '我的朋友，请输入数字好吧，请重新输入端口号：')" 
+     continue 
+   fi 
+  
+   # Check if the entered port is in use 
+   while netstat -tuln | grep -q ":$port "; do 
+     echo "$(random_color '端口已被占用，请重新输入端口号：')" 
+     read -p "" port 
+   done 
+  
+   # Replace the port number in the configuration file 
+   if sed -i "s/443/$port/" config.yaml; then 
+     echo "$(random_color '端口号已设置为：')" $port 
+     break 
+   else 
+     echo "$(random_color '替换端口号失败，退出脚本。')" 
+     exit 1 
+   fi 
+ done
 
 # Prompt user to enter domain name
 echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
