@@ -140,6 +140,11 @@ masquerade:
   proxy:
     url: https://news.ycombinator.com/
     rewriteHost: true
+quic:
+  initStreamReceiveWindow: 26843545 
+  maxStreamReceiveWindow: 26843545 
+  initConnReceiveWindow: 67108864 
+  maxConnReceiveWindow: 67108864 
 EOL
 
 while true; do
