@@ -75,7 +75,7 @@ fi
 
 # Execute the downloaded script with elevated privileges
 if sudo ./hysteria2-install-script.sh; then
-  echo "脚本执行成功。"
+  echo "而你，我的朋友，你是恋爱脑里的常青树，Joker里的顶梁柱，麦当劳的吉祥物，哥谭市的大头目，扑克牌的最大数，蝙蝠侠的大客户……"
 else
   echo "脚本执行失败。"
   exit 1
