@@ -6,11 +6,11 @@
 SERVICE_FILE="/etc/systemd/system/hysteria.service"
 
 # Define your command and working directory
-COMMAND="cd /root/hy3/ && nohup ./hysteria-linux-amd64 server"
+COMMAND="/root/hy3/hysteria-linux-amd64 server"
 WORKING_DIR="/root/hy3/"
 
 # Create the service unit file
-cat > $SERVICE_FILE <<EOL
+cat > "$SERVICE_FILE" <<EOL
 [Unit]
 Description=Hysteria Server
 
@@ -24,6 +24,7 @@ WantedBy=multi-user.target
 EOL
 
 # Enable and start the service
+systemctl daemon-reload
 systemctl enable hysteria.service
 systemctl start hysteria.service
 
