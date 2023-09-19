@@ -38,7 +38,8 @@ echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(世界和谐)"
 echo "2. 重装(世界进步)"
 echo "3. 卸载(世界美好)"
-echo "4. 退出脚本(回到未来)"
+echo "4. 启动hy2(穿越时空)"
+echo "5. 退出脚本(回到未来)"
 
 read -p "输入操作编号 (1/2/3/4): " choice
 
@@ -92,9 +93,16 @@ case $choice in
      exit
      ;;
 
-   4)
+   5)
      # Exit script
      exit
+     ;;
+
+   4) 
+     cd /root/hy3/ 
+     nohup ./hysteria-linux-amr64 server & 
+     echo "启动成功" 
+     exit 
      ;;
 
    *)
