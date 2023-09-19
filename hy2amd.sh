@@ -39,8 +39,9 @@ echo "1. 安装(世界和谐)"
 echo "2. 重装(世界进步)"
 echo "3. 卸载(世界美好)"
 echo "4. 退出脚本(回到未来)"
+echo "5. 启动hy2(穿越时空)"
 
-read -p "输入操作编号 (1/2/3/4): " choice
+read -p "输入操作编号 (1/2/3/4/5): " choice
 
 case $choice in
    1)
@@ -96,6 +97,12 @@ case $choice in
      # Exit script
      exit
      ;;
+   5)
+    cd /root/hy3/
+    nohup ./hysteria-linux-amd64 server &
+    echo "启动成功"
+    exit
+    ;;
 
    *)
      echo "$(random_color '无效的选择，退出脚本。')"
