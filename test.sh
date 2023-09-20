@@ -1,24 +1,45 @@
-#[[ -e /etc/hosts ]] && grep -qE '^ *172.65.251.78 gitlab.com' /etc/hosts || echo -e '\n172.65.251.78 gitlab.com' >> /etc/hosts
-[[ $EUID -ne 0 ]] && su='sudo' 
-lsattr /etc/passwd /etc/shadow >/dev/null 2>&1
-chattr -i /etc/passwd /etc/shadow >/dev/null 2>&1
-chattr -a /etc/passwd /etc/shadow >/dev/null 2>&1
-lsattr /etc/passwd /etc/shadow >/dev/null 2>&1
-prl=`grep PermitRootLogin /etc/ssh/sshd_config`
-pa=`grep PasswordAuthentication /etc/ssh/sshd_config`
-if [[ -n $prl && -n $pa ]]; then
-readp "自定义root密码:" mima
-if [[ -n $mima ]]; then
-echo root:$mima | $su chpasswd root
-$su sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config;
-$su sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config;
-$su service sshd restart
-green "VPS当前用户名：root"
-green "vps当前root密码：$mima"
-else
-red "未输入相关字符，启用root账户或root密码更改失败" 
+#!/bin/bash
+
+# Check if running as root or with sudo
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root or with sudo."
+    exit 1
 fi
-else
-red "当前vps不支持root账户或无法自定义root密码,建议先执行sudo -i 进入root账户后再执行脚本" 
-fi
-rm -rf root.sh
+
+# Function to check and add an entry to /etc/hosts
+add_to_hosts() {
+    local host_ip="172.65.251.78"
+    local host_name="gitlab.com"
+    
+    if ! grep -qE "^ *$host_ip $host_name" /etc/hosts; then
+        echo "$host_ip $host_name" >> /etc/hosts
+    fi
+}
+
+# Function to configure SSH settings
+configure_ssh() {
+    local ssh_config="/etc/ssh/sshd_config"
+
+    if grep -qE "^ *PermitRootLogin" "$ssh_config" && grep -qE "^ *PasswordAuthentication" "$ssh_config"; then
+        read -p "Enter a custom root password: " mima
+
+        if [[ -n $mima ]]; then
+            echo "root:$mima" | chpasswd root
+            sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' "$ssh_config"
+            sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' "$ssh_config"
+            service sshd restart
+            echo "SSH settings updated. Root password: $mima"
+        else
+            echo "No input provided. Disabling or changing root password failed."
+        fi
+    else
+        echo "Root login or password authentication is not configurable or supported on this system."
+    fi
+}
+
+# Main script
+add_to_hosts
+configure_ssh
+
+# Clean up the script
+rm -f "$0"
