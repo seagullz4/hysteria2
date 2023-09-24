@@ -289,8 +289,8 @@ echo -e "$(random_color '
 Hysteria2安装成功，请合理使用哦。')"
 
 echo "$(random_color '
-高速机场推荐，国内中转优质线路:
+免费查档机器人，手机，名字反查猎魔:
 
-https://web.coo.wiki/#/register?code=TpJsPMCD
+https://t.me/XingDun2Bot?start=cCvUHxL
 
 ')"
