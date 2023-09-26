@@ -277,6 +277,48 @@ else
   exit 1
 fi
 
+hysteria_directory="/root/hy3/"
+hysteria_executable="/root/hy3/hysteria-linux-amd64"
+hysteria_service_file="/etc/systemd/system/my_hysteria.service"
+
+create_service_file() {
+  cat > "$hysteria_service_file" <<EOF
+[Unit]
+Description=My Hysteria Server
+
+[Service]
+Type=simple
+WorkingDirectory=$hysteria_directory
+ExecStart=$hysteria_executable server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+}
+
+echo "正在设置Hysteria服务器..."
+mkdir -p "$hysteria_directory"
+
+if [ -e "$hysteria_service_file" ]; then
+  echo "服务文件已存在."
+else
+  create_service_file
+  echo "创建服务文件成功."
+fi
+
+echo "启用并启动Hysteria服务器服务..."
+systemctl enable my_hysteria.service
+systemctl start my_hysteria.service
+
+if systemctl is-active --quiet my_hysteria.service; then
+  echo "Hysteria服务器服务已启用自启动."
+else
+  echo "Hysteria服务器服务自启动失败但可以正常使用."
+fi
+
+echo "完成。"
+
 line_animation
 
 # Output Hysteria link
