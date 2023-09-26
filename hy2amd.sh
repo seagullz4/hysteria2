@@ -87,6 +87,9 @@ case $choice in
      # Remove the Hysteria binary and configuration files (adjust file paths as needed)
      rm -f ~/hy3/hysteria-linux-amd64
      rm -f ~/hy3/config.yaml
+     systemctl stop my_hysteria.service
+     systemctl disable my_hysteria.service
+     rm /etc/systemd/system/my_hysteria.service
      echo "卸载完成(ง ื▿ ื)ว."
 
      # Exit script after uninstallation
