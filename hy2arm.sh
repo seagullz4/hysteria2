@@ -100,7 +100,7 @@ case $choice in
 
    4) 
      cd /root/hy3/ 
-     nohup ./hysteria-linux-amr64 server 
+     nohup ./hysteria-linux-amr64 server &
      echo "启动成功" 
      exit 
      ;;
