@@ -156,6 +156,8 @@ quic:
    maxStreamReceiveWindow: 26843545  
    initConnReceiveWindow: 67108864  
    maxConnReceiveWindow: 67108864 
+
+ignoreClientBandwidth: false
 EOL
 
 while true; do 
