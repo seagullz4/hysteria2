@@ -67,7 +67,7 @@ esac
 
 # Download the script
 if wget -O hy2.sh "$script_url"; then
-  chmod +777 hy2.sh  # 授予下载的脚本执行权限
+  chmod +x hy2.sh  # 授予下载的脚本执行权限
   echo "下载并授予脚本执行权限成功。"
 else
   echo "下载脚本失败。退出。"
