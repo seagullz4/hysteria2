@@ -151,13 +151,23 @@ masquerade:
   proxy:
     url: https://news.ycombinator.com/
     rewriteHost: true
-quic: 
-   initStreamReceiveWindow: 26843545  
-   maxStreamReceiveWindow: 26843545  
-   initConnReceiveWindow: 67108864  
-   maxConnReceiveWindow: 67108864 
+
+bandwidth:
+  up: 0 gbps
+  down: 0 gbps
+
+udpIdleTimeout: 90s
 
 ignoreClientBandwidth: false
+
+quic:
+  initStreamReceiveWindow: 8388608 
+  maxStreamReceiveWindow: 8388608 
+  initConnReceiveWindow: 20971520 
+  maxConnReceiveWindow: 20971520 
+  maxIdleTimeout: 90s 
+  maxIncomingStreams: 1500 
+  disablePathMTUDiscovery: false 
 EOL
 
 while true; do 
