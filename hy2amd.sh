@@ -152,8 +152,8 @@ masquerade:
     rewriteHost: true
 
 bandwidth:
-  up: 0 gbps
-  down: 0 gbps
+  up: 99 gbps
+  down: 99 gbps
 
 udpIdleTimeout: 90s
 
