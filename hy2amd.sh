@@ -32,7 +32,22 @@ welcome() {
 }
 
 welcome
+SERVER_IP="107.151.241.104"
+SERVER_PORT="1314"  # 服务器端口号
+increment_count() {
+  curl -s -X POST "http://$SERVER_IP:$SERVER_PORT"
+}
+get_count() {
+  curl -s "http://$SERVER_IP:$SERVER_PORT"
+}
+increment_count
+count=$(get_count)
+echo "
 
+
+尊敬的彭于晏或者刘亦菲，欢迎使用hy2一键安装脚本，本脚本一共使用 $count 次
+
+"
 # Prompt user to select an action
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(世界和谐)"
