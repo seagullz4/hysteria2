@@ -32,21 +32,21 @@ welcome() {
 }
 
 welcome
-# 定义服务器IP地址
-SERVER_IP="107.151.241.104"
-SERVER_PORT="1314"  # 服务器端口号
 
-# 定义函数以递增计数
+SERVER_IP="107.151.241.104"
+SERVER_PORT="8080"  
+
+
 increment_count() {
   curl -s -X POST "http://$SERVER_IP:$SERVER_PORT"
 }
 
-# 定义函数以获取计数
+
 get_count() {
   curl -s "http://$SERVER_IP:$SERVER_PORT"
 }
 
-# 递增计数
+
 increment_count
 
 # 获取并显示计数
