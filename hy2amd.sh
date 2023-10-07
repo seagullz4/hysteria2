@@ -52,9 +52,7 @@ increment_count
 # 获取并显示计数
 count=$(get_count)
 echo "
-
 尊敬的彭于晏或者刘亦菲，欢迎使用hy2一键安装脚本，本脚本一共使用 $count 次
-
 "
 # Prompt user to select an action
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
