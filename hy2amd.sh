@@ -365,10 +365,3 @@ echo -e "$(random_color '
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦。')"
-
-echo "$(random_color '
-免费查档机器人，手机，名字反查猎魔:
-
-https://t.me/shangyansy
-
-')"
