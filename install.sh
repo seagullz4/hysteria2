@@ -10,7 +10,7 @@ fi
 # 在这里添加你的其他命令
 
 # Define commands to install
-commands=("wget" "sed" "openssl")
+commands=("wget" "sed" "openssl" "net-tools")
 package_manager=""
 install_command=""
 
