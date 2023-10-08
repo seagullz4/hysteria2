@@ -32,27 +32,28 @@ welcome() {
 }
 
 welcome
-SERVER_IP="107.151.241.104" 
- SERVER_PORT="8080"   
-  
-  
- increment_count() { 
-   curl -s -X POST "http://$SERVER_IP:$SERVER_PORT" 
- } 
-  
-  
- get_count() { 
-   curl -s "http://$SERVER_IP:$SERVER_PORT" 
- } 
-  
-  
- increment_count 
-  
- # 获取并显示计数 
- count=$(get_count) 
- echo " 
- 尊敬的彭于晏或者刘亦菲，欢迎使用hy2一键安装脚本，本脚本一共使用 $count 次 
- "
+
+SERVER_IP="107.151.241.104"
+SERVER_PORT="8080"  
+
+
+increment_count() {
+  curl -s -X POST "http://$SERVER_IP:$SERVER_PORT"
+}
+
+
+get_count() {
+  curl -s "http://$SERVER_IP:$SERVER_PORT"
+}
+
+
+increment_count
+
+# 获取并显示计数
+count=$(get_count)
+echo "
+尊敬的彭于晏或者刘亦菲，欢迎使用hy2一键安装脚本，本脚本一共使用 $count 次
+"
 # Prompt user to select an action
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(世界和谐)"
@@ -61,7 +62,7 @@ echo "3. 卸载(世界美好)"
 echo "4. 启动hy2(穿越时空)"
 echo "5. 退出脚本(回到未来)"
 
-read -p "输入操作编号 (1/2/3/4): " choice
+read -p "输入操作编号 (1/2/3/4/5): " choice
 
 case $choice in
    1)
@@ -72,7 +73,7 @@ case $choice in
      echo "执行重装并清除配置操作..."
 
      # Find the Hysteria server process and kill it
-     process_name="hysteria-linux-amr64"
+     process_name="hysteria-linux-arm64"
      pid=$(pgrep -f "$process_name")
 
      if [ -n "$pid" ]; then
@@ -83,50 +84,75 @@ case $choice in
        echo "未找到 $process_name 进程。"
      fi
      
-     rm -f ~/hy3/hysteria-linux-amr64 
+     rm -f ~/hy3/hysteria-linux-arm64 
      rm -f ~/hy3/config.yaml 
      echo "删除配置文件成功"
      # Perform operations such as deleting configuration files here
      ;;
    3)
-     # Uninstallation operation
-     echo "执行卸载操作请稍等..."
+#!/bin/bash
 
-     # Find the Hysteria server process and kill it
-     process_name="hysteria-linux-amr64"
-     pid=$(pgrep -f "$process_name")
+# 停止 Hysteria 服务器服务（根据实际的服务名称来替换"my_hysteria.service"）
+sudo systemctl stop my_hysteria.service
 
-     if [ -n "$pid" ]; then
-       echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
-       kill "$pid"
-       echo "$process_name 进程已被杀死。"
-     else
-       echo "未找到 $process_name 进程。"
-     fi
+# 禁用 Hysteria 服务器服务的自启动（根据实际的服务名称来替换"my_hysteria.service"）
+sudo systemctl disable my_hysteria.service
 
-     # Remove the Hysteria binary and configuration files (adjust file paths as needed)
-     rm -f ~/hy3/hysteria-linux-amr64
-     rm -f ~/hy3/config.yaml
-     systemctl stop my_hysteria.service
-     systemctl disable my_hysteria.service
-     rm /etc/systemd/system/my_hysteria.service
-     echo "卸载完成(ง ื▿ ื)ว."
+# 删除 Hysteria 服务器服务文件（根据实际的服务文件路径来替换"/etc/systemd/system/my_hysteria.service"）
+if [ -f "/etc/systemd/system/my_hysteria.service" ]; then
+  sudo rm "/etc/systemd/system/my_hysteria.service"
+  echo "Hysteria 服务器服务文件已删除。"
+else
+  echo "Hysteria 服务器服务文件不存在。"
+fi
 
-     # Exit script after uninstallation
-     exit
+# 查找并杀死 Hysteria 服务器进程
+process_name="hysteria-linux-arm64"
+pid=$(pgrep -f "$process_name")
+
+if [ -n "$pid" ]; then
+  echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
+  kill "$pid"
+  echo "$process_name 进程已被杀死。"
+else
+  echo "未找到 $process_name 进程。"
+fi
+
+# 删除 Hysteria 服务器二进制文件和配置文件（根据实际文件路径来替换）
+if [ -f "/root/hy3/hysteria-linux-arm64" ]; then
+  rm -f "/root/hy3/hysteria-linux-arm64"
+  echo "Hysteria 服务器二进制文件已删除。"
+else
+  echo "Hysteria 服务器二进制文件不存在。"
+fi
+
+if [ -f "/root/hy3/config.yaml" ]; then
+  rm -f "/root/hy3/config.yaml"
+  echo "Hysteria 服务器配置文件已删除。"
+else
+  echo "Hysteria 服务器配置文件不存在。"
+fi
+rm -r /root/hy3
+systemctl stop ipppp.service
+systemctl disable ipppp.service
+rm /etc/systemd/system/ipppp.service
+
+echo "卸载完成(ง ื▿ ื)ว."
+
+# 退出脚本
+exit
      ;;
 
    5)
      # Exit script
      exit
      ;;
-
-   4) 
-     cd /root/hy3/ 
-     nohup ./hysteria-linux-amr64 server &
-     echo "启动成功" 
-     exit 
-     ;;
+   4)
+    cd /root/hy3/
+    nohup ./hysteria-linux-arm64 server &
+    echo "启动成功"
+    exit
+    ;;
 
    *)
      echo "$(random_color '无效的选择，退出脚本。')"
@@ -143,8 +169,8 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-amr64 https://github.com/apernet/hysteria/releases/download/app/v2.0.4/hysteria-linux-arm64; then
-  chmod +x hysteria-linux-amr64
+if wget -O hysteria-linux-arm64 https://github.com/apernet/hysteria/releases/download/app/v2.0.4/hysteria-linux-arm64; then
+  chmod +x hysteria-linux-arm64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
   exit 1
@@ -173,16 +199,16 @@ masquerade:
     rewriteHost: true
 
 bandwidth:
-  up: 0 gbps
-  down: 0 gbps
+  up: 99 gbps
+  down: 99 gbps
 
 udpIdleTimeout: 90s
 
 ignoreClientBandwidth: false
 
 quic:
-  initStreamReceiveWindow: 8388608 
-  maxStreamReceiveWindow: 8388608 
+  initStrearmeceiveWindow: 8388608 
+  maxStrearmeceiveWindow: 8388608 
   initConnReceiveWindow: 20971520 
   maxConnReceiveWindow: 20971520 
   maxIdleTimeout: 90s 
@@ -190,37 +216,83 @@ quic:
   disablePathMTUDiscovery: false 
 EOL
 
-while true; do 
-   echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')" 
-   read -p "" port 
-  
-   # If the port number is empty, it defaults to 443 
-   if [ -z "$port" ]; then 
-     port=443 
-   elif [ "$port" -eq "0" ]; then 
-     # Randomly generate a port number between 2000-60000 
-     port=$((RANDOM % 58001 + 2000)) 
-   elif ! [[ "$port" =~ ^[0-9]+$ ]]; then 
-     echo "$(random_color '我的朋友，请输入数字好吧，请重新输入端口号：')" 
-     continue 
-   fi 
-  
-   # Check if the entered port is in use 
-   while netstat -tuln | grep -q ":$port "; do 
-     echo "$(random_color '端口已被占用，请重新输入端口号：')" 
-     read -p "" port 
-   done 
-  
-   # Replace the port number in the configuration file 
-   if sed -i "s/443/$port/" config.yaml; then 
-     echo "$(random_color '端口号已设置为：')" $port 
-     break 
-   else 
-     echo "$(random_color '替换端口号失败，退出脚本。')" 
-     exit 1 
-   fi 
- done
+#!/bin/bash
 
+while true; do
+   echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')"
+   read -p "" port
+
+   if [ -z "$port" ]; then
+     port=443
+   elif [ "$port" -eq 0 ]; then
+     port=$((RANDOM % 58001 + 2000))
+   elif ! [[ "$port" =~ ^[0-9]+$ ]]; then
+     echo "$(random_color '我的朋友，请输入数字好吧，请重新输入端口号：')"
+     continue
+   fi
+
+   while netstat -tuln | grep -q ":$port "; do
+     echo "$(random_color '端口已被占用，请重新输入端口号：')"
+     read -p "" port
+   done
+
+   if sed -i "s/443/$port/" config.yaml; then
+     echo "$(random_color '端口号已设置为：')" "$port"
+   else
+     echo "$(random_color '替换端口号失败，退出脚本。')"
+     exit 1
+   fi
+
+   # 判断用户是否要开启端口跳跃功能
+  echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就不用开启(ง ื▿ ื)ว（回车默认不开启，输入1开启）: ')"
+  read -p "" port_jump
+
+  if [ "$port_jump" == "" ]; then
+    # 如果用户按下回车，不开启端口跳跃功能
+    break
+  elif [ "$port_jump" -eq 1 ]; then
+    # 用户输入了1，开启端口跳跃功能
+    echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')"
+    read -p "" start_port
+
+    echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')"
+    read -p "" end_port
+
+    if [ "$start_port" -lt "$end_port" ]; then
+      # 执行iptables规则
+      iptables -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port:$end_port" -j DNAT --to-destination :"$port"
+      echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port"
+      break
+    else
+      echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')"
+    fi
+  else
+    echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')"
+  fi
+done
+echo "#!/bin/bash" > /root/hy3/ipppp.sh
+echo "iptables -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh
+
+# 赋予脚本执行权限
+chmod +x /root/hy3/ipppp.sh
+
+# 添加开机自启动命令，使用systemctl
+echo "[Unit]" > /etc/systemd/system/ipppp.service
+echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service
+echo "" >> /etc/systemd/system/ipppp.service
+echo "[Service]" >> /etc/systemd/system/ipppp.service
+echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service
+echo "" >> /etc/systemd/system/ipppp.service
+echo "[Install]" >> /etc/systemd/system/ipppp.service
+echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service
+
+# 启用开机自启动服务
+systemctl enable ipppp.service
+
+# 启动服务
+systemctl start ipppp.service
+
+echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
 # Prompt user to enter domain name
 echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
 read -p "" domain
@@ -295,7 +367,7 @@ else
 fi
 
 # Grant permissions to the Hysteria binary
-if sudo setcap cap_net_bind_service=+ep hysteria-linux-amr64; then
+if sudo setcap cap_net_bind_service=+ep hysteria-linux-arm64; then
   echo "$(random_color '授予权限成功。')"
 else
   echo "$(random_color '授予权限失败，退出脚本。')"
@@ -303,7 +375,7 @@ else
 fi
 
 # Running the Hysteria server in the background
-if nohup ./hysteria-linux-amr64 server & then
+if nohup ./hysteria-linux-arm64 server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
 else
   echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
@@ -311,7 +383,7 @@ else
 fi
 
 hysteria_directory="/root/hy3/"
-hysteria_executable="/root/hy3/hysteria-linux-amr64"
+hysteria_executable="/root/hy3/hysteria-linux-arm64"
 hysteria_service_file="/etc/systemd/system/my_hysteria.service"
 
 create_service_file() {
@@ -347,7 +419,7 @@ systemctl start my_hysteria.service
 if systemctl is-active --quiet my_hysteria.service; then
   echo "Hysteria服务器服务已启用自启动."
 else
-  echo "Hysteria服务器服务自启动失败.但是依旧可以使用"
+  echo "Hysteria服务器服务自启动失败但可以正常使用."
 fi
 
 echo "完成。"
@@ -357,7 +429,7 @@ line_animation
 # Output Hysteria link
 echo -e "$(random_color '
 
-这是你的Hysteria2节点链接，请注意保存哦宝宝: 
+这是你的Hysteria2节点链接信息，请注意保存哦宝宝: 
 
 ')hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
 
@@ -365,10 +437,3 @@ echo -e "$(random_color '
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦。')"
-
-echo "$(random_color ' 
-免费查档机器人，手机，名字反查猎魔: 
-  
-https://t.me/shangyansy
-  
- ')"
