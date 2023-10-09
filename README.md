@@ -24,7 +24,7 @@ hysteria2一键安装
 执行下面的脚本，等你安装之后会提示你输入域名，端口，密码，邮箱，伪装域名等，*域名必须是你解析到你云服务器ip的行*，端口可以默认443端口，或者随机端口或者自定义，密码可以随机也可以自己输入，邮箱可以随机也可以自己输入，伪装网页可以随机也可以自己输入，等待一切就绪后就会输出显示你的hysteria2的节点信息，推荐使用nekobox，更多客户端配置请查看[客户端配置](https://v2.hysteria.network/zh/docs/getting-started/Client/)
 
 
-**🙃安装脚本:**
+**🙃安装脚本(首先推荐ubuntu的系统):**
 ```
 curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && bash install.sh
 ```
