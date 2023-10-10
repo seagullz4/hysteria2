@@ -69,7 +69,7 @@ case $choice in
      # Perform operations such as deleting configuration files here
      ;;
    3)
-#!/bin/bash
+
 
 # 停止 Hysteria 服务器服务（根据实际的服务名称来替换"my_hysteria.service"）
 sudo systemctl stop my_hysteria.service
@@ -195,83 +195,86 @@ quic:
   disablePathMTUDiscovery: false 
 EOL
 
-#!/bin/bash
 
-while true; do
-   echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')"
-   read -p "" port
+while true; do 
+    echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')" 
+    read -p "" port 
+  
+    if [ -z "$port" ]; then 
+      port=443 
+    elif [ "$port" -eq 0 ]; then 
+      port=$((RANDOM % 58001 + 2000)) 
+    elif ! [[ "$port" =~ ^[0-9]+$ ]]; then 
+      echo "$(random_color '我的朋友，请输入数字好吧，请重新输入端口号：')" 
+      continue 
+    fi 
+  
+    while netstat -tuln | grep -q ":$port "; do 
+      echo "$(random_color '端口已被占用，请重新输入端口号：')" 
+      read -p "" port 
+    done 
+  
+    if sed -i "s/443/$port/" config.yaml; then 
+      echo "$(random_color '端口号已设置为：')" "$port" 
+    else 
+      echo "$(random_color '替换端口号失败，退出脚本。')" 
+      exit 1 
+    fi 
+  
+  
+    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就不用开启(ง ื▿ ื)ว，安卓端不支持端口跳跃（回车默认不开启，输入1开启）: ')" 
+    read -p "" port_jump 
+  
+    if [ -z "$port_jump" ]; then 
+     
+      break 
+    elif [ "$port_jump" -eq 1 ]; then 
+      
+      echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')" 
+      read -p "" start_port 
+  
+      echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')" 
+      read -p "" end_port 
+  
+      if [ "$start_port" -lt "$end_port" ]; then 
+        
+        iptables -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port:$end_port" -j DNAT --to-destination :"$port" 
+        echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
+        break 
+      else 
+        echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')" 
+      fi 
+    else 
+      echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')" 
+    fi 
+done 
 
-   if [ -z "$port" ]; then
-     port=443
-   elif [ "$port" -eq 0 ]; then
-     port=$((RANDOM % 58001 + 2000))
-   elif ! [[ "$port" =~ ^[0-9]+$ ]]; then
-     echo "$(random_color '我的朋友，请输入数字好吧，请重新输入端口号：')"
-     continue
-   fi
 
-   while netstat -tuln | grep -q ":$port "; do
-     echo "$(random_color '端口已被占用，请重新输入端口号：')"
-     read -p "" port
-   done
-
-   if sed -i "s/443/$port/" config.yaml; then
-     echo "$(random_color '端口号已设置为：')" "$port"
-   else
-     echo "$(random_color '替换端口号失败，退出脚本。')"
-     exit 1
-   fi
-
-   # 判断用户是否要开启端口跳跃功能
-  echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就不用开启(ง ื▿ ื)ว（回车默认不开启，输入1开启）: ')"
-  read -p "" port_jump
-
-  if [ "$port_jump" == "" ]; then
-    # 如果用户按下回车，不开启端口跳跃功能
-    break
-  elif [ "$port_jump" -eq 1 ]; then
-    # 用户输入了1，开启端口跳跃功能
-    echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')"
-    read -p "" start_port
-
-    echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')"
-    read -p "" end_port
-
-    if [ "$start_port" -lt "$end_port" ]; then
-      # 执行iptables规则
-      iptables -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port:$end_port" -j DNAT --to-destination :"$port"
-      echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port"
-      break
-    else
-      echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')"
-    fi
-  else
-    echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')"
-  fi
-done
-echo "#!/bin/bash" > /root/hy3/ipppp.sh
-echo "iptables -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh
-
-# 赋予脚本执行权限
-chmod +x /root/hy3/ipppp.sh
-
-# 添加开机自启动命令，使用systemctl
-echo "[Unit]" > /etc/systemd/system/ipppp.service
-echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service
-echo "" >> /etc/systemd/system/ipppp.service
-echo "[Service]" >> /etc/systemd/system/ipppp.service
-echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service
-echo "" >> /etc/systemd/system/ipppp.service
-echo "[Install]" >> /etc/systemd/system/ipppp.service
-echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service
-
-# 启用开机自启动服务
-systemctl enable ipppp.service
-
-# 启动服务
-systemctl start ipppp.service
-
-echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
+if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
+  echo "#!/bin/bash" > /root/hy3/ipppp.sh 
+  echo "iptables -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh 
+  
+  # 赋予脚本执行权限 
+  chmod +x /root/hy3/ipppp.sh 
+  
+  # 添加开机自启动命令，使用systemctl 
+  echo "[Unit]" > /etc/systemd/system/ipppp.service 
+  echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service 
+  echo "" >> /etc/systemd/system/ipppp.service 
+  echo "[Service]" >> /etc/systemd/system/ipppp.service 
+  echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service 
+  echo "" >> /etc/systemd/system/ipppp.service 
+  echo "[Install]" >> /etc/systemd/system/ipppp.service 
+  echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service 
+  
+ 
+  systemctl enable ipppp.service 
+  
+ 
+  systemctl start ipppp.service 
+  
+  echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
+fi
 # Prompt user to enter domain name
 echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
 read -p "" domain
