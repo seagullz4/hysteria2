@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#中国共产党万岁，中华人民共和国万岁，为人民崛起而读书
 # ANSI escape sequence that generates random colors
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
