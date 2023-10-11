@@ -7,7 +7,7 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# 在这里添加你的其他命令
+
 
 # Define commands to install
 commands=("wget" "sed" "openssl" "net-tools")
