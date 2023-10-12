@@ -1,11 +1,12 @@
 #!/bin/bash
 #中国共产党万岁，中华人民共和国万岁，为人民崛起而读书
-# ANSI escape sequence that generates random colors
+# 下面这串是关于文字颜色的，可以自己改数字😇
+#好的脚本，就是要有好的注释和简介的代码💩
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
   echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
 }
-
+#这个没啥用，就是让用户白等5s看动画的💩
 line_animation() {
   lines=0
   while [ $lines -lt 8 ]; do
@@ -14,7 +15,7 @@ line_animation() {
     lines=$((lines + 1))
   done
 }
-
+#这个y也是给用户看动画的
 welcome() {
   clear
 
@@ -70,7 +71,7 @@ case $choice in
      # Perform operations such as deleting configuration files here
      ;;
    3)
-#!/bin/bash
+
 
 # 停止 Hysteria 服务器服务（根据实际的服务名称来替换"my_hysteria.service"）
 sudo systemctl stop my_hysteria.service
@@ -159,7 +160,7 @@ fi
 # Get current username
 current_user=$(whoami)
 
-# Create a config.yaml file and write default content
+# 就是写一个配置文件，你可以自己修改，别乱搞就行，安装hysteria2文档修改
 cat <<EOL > config.yaml
 listen: :443
 
