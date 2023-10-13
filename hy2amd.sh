@@ -150,7 +150,7 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.0.4/hysteria-linux-amd64; then
+if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.1.0/hysteria-linux-amd64; then
   chmod +x hysteria-linux-amd64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
