@@ -333,7 +333,7 @@ else
 fi
 
 # Prompt the user to enter the disguised domain name
-echo "$(random_color '请输入伪装域名（默认https://news.ycombinator.com/）: ')"
+echo "$(random_color '请输入伪装网址（默认https://news.ycombinator.com/）: ')"
 read -p "" masquerade_url
 
 # If the disguised domain name is empty, the default value is used
@@ -343,9 +343,9 @@ fi
 
 # Replace the disguised domain name in the configuration file
 if sed -i "s|https://news.ycombinator.com/|$masquerade_url|" config.yaml; then
-  echo "$(random_color '伪装域名已设置为：')" $masquerade_url
+  echo "$(random_color '伪装网址已设置为：')" $masquerade_url
 else
-  echo "$(random_color '替换伪装域名失败，退出脚本。')"
+  echo "$(random_color '替换伪装网址失败，退出脚本。')"
   exit 1
 fi
 
@@ -356,6 +356,9 @@ else
   echo "$(random_color '授予权限失败，退出脚本。')"
   exit 1
 fi
+
+fuser -k -n tcp $port
+fuser -k -n udp $port
 
 # Running the Hysteria server in the background
 if nohup ./hysteria-linux-arm64 server & then
