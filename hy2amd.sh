@@ -32,10 +32,12 @@ welcome() {
   "
 }
 
+#这个welcome就是启动上面的对话😇
 welcome
 
  
 # Prompt user to select an action
+#这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(世界和谐)"
 echo "2. 重装(世界进步)"
