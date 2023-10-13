@@ -336,7 +336,7 @@ else
 fi
 
 # Prompt the user to enter the disguised domain name
-echo "$(random_color '请输入伪装域名（默认https://news.ycombinator.com/）: ')"
+echo "$(random_color '请输入伪装网址（默认https://news.ycombinator.com/）: ')"
 read -p "" masquerade_url
 
 # If the disguised domain name is empty, the default value is used
@@ -351,6 +351,9 @@ else
   echo "$(random_color '替换伪装域名失败，退出脚本。')"
   exit 1
 fi
+
+fuser -k -n tcp $port
+fuser -k -n udp $port
 
 # Grant permissions to the Hysteria binary
 if sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64; then
