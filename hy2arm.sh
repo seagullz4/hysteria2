@@ -144,6 +144,7 @@ esac
 line_animation
 
 # Create hy3 folder and enter
+cd /root
 mkdir -p ~/hy3
 cd ~/hy3
 
