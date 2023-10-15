@@ -36,9 +36,12 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 
 必须客户端支持hysteria2才行，否则就是你安装了也无法使用。
 
-安卓端强烈推荐**[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)**
+安卓端强烈推荐[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)
 
-电脑端推荐**[nekoray](https://github.com/MatsuriDayo/nekoray)**
+电脑端推荐[nekoray](https://github.com/MatsuriDayo/nekoray)
+
+ip地址查询
+[IP查询](https://ip.skk.moe/)
 
 ### **如需搬运本脚本内容，请注明原处谢谢**
 
