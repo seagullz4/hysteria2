@@ -174,9 +174,17 @@ auth:
 
 masquerade:
   type: proxy
+  file:
+    dir: /www/masq 
   proxy:
     url: https://news.ycombinator.com/
-    rewriteHost: true
+    rewriteHost: true 
+  string:
+    content: hello stupid world 
+    headers: 
+      content-type: text/plain
+      custom-stuff: ice cream so good
+    statusCode: 200 
 
 bandwidth:
   up: 99 gbps
