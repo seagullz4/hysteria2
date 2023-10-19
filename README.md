@@ -44,7 +44,7 @@ ip地址查询
 [IP查询](https://ip.skk.moe/)
 
 社工库查询(十亿机主)
-[社工](t.me/MoLeLeBot?start=clnhn9x0g03djo30z5646kher)
+[社工](https://t.me/MoLeLeBot?start=clnhn9x0g03djo30z5646kher)
 
 ### **如需搬运本脚本内容，请注明原处谢谢**
 
