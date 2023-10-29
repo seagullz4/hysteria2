@@ -10,7 +10,7 @@ fi
 
 # 参数
 DNS_SERVER1="8.8.8.8"
-DNS_SERVER2="8.8.4.4"
+DNS_SERVER2="1.1.1.1"
 DNS_SERVER3="114.114.114.114"
 
 netplan_config="/etc/netplan/01-custom-dns.yaml"
