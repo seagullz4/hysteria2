@@ -1,11 +1,12 @@
 #!/bin/bash
-
-# ANSI escape sequence that generates random colors
+#中国共产党万岁，中华人民共和国万岁，为人民崛起而读书
+# 下面这串是关于文字颜色的，可以自己改数字😇
+#好的脚本，就是要有好的注释和简介的代码💩
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
   echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
 }
-
+#这个没啥用，就是让用户白等5s看动画的💩
 line_animation() {
   lines=0
   while [ $lines -lt 8 ]; do
@@ -14,7 +15,7 @@ line_animation() {
     lines=$((lines + 1))
   done
 }
-
+#这个y也是给用户看动画的
 welcome() {
   clear
 
@@ -31,9 +32,12 @@ welcome() {
   "
 }
 
+#这个welcome就是启动上面的对话😇
 welcome
 
+ 
 # Prompt user to select an action
+#这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(世界和谐)"
 echo "2. 重装(世界进步)"
@@ -115,7 +119,7 @@ rm -r /root/hy3
 systemctl stop ipppp.service
 systemctl disable ipppp.service
 rm /etc/systemd/system/ipppp.service
-
+iptables -F
 echo "卸载完成(ง ื▿ ื)ว."
 
 # 退出脚本
@@ -159,7 +163,7 @@ fi
 # Get current username
 current_user=$(whoami)
 
-# Create a config.yaml file and write default content
+# 就是写一个配置文件，你可以自己修改，别乱搞就行，安装hysteria2文档修改
 cat <<EOL > config.yaml
 listen: :443
 
@@ -195,8 +199,8 @@ udpIdleTimeout: 90s
 ignoreClientBandwidth: false
 
 quic:
-  initStrearmeceiveWindow: 8388608 
-  maxStrearmeceiveWindow: 8388608 
+  initStreamReceiveWindow: 8388608 
+  maxStreamReceiveWindow: 8388608 
   initConnReceiveWindow: 20971520 
   maxConnReceiveWindow: 20971520 
   maxIdleTimeout: 90s 
@@ -230,15 +234,15 @@ while true; do
       exit 1 
     fi 
   
-  
-    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就不用开启(ง ื▿ ื)ว，安卓端不支持端口跳跃（回车默认不开启，输入1开启）: ')" 
+   
+    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就不用开启(ง ื▿ ื)ว，请使用最新版nekobox（回车默认不开启，输入1开启）: ')" 
     read -p "" port_jump 
   
     if [ -z "$port_jump" ]; then 
-     
+      
       break 
     elif [ "$port_jump" -eq 1 ]; then 
-      
+    
       echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')" 
       read -p "" start_port 
   
@@ -263,10 +267,9 @@ if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
   echo "#!/bin/bash" > /root/hy3/ipppp.sh 
   echo "iptables -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh 
   
-  # 赋予脚本执行权限 
+ 
   chmod +x /root/hy3/ipppp.sh 
   
-  # 添加开机自启动命令，使用systemctl 
   echo "[Unit]" > /etc/systemd/system/ipppp.service 
   echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service 
   echo "" >> /etc/systemd/system/ipppp.service 
@@ -276,14 +279,34 @@ if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
   echo "[Install]" >> /etc/systemd/system/ipppp.service 
   echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service 
   
- 
+  # 启用开机自启动服务 
   systemctl enable ipppp.service 
   
- 
+  # 启动服务 
   systemctl start ipppp.service 
   
   echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
 fi
+
+echo "$(random_color '请选择内核加速类型：')"
+echo "$(random_color '1. 默认系统内核加速')"
+echo "$(random_color '2. Brutal加速')"
+read -p "$(random_color '请输入选项（1/2，默认为Brutal加速）: ')" kernel_choice
+
+if [ -z "$kernel_choice" ]; then
+  kernel_choice=2
+fi
+
+if [ "$kernel_choice" == "1" ]; then
+  sed -i 's/ignoreClientBandwidth: false/ignoreClientBandwidth: true/' config.yaml
+  echo "$(random_color '已启用默认系统内核加速')"
+elif [ "$kernel_choice" == "2" ]; then
+  echo "$(random_color '已启用Brutal加速')"
+else
+  echo "$(random_color '错误的选项，请重新运行脚本并选择正确的内核加速类型。')"
+  exit 1
+fi
+
 # Prompt user to enter domain name
 echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
 read -p "" domain
@@ -351,11 +374,14 @@ fi
 
 # Replace the disguised domain name in the configuration file
 if sed -i "s|https://news.ycombinator.com/|$masquerade_url|" config.yaml; then
-  echo "$(random_color '伪装网址已设置为：')" $masquerade_url
+  echo "$(random_color '伪装域名已设置为：')" $masquerade_url
 else
-  echo "$(random_color '替换伪装网址失败，退出脚本。')"
+  echo "$(random_color '替换伪装域名失败，退出脚本。')"
   exit 1
 fi
+
+fuser -k -n tcp $port
+fuser -k -n udp $port
 
 # Grant permissions to the Hysteria binary
 if sudo setcap cap_net_bind_service=+ep hysteria-linux-arm64; then
@@ -364,9 +390,6 @@ else
   echo "$(random_color '授予权限失败，退出脚本。')"
   exit 1
 fi
-
-fuser -k -n tcp $port
-fuser -k -n udp $port
 
 # Running the Hysteria server in the background
 if nohup ./hysteria-linux-arm64 server & then
@@ -421,11 +444,13 @@ echo "完成。"
 line_animation
 
 # Output Hysteria link
-echo -e "$(random_color '
+if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-这是你的Hysteria2节点链接信息，请注意保存哦宝宝: 
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝(请使用nekobox最新版才能兼容端口跳跃): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+else
 
-')hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+fi
 
 # Output installation success information
 echo -e "$(random_color '
