@@ -288,6 +288,15 @@ if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
   echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
 fi
 
+echo "$(random_color '请选择内核加速类型：')"
+echo "$(random_color '1. 默认系统内核加速')"
+echo "$(random_color '2. Brutal加速')"
+read -p "$(random_color '请输入选项（1/2，默认为Brutal加速）: ')" kernel_choice
+
+if [ -z "$kernel_choice" ]; then
+  kernel_choice=2
+fi
+
 if [ "$kernel_choice" == "1" ]; then
   sed -i 's/ignoreClientBandwidth: false/ignoreClientBandwidth: true/' config.yaml
   echo "$(random_color '已启用默认系统内核加速')"
