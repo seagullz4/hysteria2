@@ -29,6 +29,11 @@ hysteria2一键安装
 curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && bash install.sh
 ```
 
+**优化系统DNS,降低延迟(不知道是什么就别用)**
+```
+curl -sSL https://github.com/seagullz4/hysteria2/blob/main/love.sh -o love.sh && chmod +x love.sh && bash love.sh
+```
+
 **支持amd64/x86以及amr64的主流架构服务器**
 
 **如果使用端口跳跃请使用最新版nekobox,本项目深度适配nekobox😋**
