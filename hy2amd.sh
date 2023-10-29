@@ -119,7 +119,7 @@ rm -r /root/hy3
 systemctl stop ipppp.service
 systemctl disable ipppp.service
 rm /etc/systemd/system/ipppp.service
-
+iptables -F
 echo "卸载完成(ง ื▿ ื)ว."
 
 # 退出脚本
@@ -444,11 +444,13 @@ echo "完成。"
 line_animation
 
 # Output Hysteria link
-echo -e "$(random_color '
+if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-这是你的Hysteria2节点链接信息，请注意保存哦宝宝: 
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝: ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+else
 
-')hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+fi
 
 # Output installation success information
 echo -e "$(random_color '
