@@ -287,6 +287,17 @@ if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
   
   echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
 fi
+
+if [ "$kernel_choice" == "1" ]; then
+  sed -i 's/ignoreClientBandwidth: false/ignoreClientBandwidth: true/' config.yaml
+  echo "$(random_color '已启用默认系统内核加速')"
+elif [ "$kernel_choice" == "2" ]; then
+  echo "$(random_color '已启用Brutal加速')"
+else
+  echo "$(random_color '错误的选项，请重新运行脚本并选择正确的内核加速类型。')"
+  exit 1
+fi
+
 # Prompt user to enter domain name
 echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
 read -p "" domain
