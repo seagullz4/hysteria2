@@ -40,10 +40,9 @@ welcome
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(世界和谐)"
-echo "2. 重装(世界进步)"
-echo "3. 卸载(世界美好)"
-echo "4. 启动hy2(穿越时空)"
-echo "5. 退出脚本(回到未来)"
+echo "2. 卸载(世界美好)"
+echo "3. 启动hy2(穿越时空)"
+echo "4. 退出脚本(回到未来)"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
@@ -51,28 +50,8 @@ case $choice in
    1)
      # Default installation operation
      ;;
+
    2)
-     # Reinstall and clear configuration operations
-     echo "执行重装并清除配置操作..."
-
-     # Find the Hysteria server process and kill it
-     process_name="hysteria-linux-amd64"
-     pid=$(pgrep -f "$process_name")
-
-     if [ -n "$pid" ]; then
-       echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
-       kill "$pid"
-       echo "$process_name 进程已被杀死。"
-     else
-       echo "未找到 $process_name 进程。"
-     fi
-     
-     rm -f ~/hy3/hysteria-linux-amd64 
-     rm -f ~/hy3/config.yaml 
-     echo "删除配置文件成功"
-     # Perform operations such as deleting configuration files here
-     ;;
-   3)
 
 
 # 停止 Hysteria 服务器服务（根据实际的服务名称来替换"my_hysteria.service"）
@@ -126,11 +105,11 @@ echo "卸载完成(ง ื▿ ื)ว."
 exit
      ;;
 
-   5)
+   4)
      # Exit script
      exit
      ;;
-   4)
+   3)
     cd /root/hy3/
     nohup ./hysteria-linux-amd64 server &
     echo "启动成功"
