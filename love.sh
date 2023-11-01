@@ -11,7 +11,6 @@ fi
 # 参数
 DNS_SERVER1="8.8.8.8"
 DNS_SERVER2="8.8.4.4"
-DNS_SERVER3="223.5.5.5"
 
 netplan_config="/etc/netplan/01-custom-dns.yaml"
 
@@ -27,12 +26,11 @@ for iface in "${network_interfaces[@]}"; do
       nameservers:
         addresses:
           - $DNS_SERVER1
-          - $DNS_SERVER2
-          - $DNS_SERVER3" >> "$netplan_config"
+          - $DNS_SERVER2" >> "$netplan_config"
 done
 
 netplan apply
 
-echo "已成功更新DNS配置为使用 $DNS_SERVER1、$DNS_SERVER2 和 $DNS_SERVER3 用于所有可用的网络接口。"
+echo "已成功更新DNS配置为使用 $DNS_SERVER1、$DNS_SERVER2 用于所有可用的网络接口。"
 
 resolvectl status
