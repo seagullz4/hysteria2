@@ -40,6 +40,7 @@ echo "1. 安装(世界和谐)"
 echo "2. 卸载(世界美好)"
 echo "3. 启动hy2(穿越时空)"
 echo "4. 退出脚本(回到未来)"
+echo "$(random_color 'hy2一键安装v23.11.04')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
@@ -51,15 +52,15 @@ case $choice in
    2)
 
 
-# 停止 Hysteria 服务器服务（根据实际的服务名称来替换"my_hysteria.service"）
-sudo systemctl stop my_hysteria.service
+# 停止 Hysteria 服务器服务（根据实际的服务名称来替换"hysteria.service"）
+sudo systemctl stop hysteria.service
 
-# 禁用 Hysteria 服务器服务的自启动（根据实际的服务名称来替换"my_hysteria.service"）
-sudo systemctl disable my_hysteria.service
+# 禁用 Hysteria 服务器服务的自启动（根据实际的服务名称来替换"hysteria.service"）
+sudo systemctl disable hysteria.service
 
-# 删除 Hysteria 服务器服务文件（根据实际的服务文件路径来替换"/etc/systemd/system/my_hysteria.service"）
-if [ -f "/etc/systemd/system/my_hysteria.service" ]; then
-  sudo rm "/etc/systemd/system/my_hysteria.service"
+# 删除 Hysteria 服务器服务文件（根据实际的服务文件路径来替换"/etc/systemd/system/hysteria.service"）
+if [ -f "/etc/systemd/system/hysteria.service" ]; then
+  sudo rm "/etc/systemd/system/hysteria.service"
   echo "Hysteria 服务器服务文件已删除。"
 else
   echo "Hysteria 服务器服务文件不存在。"
@@ -377,10 +378,12 @@ fi
 
 hysteria_directory="/root/hy3/"
 hysteria_executable="/root/hy3/hysteria-linux-amd64"
-hysteria_service_file="/etc/systemd/system/my_hysteria.service"
+hysteria_service_file="/etc/systemd/system/hysteria.service"
 
-create_service_file() {
-  cat > "$hysteria_service_file" <<EOF
+# Function to create and configure the systemd service file
+create_and_configure_service() {
+  if [ -e "$hysteria_directory" ] && [ -e "$hysteria_executable" ]; then
+    cat > "$hysteria_service_file" <<EOF
 [Unit]
 Description=My Hysteria Server
 
@@ -393,27 +396,28 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
+    echo "Hysteria服务器服务文件已创建和配置."
+  else
+    echo "Hysteria目录或可执行文件不存在，请检查路径."
+    exit 1
+  fi
 }
 
-echo "正在设置Hysteria服务器..."
-mkdir -p "$hysteria_directory"
+# Function to enable and start the systemd service
+enable_and_start_service() {
+  if [ -f "$hysteria_service_file" ]; then
+    systemctl enable hysteria.service
+    systemctl start hysteria.service
+    echo "Hysteria服务器服务已启用自启动并成功启动."
+  else
+    echo "Hysteria服务文件不存在，请先创建并配置服务文件."
+    exit 1
+  fi
+}
 
-if [ -e "$hysteria_service_file" ]; then
-  echo "服务文件已存在."
-else
-  create_service_file
-  echo "创建服务文件成功."
-fi
-
-echo "启用并启动Hysteria服务器服务..."
-systemctl enable my_hysteria.service
-systemctl start my_hysteria.service
-
-if systemctl is-active --quiet my_hysteria.service; then
-  echo "Hysteria服务器服务已启用自启动."
-else
-  echo "Hysteria服务器服务自启动失败但可以正常使用."
-fi
+# Main script
+create_and_configure_service
+enable_and_start_service
 
 echo "完成。"
 
