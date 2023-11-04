@@ -19,31 +19,29 @@ line_animation() {
 welcome() {
   clear
 
-  echo "████████████████████████████████████████████████████████████"
-  echo "█     █     ███   ████   █   ████  █   █   ███   █   █   ███"
-  echo "█  ████  ████   ████   █   ████  █   █   ███   █   █   ███"
-  echo "你好，有缘人，欢迎你使用hy2一键安装脚本"
-  echo "█  ████  ████   ████   █   ████  █   █   ███   █   █   ███"
-  echo "█  ████  ████   ████   █   ████  █   █   ███   █   █   ███"
-  echo "█     █          █       █       █       █       █       █"
-  echo "问君能有几多愁？恰似一江春水向东流。"
-  echo "████████████████████████████████████████████████████████████"
+echo -e "$(random_color '
+░██  ░██                                                              
+░██  ░██       ░████        ░█         ░█        ░█░█░█  
+░██  ░██     ░█      █      ░█         ░█        ░█    ░█ 
+░██████     ░██████         ░█         ░█        ░█    ░█ 
+░██  ░██     ░█             ░█ ░█      ░█  ░█     ░█░█░█ 
+░██  ░██      ░██  █         ░█         ░█                   ')"
+  echo "人生有两出悲剧：一是万念俱灰，另一是踌躇满志"
   echo "
   "
 }
-
 #这个welcome就是启动上面的对话😇
 welcome
-
  
 # Prompt user to select an action
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
-echo "1. 安装(世界和谐)"
-echo "2. 重装(世界进步)"
-echo "3. 卸载(世界美好)"
-echo "4. 启动hy2(穿越时空)"
-echo "5. 退出脚本(回到未来)"
+echo "1. 安装(以梦为马)"
+echo "2. 卸载(以心为疆)"
+echo "3. 启动hy2(穿越时空)"
+echo "4. 退出脚本(回到未来)"
+echo "5. 在线更新(逆天改命)"
+echo "$(random_color 'hy2一键安装v23.11.04')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
@@ -51,45 +49,20 @@ case $choice in
    1)
      # Default installation operation
      ;;
+
    2)
-     # Reinstall and clear configuration operations
-     echo "执行重装并清除配置操作..."
 
-     # Find the Hysteria server process and kill it
-     process_name="hysteria-linux-arm64"
-     pid=$(pgrep -f "$process_name")
+sudo systemctl stop hysteria.service
 
-     if [ -n "$pid" ]; then
-       echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
-       kill "$pid"
-       echo "$process_name 进程已被杀死。"
-     else
-       echo "未找到 $process_name 进程。"
-     fi
-     
-     rm -f ~/hy3/hysteria-linux-arm64 
-     rm -f ~/hy3/config.yaml 
-     echo "删除配置文件成功"
-     # Perform operations such as deleting configuration files here
-     ;;
-   3)
+sudo systemctl disable hysteria.service
 
-
-# 停止 Hysteria 服务器服务（根据实际的服务名称来替换"my_hysteria.service"）
-sudo systemctl stop my_hysteria.service
-
-# 禁用 Hysteria 服务器服务的自启动（根据实际的服务名称来替换"my_hysteria.service"）
-sudo systemctl disable my_hysteria.service
-
-# 删除 Hysteria 服务器服务文件（根据实际的服务文件路径来替换"/etc/systemd/system/my_hysteria.service"）
-if [ -f "/etc/systemd/system/my_hysteria.service" ]; then
-  sudo rm "/etc/systemd/system/my_hysteria.service"
+if [ -f "/etc/systemd/system/hysteria.service" ]; then
+  sudo rm "/etc/systemd/system/hysteria.service"
   echo "Hysteria 服务器服务文件已删除。"
 else
   echo "Hysteria 服务器服务文件不存在。"
 fi
 
-# 查找并杀死 Hysteria 服务器进程
 process_name="hysteria-linux-arm64"
 pid=$(pgrep -f "$process_name")
 
@@ -101,7 +74,6 @@ else
   echo "未找到 $process_name 进程。"
 fi
 
-# 删除 Hysteria 服务器二进制文件和配置文件（根据实际文件路径来替换）
 if [ -f "/root/hy3/hysteria-linux-arm64" ]; then
   rm -f "/root/hy3/hysteria-linux-arm64"
   echo "Hysteria 服务器二进制文件已删除。"
@@ -126,17 +98,43 @@ echo "卸载完成(ง ื▿ ื)ว."
 exit
      ;;
 
-   5)
+   4)
      # Exit script
      exit
      ;;
-   4)
+   3)
     cd /root/hy3/
     nohup ./hysteria-linux-arm64 server &
     echo "启动成功"
     exit
     ;;
+   5)
+   
+process_name="hysteria-linux-arm64"
 
+pid=$(pgrep -f "$process_name")
+
+if [ -n "$pid" ]; then
+  echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
+  kill "$pid"
+  echo "$process_name 进程已被杀死。"
+else
+  echo "未找到 $process_name 进程。"
+fi   
+
+cd /root/hy3
+
+rm -r hysteria-linux-arm64
+
+wget -O hysteria-linux-arm64 https://github.com/apernet/hysteria/releases/download/app/v2.2.0/hysteria-linux-arm64
+
+chmod +x hysteria-linux-arm64
+
+nohup ./hysteria-linux-arm64 server &
+
+echo "更新完成(ง ื▿ ื)ว."
+    exit
+    ;;
    *)
      echo "$(random_color '无效的选择，退出脚本。')"
      exit
@@ -153,7 +151,7 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-arm64 https://github.com/apernet/hysteria/releases/download/app/v2.1.1/hysteria-linux-arm64; then
+if wget -O hysteria-linux-arm64 https://github.com/apernet/hysteria/releases/download/app/v2.2.0/hysteria-linux-arm64; then
   chmod +x hysteria-linux-arm64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
@@ -401,10 +399,12 @@ fi
 
 hysteria_directory="/root/hy3/"
 hysteria_executable="/root/hy3/hysteria-linux-arm64"
-hysteria_service_file="/etc/systemd/system/my_hysteria.service"
+hysteria_service_file="/etc/systemd/system/hysteria.service"
 
-create_service_file() {
-  cat > "$hysteria_service_file" <<EOF
+# Function to create and configure the systemd service file
+create_and_configure_service() {
+  if [ -e "$hysteria_directory" ] && [ -e "$hysteria_executable" ]; then
+    cat > "$hysteria_service_file" <<EOF
 [Unit]
 Description=My Hysteria Server
 
@@ -417,27 +417,28 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
+    echo "Hysteria服务器服务文件已创建和配置."
+  else
+    echo "Hysteria目录或可执行文件不存在，请检查路径."
+    exit 1
+  fi
 }
 
-echo "正在设置Hysteria服务器..."
-mkdir -p "$hysteria_directory"
+# Function to enable and start the systemd service
+enable_and_start_service() {
+  if [ -f "$hysteria_service_file" ]; then
+    systemctl enable hysteria.service
+    systemctl start hysteria.service
+    echo "Hysteria服务器服务已启用自启动并成功启动."
+  else
+    echo "Hysteria服务文件不存在，请先创建并配置服务文件."
+    exit 1
+  fi
+}
 
-if [ -e "$hysteria_service_file" ]; then
-  echo "服务文件已存在."
-else
-  create_service_file
-  echo "创建服务文件成功."
-fi
-
-echo "启用并启动Hysteria服务器服务..."
-systemctl enable my_hysteria.service
-systemctl start my_hysteria.service
-
-if systemctl is-active --quiet my_hysteria.service; then
-  echo "Hysteria服务器服务已启用自启动."
-else
-  echo "Hysteria服务器服务自启动失败但可以正常使用."
-fi
+# Main script
+create_and_configure_service
+enable_and_start_service
 
 echo "完成。"
 
