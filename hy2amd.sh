@@ -36,10 +36,11 @@ welcome
 # Prompt user to select an action
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
-echo "1. 安装(世界和谐)"
-echo "2. 卸载(世界美好)"
+echo "1. 安装(以梦为马)"
+echo "2. 卸载(以心为疆)"
 echo "3. 启动hy2(穿越时空)"
 echo "4. 退出脚本(回到未来)"
+echo "5. 在线更新(逆天改命)"
 echo "$(random_color 'hy2一键安装v23.11.04')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
@@ -51,14 +52,10 @@ case $choice in
 
    2)
 
-
-# 停止 Hysteria 服务器服务（根据实际的服务名称来替换"hysteria.service"）
 sudo systemctl stop hysteria.service
 
-# 禁用 Hysteria 服务器服务的自启动（根据实际的服务名称来替换"hysteria.service"）
 sudo systemctl disable hysteria.service
 
-# 删除 Hysteria 服务器服务文件（根据实际的服务文件路径来替换"/etc/systemd/system/hysteria.service"）
 if [ -f "/etc/systemd/system/hysteria.service" ]; then
   sudo rm "/etc/systemd/system/hysteria.service"
   echo "Hysteria 服务器服务文件已删除。"
@@ -66,7 +63,6 @@ else
   echo "Hysteria 服务器服务文件不存在。"
 fi
 
-# 查找并杀死 Hysteria 服务器进程
 process_name="hysteria-linux-amd64"
 pid=$(pgrep -f "$process_name")
 
@@ -78,7 +74,6 @@ else
   echo "未找到 $process_name 进程。"
 fi
 
-# 删除 Hysteria 服务器二进制文件和配置文件（根据实际文件路径来替换）
 if [ -f "/root/hy3/hysteria-linux-amd64" ]; then
   rm -f "/root/hy3/hysteria-linux-amd64"
   echo "Hysteria 服务器二进制文件已删除。"
@@ -113,7 +108,33 @@ exit
     echo "启动成功"
     exit
     ;;
+   5)
+   
+process_name="hysteria-linux-amd64"
 
+pid=$(pgrep -f "$process_name")
+
+if [ -n "$pid" ]; then
+  echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
+  kill "$pid"
+  echo "$process_name 进程已被杀死。"
+else
+  echo "未找到 $process_name 进程。"
+fi   
+
+cd /root/hy3
+
+rm -r hysteria-linux-amd64
+
+wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.0/hysteria-linux-amd64
+
+chmod +x hysteria-linux-amd64
+
+nohup ./hysteria-linux-amd64 server &
+
+echo "更新完成(ง ื▿ ื)ว."
+    exit
+    ;;
    *)
      echo "$(random_color '无效的选择，退出脚本。')"
      exit
