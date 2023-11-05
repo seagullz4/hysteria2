@@ -201,12 +201,12 @@ udpIdleTimeout: 90s
 ignoreClientBandwidth: false
 
 quic:
-  initStreamReceiveWindow: 8388608 
-  maxStreamReceiveWindow: 8388608 
+  initStreamReceiveWindow: 8888888 
+  maxStreamReceiveWindow: 8888888 
   initConnReceiveWindow: 20971520 
   maxConnReceiveWindow: 20971520 
   maxIdleTimeout: 90s 
-  maxIncomingStreams: 1500 
+  maxIncomingStreams: 1800 
   disablePathMTUDiscovery: false 
 EOL
 
@@ -293,7 +293,7 @@ fi
 echo "$(random_color '请选择内核加速类型：')"
 echo "$(random_color '1. 默认系统内核加速')"
 echo "$(random_color '2. Brutal加速')"
-read -p "$(random_color '请输入选项（1/2，默认为Brutal加速）: ')" kernel_choice
+read -p "$(random_color '请输入选项（1/2，推荐系统内核加速,brutal有点激进）: ')" kernel_choice
 
 if [ -z "$kernel_choice" ]; then
   kernel_choice=2
