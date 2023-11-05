@@ -10,7 +10,7 @@ fi
 
 
 # Define commands to install
-commands=("wget" "sed" "openssl" "net-tools" "psmisc")
+commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps")
 package_manager=""
 install_command=""
 
