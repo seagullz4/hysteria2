@@ -57,7 +57,7 @@ ip地址查询
 
 中转机配落地鸡简直无敌
 akile小鸡解锁流媒体,住宅ISPip(香港低至15元)
-点击直达————[akile](https://akile.io/shop/server?type=traffic&areaId=3&nodeId=55&planId=319&aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
+点击直达————[**akile**](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
 ### **如需搬运本脚本内容，请注明原处谢谢**
 
