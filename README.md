@@ -52,11 +52,11 @@ ip地址查询
 [IP查询](https://ip.skk.moe/)
 
 # AD 😇
-比较好用的中转鸡,对于个人来说很便宜了7元一个月
+1.比较好用的中转鸡,对于个人来说很便宜了7元一个月
 
 点击直达————[**nnr**](https://nnr.moe?aff=8000)
 
-中转机配落地鸡简直无敌
+2.中转机配落地鸡简直无敌
 akile小鸡解锁流媒体,住宅ISPip(香港低至15元)
 
 点击直达————[**akile**](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
