@@ -74,9 +74,13 @@ else
   exit 1
 fi
 
-# 将发送、接收两个缓冲区都设置为 16 MB
+#正向优化系统，非测试😀
 sysctl -w net.core.rmem_max=16777216
 sysctl -w net.core.wmem_max=16777216
+sudo bash -c 'echo "net.ipv4.tcp_ecn = 1" >> /etc/sysctl.conf'
+sudo bash -c 'echo "net.ipv4.tcp_ecn_fallback = 1" >> /etc/sysctl.conf'
+sudo bash -c 'echo "net.ipv6.tcp_ecn = 1" >> /etc/sysctl.conf'
+sudo sysctl -p
 
 # Execute the downloaded script with elevated privileges
 if bash hy2.sh; then
