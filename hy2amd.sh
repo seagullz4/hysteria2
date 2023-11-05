@@ -16,6 +16,7 @@ line_animation() {
   done
 }
 #小火车开起来
+clear
 sl
 
 #这个y也是给用户看动画的
