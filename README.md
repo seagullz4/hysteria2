@@ -1,3 +1,10 @@
+#AD 😇
+比较好用的中转鸡,对于个人来说很便宜了7元一个月
+点击直达————[nnr](https://nnr.moe?aff=8000)
+中转机配落地鸡简直无敌
+akile小鸡解锁流媒体,住宅ISPip(香港低至15元)
+点击直达————[akile](https://akile.io/shop/server?type=traffic&areaId=3&nodeId=55&planId=319&aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
+
 # Hysteria2
 hysteria2一键安装
 宝宝们如果觉得好用，记得点个小星星⭐️哦
