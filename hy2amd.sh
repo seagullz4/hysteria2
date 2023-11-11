@@ -114,12 +114,14 @@ exit
 config_file="/root/hy3/config.yaml"
 
 if [ -f "$config_file" ]; then
+    # Extracting information using awk with the updated structure
     password=$(awk '/password:/ {print $2}' "$config_file")
-    domain=$(awk '/domain:/ {print $2}' "$config_file")
+    domains=$(awk '/domains:/ {flag=1; next} flag && /^ *-/{print $2; flag=0}' "$config_file")
     port=$(awk '/listen:/ {print $2}' "$config_file")
 
-    if [ -n "$password" ] && [ -n "$domain" ] && [ -n "$port" ]; then
-        output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+    if [ -n "$password" ] && [ -n "$domains" ] && [ -n "$port" ]; then
+        # Adjusting the output format with the new structure
+        output="hy2://$password@$domains:$port/?sni=$domains#Hysteria2"
         echo "$output"
     else
         echo "Error: Failed to extract required information from the configuration file."
@@ -127,7 +129,6 @@ if [ -f "$config_file" ]; then
 else
     echo "Error: Configuration file not found."
 fi
-    exit
     ;;
    5)
    
