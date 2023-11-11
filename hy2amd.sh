@@ -109,7 +109,7 @@ exit
      exit
      ;;
    3)
-echo "$(random_color '下面是你的节点信息')"    
+echo "$(random_color '下面是你的nekobox节点信息')"    
 cd /root/hy3/
 
 config_file="/root/hy3/config.yaml"
