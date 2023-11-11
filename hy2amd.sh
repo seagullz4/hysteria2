@@ -115,7 +115,7 @@ password=$(awk '/password:/ {print $2}' /root/hy3/config.yaml)
 domain=$(awk 'NR==5 {print substr($0, index($0,$2))}' /root/hy3/config.yaml)
 port=$(awk '/listen:/ {print $2}' /root/hy3/config.yaml)
 
-output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+output="hy2://$password@$domain$port/?sni=$domain#Hysteria2"
 
 echo $output
     exit
