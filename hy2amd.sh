@@ -117,7 +117,7 @@ if [ -f "$config_file" ]; then
     # Extracting information using awk with the updated structure
     password=$(awk '/password:/ {print $2}' "$config_file")
     domains=$(awk '/domains:/ {flag=1; next} flag && /^ *-/{print $2; flag=0}' "$config_file")
-    port=$(awk '/listen:/ {print $2}' "$config_file")
+    port=$(awk '/listen:/ {gsub(/[^0-9]/, "", $2); print $2}' "$config_file")
 
     if [ -n "$password" ] && [ -n "$domains" ] && [ -n "$port" ]; then
         # Adjusting the output format with the new structure
