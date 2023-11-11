@@ -129,6 +129,7 @@ if [ -f "$config_file" ]; then
 else
     echo "Error: Configuration file not found."
 fi
+    exit
     ;;
    5)
    
