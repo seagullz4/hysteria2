@@ -43,7 +43,7 @@ echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
 echo "2. 卸载(以心为疆)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "3. 启动hy2(穿越时空)"
+echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2版本(逆天改命)"
@@ -110,8 +110,13 @@ exit
      ;;
    3)
     cd /root/hy3/
-    nohup ./hysteria-linux-amd64 server &
-    echo "启动成功"
+   password=$(grep -E 'password:' /root/hy3/config.yaml | awk '{print $2}')
+domain=$(grep -E '- ' /root/hy3/config.yaml | awk '{print $2}')
+port=$(grep -E 'listen:' /root/hy3/config.yaml | awk '{print $2}')
+
+output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+
+echo $output
     exit
     ;;
    5)
