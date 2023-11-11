@@ -495,9 +495,8 @@ line_animation
 # Output Hysteria link
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝(请使用nekobox最新版才能兼容端口跳跃): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
-  echo -e "$(random_color '
-  电脑端自行修改端口跳跃,比如443,1000-10000)"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+  
 else
 
   echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
