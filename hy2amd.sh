@@ -47,7 +47,7 @@ echo "3. 启动hy2(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2版本(逆天改命)"
-echo "$(random_color 'hy2一键安装v23.11.04')"
+echo "$(random_color 'hy2究极版本v23.11.11')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
