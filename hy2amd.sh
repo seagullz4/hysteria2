@@ -109,7 +109,8 @@ exit
      exit
      ;;
    3)
-    cd /root/hy3/
+echo "$(random_color '下面是你的节点信息')"    
+cd /root/hy3/
 
 config_file="/root/hy3/config.yaml"
 
@@ -129,6 +130,11 @@ if [ -f "$config_file" ]; then
 else
     echo "Error: Configuration file not found."
 fi
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '下面是你的clashmate配置')"
+cat /root/hy3/clash-mate.yaml
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
     exit
     ;;
    5)
