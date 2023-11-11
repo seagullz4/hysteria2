@@ -110,9 +110,10 @@ exit
      ;;
    3)
     cd /root/hy3/
-   password=$(grep -E 'password:' /root/hy3/config.yaml | awk '{print $2}')
-domain=$(grep -E '- ' /root/hy3/config.yaml | awk '{print $2}')
-port=$(grep -E 'listen:' /root/hy3/config.yaml | awk '{print $2}')
+
+password=$(awk '/password:/ {print $2}' /root/hy3/config.yaml)
+domain=$(awk '/- / {print $2}' /root/hy3/config.yaml)
+port=$(awk '/listen:/ {print $2}' /root/hy3/config.yaml)
 
 output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
 
