@@ -396,7 +396,7 @@ else
 fi
 
 cat <<EOL > clash-mate.yaml
-mixed-port: 7890
+system-port: 7890
 external-controller: 127.0.0.1:9090
 allow-lan: false
 mode: rule
