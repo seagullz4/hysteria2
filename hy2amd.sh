@@ -111,13 +111,20 @@ exit
    3)
     cd /root/hy3/
 
-password=$(awk '/password:/ {print $2}' /root/hy3/config.yaml)
-domain=$(awk 'NR==5 {sub(/^[^:]*:/, ""); print}' /root/hy3/config.yaml)
-port=$(awk '/listen:/ {print $2}' /root/hy3/config.yaml)
+"$config_file" ]; then
+    password=$(awk '/password:/ {print $2}' "$config_file")
+    domain=$(awk '/domain:/ {print $2}' "$config_file")
+    port=$(awk '/listen:/ {print $2}' "$config_file")
 
-output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
-
-echo $output
+    if [ -n "$password" ] && [ -n "$domain" ] && [ -n "$port" ]; then
+        output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+        echo "$output"
+    else
+        echo "Error: Failed to extract required information from the configuration file."
+    fi
+else
+    echo "Error: Configuration file not found."
+fi
     exit
     ;;
    5)
