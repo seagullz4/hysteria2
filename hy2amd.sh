@@ -112,7 +112,7 @@ exit
     cd /root/hy3/
 
 password=$(awk '/password:/ {print $2}' /root/hy3/config.yaml)
-domain=$(sed -n '5s/^[^:]*:[[:space:]]*//p' /root/hy3/config.yaml)
+domain=$(awk 'NR==5 {sub(/^[^:]*:/, ""); print}' /root/hy3/config.yaml)
 port=$(awk '/listen:/ {print $2}' /root/hy3/config.yaml)
 
 output="hy2://$password@$domain:$port/?sni=$domain#Hysteria2"
