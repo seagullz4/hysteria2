@@ -42,9 +42,11 @@ welcome
 echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
 echo "2. 卸载(以心为疆)"
+echo "$(random_color '>>>>>>>>>>')"
 echo "3. 启动hy2(穿越时空)"
 echo "4. 退出脚本(回到未来)"
-echo "5. 在线更新(逆天改命)"
+echo "$(random_color '>>>>>>>>>>')"
+echo "5. 在线更新hy2版本(逆天改命)"
 echo "$(random_color 'hy2一键安装v23.11.04')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
