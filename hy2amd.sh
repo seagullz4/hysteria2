@@ -393,6 +393,48 @@ else
   exit 1
 fi
 
+cat <<EOL > clash-mate.yaml
+mixed-port: 7890
+external-controller: 127.0.0.1:9090
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: true
+unified-delay: true
+profile:
+  store-selected: true
+  store-fake-ip: true
+tun:
+  enable: true
+  stack: system
+  auto-route: true
+  auto-detect-interface: true
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  nameserver:
+    - 114.114.114.114
+    - 8.8.8.8
+proxies:
+  - name: Hysteria2
+    type: hysteria2
+    server: $domain
+    port: $port
+    password: $password
+    sni: $domain
+    skip-cert-verify: false
+proxy-groups:
+  - name: Proxy
+    type: select
+    proxies:
+      - Hysteria2
+rules:
+  - MATCH,Proxy
+EOL
+
+echo "clash-mate.yaml 已保存到当前文件夹"
+
 # Running the Hysteria server in the background
 if nohup ./hysteria-linux-amd64 server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
