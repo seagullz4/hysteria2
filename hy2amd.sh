@@ -111,7 +111,9 @@ exit
    3)
     cd /root/hy3/
 
-"$config_file" ]; then
+config_file="/root/hy3/config.yaml"
+
+if [ -f "$config_file" ]; then
     password=$(awk '/password:/ {print $2}' "$config_file")
     domain=$(awk '/domain:/ {print $2}' "$config_file")
     port=$(awk '/listen:/ {print $2}' "$config_file")
