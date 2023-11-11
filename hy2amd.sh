@@ -194,7 +194,7 @@ current_user=$(whoami)
 
 # 就是写一个配置文件，你可以自己修改，别乱搞就行，安装hysteria2文档修改
 cat <<EOL > config.yaml
-listen: 443
+listen: :443
 
 acme:
   domains:
