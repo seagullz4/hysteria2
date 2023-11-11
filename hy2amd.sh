@@ -438,6 +438,7 @@ tun:
   auto-detect-interface: true
 dns:
   enable: true
+  prefer-h3: true
   listen: 0.0.0.0:53
   enhanced-mode: fake-ip
   nameserver:
