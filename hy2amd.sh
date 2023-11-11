@@ -434,9 +434,11 @@ proxy-groups:
 rules:
   - MATCH,Proxy
 EOL
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "clash-mate.yaml 已保存到当前文件夹"
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 # Running the Hysteria server in the background
 if nohup ./hysteria-linux-amd64 server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
@@ -444,7 +446,8 @@ else
   echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
   exit 1
 fi
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 hysteria_directory="/root/hy3/"
 hysteria_executable="/root/hy3/hysteria-linux-amd64"
 hysteria_service_file="/etc/systemd/system/hysteria.service"
@@ -487,11 +490,12 @@ enable_and_start_service() {
 # Main script
 create_and_configure_service
 enable_and_start_service
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "完成。"
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 line_animation
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 # Output Hysteria link
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
