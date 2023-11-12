@@ -453,12 +453,12 @@ proxies:
     sni: $domain
     skip-cert-verify: false
 proxy-groups:
-  - name: Proxy
+  - name: auto
     type: select
     proxies:
       - Hysteria2
 rules:
-  - MATCH,Proxy
+  - MATCH,auto
 EOL
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
