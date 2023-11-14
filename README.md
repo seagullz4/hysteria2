@@ -46,12 +46,15 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/love.sh -o love.sh && 
 
 必须客户端支持hysteria2才行，否则就是你安装了也无法使用。
 
-安卓端强烈推荐[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)
+安卓端强烈推荐
+[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)
 
      [clash-mate](https://github.com/MetaCubeX/ClashMetaForAndroid)
 
 
-电脑端推荐[nekoray](https://github.com/MatsuriDayo/nekoray)
+电脑端推荐
+
+[nekoray](https://github.com/MatsuriDayo/nekoray)
 
      [clash-verge](https://github.com/zzzgydi/clash-verge)
 
