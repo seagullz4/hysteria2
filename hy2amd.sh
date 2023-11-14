@@ -39,14 +39,14 @@ welcome
  
 # Prompt user to select an action
 #这些就行提示你输入的😇
-echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
+echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
 echo "2. 卸载(以心为疆)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "5. 在线更新hy2版本(逆天改命)"
+echo "5. 在线更新hy2内核(目前版本2.2.0)"
 echo "$(random_color 'hy2究极版本v23.11.11')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
@@ -525,14 +525,14 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 # Output Hysteria link
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
   
 else
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
 fi
 
 # Output installation success information
 echo -e "$(random_color '
 
-Hysteria2安装成功，请合理使用哦。')"
+Hysteria2安装成功，请合理使用哦,你直接给我坐下')"
