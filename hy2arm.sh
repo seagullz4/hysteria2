@@ -15,6 +15,10 @@ line_animation() {
     lines=$((lines + 1))
   done
 }
+#小火车开起来
+clear
+sl
+
 #这个y也是给用户看动画的
 welcome() {
   clear
@@ -26,22 +30,24 @@ echo -e "$(random_color '
 ░██████     ░██████         ░█         ░█        ░█    ░█ 
 ░██  ░██     ░█             ░█ ░█      ░█  ░█     ░█░█░█ 
 ░██  ░██      ░██  █         ░█         ░█                   ')"
-  echo "人生有两出悲剧：一是万念俱灰，另一是踌躇满志"
-  echo "
-  "
+ echo -e "$(random_color '
+人生有两出悲剧：一是万念俱灰，另一是踌躇满志 ')"
+ 
 }
 #这个welcome就是启动上面的对话😇
 welcome
  
 # Prompt user to select an action
 #这些就行提示你输入的😇
-echo "$(random_color '选择一个操作，宝宝(ง ื▿ ื)ว：')"
+echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
 echo "2. 卸载(以心为疆)"
-echo "3. 启动hy2(穿越时空)"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
-echo "5. 在线更新(逆天改命)"
-echo "$(random_color 'hy2一键安装v23.11.04')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "5. 在线更新hy2内核(目前版本2.2.0)"
+echo "$(random_color 'hy2究极版本v23.11.11')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
@@ -103,9 +109,34 @@ exit
      exit
      ;;
    3)
-    cd /root/hy3/
-    nohup ./hysteria-linux-arm64 server &
-    echo "启动成功"
+echo "$(random_color '下面是你的nekobox节点信息')" 
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"   
+cd /root/hy3/
+
+config_file="/root/hy3/config.yaml"
+
+if [ -f "$config_file" ]; then
+    # Extracting information using awk with the updated structure
+    password=$(awk '/password:/ {print $2}' "$config_file")
+    domains=$(awk '/domains:/ {flag=1; next} flag && /^ *-/{print $2; flag=0}' "$config_file")
+    port=$(awk '/listen:/ {gsub(/[^0-9]/, "", $2); print $2}' "$config_file")
+
+    if [ -n "$password" ] && [ -n "$domains" ] && [ -n "$port" ]; then
+        # Adjusting the output format with the new structure
+        output="hy2://$password@$domains:$port/?sni=$domains#Hysteria2"
+        echo "$output"
+    else
+        echo "Error: Failed to extract required information from the configuration file."
+    fi
+else
+    echo "Error: Configuration file not found."
+fi
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '下面是你的clashmate配置')"
+cat /root/hy3/clash-mate.yaml
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
     exit
     ;;
    5)
@@ -197,12 +228,12 @@ udpIdleTimeout: 90s
 ignoreClientBandwidth: false
 
 quic:
-  initStreamReceiveWindow: 8388608 
-  maxStreamReceiveWindow: 8388608 
+  initStreamReceiveWindow: 8888888 
+  maxStreamReceiveWindow: 8888888 
   initConnReceiveWindow: 20971520 
   maxConnReceiveWindow: 20971520 
   maxIdleTimeout: 90s 
-  maxIncomingStreams: 1500 
+  maxIncomingStreams: 1800 
   disablePathMTUDiscovery: false 
 EOL
 
@@ -289,7 +320,7 @@ fi
 echo "$(random_color '请选择内核加速类型：')"
 echo "$(random_color '1. 默认系统内核加速')"
 echo "$(random_color '2. Brutal加速')"
-read -p "$(random_color '请输入选项（1/2，默认为Brutal加速）: ')" kernel_choice
+read -p "$(random_color '请输入选项（1/2，推荐系统内核加速,brutal有点激进）: ')" kernel_choice
 
 if [ -z "$kernel_choice" ]; then
   kernel_choice=2
@@ -389,6 +420,51 @@ else
   exit 1
 fi
 
+cat <<EOL > clash-mate.yaml
+system-port: 7890
+external-controller: 127.0.0.1:9090
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: true
+unified-delay: true
+profile:
+  store-selected: true
+  store-fake-ip: true
+tun:
+  enable: true
+  stack: system
+  auto-route: true
+  auto-detect-interface: true
+dns:
+  enable: true
+  prefer-h3: true
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  nameserver:
+    - 114.114.114.114
+    - 8.8.8.8
+proxies:
+  - name: Hysteria2
+    type: hysteria2
+    server: $domain
+    port: $port
+    password: $password
+    sni: $domain
+    skip-cert-verify: false
+proxy-groups:
+  - name: auto
+    type: select
+    proxies:
+      - Hysteria2
+rules:
+  - MATCH,auto
+EOL
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "clash-mate.yaml 已保存到当前文件夹"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 # Running the Hysteria server in the background
 if nohup ./hysteria-linux-arm64 server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
@@ -396,7 +472,8 @@ else
   echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
   exit 1
 fi
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 hysteria_directory="/root/hy3/"
 hysteria_executable="/root/hy3/hysteria-linux-arm64"
 hysteria_service_file="/etc/systemd/system/hysteria.service"
@@ -439,21 +516,23 @@ enable_and_start_service() {
 # Main script
 create_and_configure_service
 enable_and_start_service
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "完成。"
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 line_animation
-
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 # Output Hysteria link
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝(请使用nekobox最新版才能兼容端口跳跃): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+  
 else
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦宝宝: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
 fi
 
 # Output installation success information
 echo -e "$(random_color '
 
-Hysteria2安装成功，请合理使用哦。')"
+Hysteria2安装成功，请合理使用哦,你直接给我坐下')"
