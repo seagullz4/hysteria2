@@ -48,10 +48,12 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/love.sh -o love.sh && 
 
 安卓端强烈推荐[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)
 
+[clash-mate](https://github.com/MetaCubeX/ClashMetaForAndroid)
+
+
 电脑端推荐[nekoray](https://github.com/MatsuriDayo/nekoray)
 
-ip地址查询
-[IP查询](https://ip.skk.moe/)
+[clash-verge](https://github.com/zzzgydi/clash-verge)
 
 # AD 😇
 1.比较好用的中转鸡,对于个人来说很便宜了7元一个月
