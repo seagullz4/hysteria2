@@ -46,7 +46,7 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "5. 在线更新hy2内核(目前版本2.2.0)"
+echo "5. 在线更新hy2内核(目前版本2.2.1)"
 echo "$(random_color 'hy2究极版本v23.11.11')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
@@ -157,7 +157,7 @@ cd /root/hy3
 
 rm -r hysteria-linux-amd64
 
-wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.0/hysteria-linux-amd64
+wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.1/hysteria-linux-amd64
 
 chmod +x hysteria-linux-amd64
 
@@ -182,7 +182,7 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.0/hysteria-linux-amd64; then
+if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.1/hysteria-linux-amd64; then
   chmod +x hysteria-linux-amd64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
