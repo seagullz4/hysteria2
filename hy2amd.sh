@@ -15,9 +15,7 @@ line_animation() {
     lines=$((lines + 1))
   done
 }
-#小火车开起来
-clear
-sl
+
 
 #这个y也是给用户看动画的
 welcome() {
