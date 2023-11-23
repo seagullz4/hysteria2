@@ -155,7 +155,7 @@ cd /root/hy3
 
 rm -r hysteria-linux-amd64
 
-wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.1/hysteria-linux-amd64
+wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-amd64
 
 chmod +x hysteria-linux-amd64
 
@@ -180,7 +180,7 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.1/hysteria-linux-amd64; then
+if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-amd64; then
   chmod +x hysteria-linux-amd64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
