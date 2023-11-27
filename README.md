@@ -61,7 +61,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 点击直达(非常推荐)————[**nnr**](https://nnr.moe?aff=8000)
 
 2.中转机配落地鸡简直无敌
-akile小鸡解锁流媒体,住宅ISPip(香港低至15元)
+akile小鸡解锁流媒体(香港低至15元)
 
 点击直达————[**akile**](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
