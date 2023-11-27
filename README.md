@@ -1,7 +1,7 @@
 
 # Hysteria2
 hysteria2一键安装
-宝宝们如果觉得好用，记得点个小星星⭐️哦
+宝宝们如果觉得好用，记得点个小星星⭐️哦(到200⭐️将重新写架构,使其更加轻量化,丰富注释)
 
 
 （已升级到终极版本23.11.11，修复了已知和未知的bug，美化了脚本使用，以及流畅度😇😇😇）
@@ -61,7 +61,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 点击直达(非常推荐)————[**nnr**](https://nnr.moe?aff=8000)
 
 2.中转机配落地鸡简直无敌
-akile小鸡解锁流媒体(香港低至15元)
+akile小鸡解锁流媒体(解锁奈飞,迪士尼,chatgpt等等)
 
 点击直达————[**akile**](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
