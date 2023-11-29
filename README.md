@@ -39,7 +39,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 **如果使用端口跳跃请使用最新版nekobox,本项目深度适配nekobox😋**
 
 
-[8K视频测速网站](pornhub.com)
+[8K视频测速网站](https://pornhub.com)
 
 本项目原hysteria2地址请点击[hysteria](https://github.com/apernet/hysteria)
 
