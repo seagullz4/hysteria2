@@ -78,6 +78,9 @@ fi
 # Execute the downloaded script with elevated privileges
 if bash hy2.sh; then
   echo "而你，我的朋友，你是恋爱脑里的常青树，Joker里的顶梁柱，麦当劳的吉祥物，哥谭市的大头目，扑克牌的最大数，蝙蝠侠的大客户……"
+  echo "
+
+家人们,由于我是傻鸟,脚本有问题请尽快提出来,很可能因为我的粗心导致脚本不能使用,这是经常发生的,请大家谅解,谢谢"
 else
   echo "脚本执行失败。"
   exit 1
