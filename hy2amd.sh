@@ -67,7 +67,7 @@ else
   echo "Hysteria 服务器服务文件不存在。"
 fi
 
-process_name="hysteria-linux-amd64"
+process_name="hysteria-linux-arm64"
 pid=$(pgrep -f "$process_name")
 
 if [ -n "$pid" ]; then
@@ -78,8 +78,8 @@ else
   echo "未找到 $process_name 进程。"
 fi
 
-if [ -f "/root/hy3/hysteria-linux-amd64" ]; then
-  rm -f "/root/hy3/hysteria-linux-amd64"
+if [ -f "/root/hy3/hysteria-linux-arm64" ]; then
+  rm -f "/root/hy3/hysteria-linux-arm64"
   echo "Hysteria 服务器二进制文件已删除。"
 else
   echo "Hysteria 服务器二进制文件不存在。"
@@ -139,7 +139,7 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
     ;;
    5)
    
-process_name="hysteria-linux-amd64"
+process_name="hysteria-linux-arm64"
 
 pid=$(pgrep -f "$process_name")
 
@@ -153,13 +153,13 @@ fi
 
 cd /root/hy3
 
-rm -r hysteria-linux-amd64
+rm -r hysteria-linux-arm64
 
-wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-amd64
+wget -O hysteria-linux-arm64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-arm64
 
-chmod +x hysteria-linux-amd64
+chmod +x hysteria-linux-arm64
 
-nohup ./hysteria-linux-amd64 server &
+nohup ./hysteria-linux-arm64 server &
 
 echo "更新完成(ง ื▿ ื)ว."
     exit
@@ -180,8 +180,8 @@ mkdir -p ~/hy3
 cd ~/hy3
 
 # Download the Hysteria binary and grant highest permissions
-if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-amd64; then
-  chmod +x hysteria-linux-amd64
+if wget -O hysteria-linux-arm64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-arm64; then
+  chmod +x hysteria-linux-arm64
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
   exit 1
@@ -440,7 +440,7 @@ fi
 fuser -k -n tcp $port
 fuser -k -n udp $port
 
-if sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64; then
+if sudo setcap cap_net_bind_service=+ep hysteria-linux-arm64; then
   echo "$(random_color '授予权限成功。')"
 else
   echo "$(random_color '授予权限失败，退出脚本。')"
@@ -493,7 +493,7 @@ echo "clash-mate.yaml 已保存到当前文件夹"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 # Running the Hysteria server in the background
-if nohup ./hysteria-linux-amd64 server & then
+if nohup ./hysteria-linux-arm64 server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
 else
   echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
@@ -502,7 +502,7 @@ fi
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 hysteria_directory="/root/hy3/"
-hysteria_executable="/root/hy3/hysteria-linux-amd64"
+hysteria_executable="/root/hy3/hysteria-linux-arm64"
 hysteria_service_file="/etc/systemd/system/hysteria.service"
 
 create_and_configure_service() {
