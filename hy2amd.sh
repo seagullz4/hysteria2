@@ -194,11 +194,6 @@ current_user=$(whoami)
 cat <<EOL > config.yaml
 listen: :443
 
-acme:
-  domains:
-    - your.domain.net
-  email: your@email.com
-
 auth:
   type: password
   password: Se7RAuFZ8Lzg
@@ -334,55 +329,93 @@ else
   exit 1
 fi
 
-# Prompt user to enter domain name
-echo "$(random_color '请输入你的域名(必须是解析好的域名哦)（your.domain.net）: ')"
-read -p "" domain
 
-# Check whether the input is empty, if it is empty, prompt to re-enter
-while [ -z "$domain" ]; do
-  echo "$(random_color '域名不能为空，请重新输入: ')"
+generate_certificate() {
+    read -p "请输入要用于自签名证书的域名（默认为 bing.com）: " user_domain
+    domain_name=${user_domain:-"bing.com"}
+    if curl --output /dev/null --silent --head --fail "$domain_name"; then
+        openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout "/etc/ssl/private/$domain_name.key" -out "/etc/ssl/private/$domain_name.crt" -subj "/CN=$domain_name" -days 36500
+        chmod 600 "/etc/ssl/private/$domain_name.key" "/etc/ssl/private/$domain_name.crt"
+        echo -e "自签名证书和私钥已生成！"
+    else
+        echo -e "无效的域名或域名不可用，请输入有效的域名！"
+        generate_certificate
+    fi
+}
+
+
+read -p "请选择证书类型（输入 1 使用ACME证书，输入 2 使用自签名证书）: " cert_choice
+
+if [ "$cert_choice" == "2" ]; then
+    generate_certificate
+
+    certificate_path="/etc/ssl/private/$domain_name.crt"
+    private_key_path="/etc/ssl/private/$domain_name.key"
+
+    echo -e "证书文件已保存到 /etc/ssl/private/$domain_name.crt"
+    echo -e "私钥文件已保存到 /etc/ssl/private/$domain_name.key"
+
+
+    temp_file=$(mktemp)
+    echo -e "temp_file: $temp_file"
+    sed '3i\tls:\n  cert: '"/etc/ssl/private/$domain_name.crt"'\n  key: '"/etc/ssl/private/$domain_name.key"'' /root/hy3/config.yaml > "$temp_file"
+    mv "$temp_file" /root/hy3/config.yaml
+    touch /root/hy3/ca
+    ip4=$(hostname -I | awk '{print $1}')
+    ovokk="insecure=1&"
+    echo -e "已将证书和密钥信息写入 /root/hy3/config.yaml 文件。"
+fi
+
+if [ -f "/root/hy3/ca" ]; then
+  echo "$(random_color '/root/hy3/ 文件夹中已存在名为 ca 的文件。跳过添加操作。')"
+else
+
+  echo "$(random_color '请输入你的域名（必须是解析好的域名哦）: ')"
   read -p "" domain
-done
 
-# Replace the domain name in the configuration file
-if sed -i "s/your.domain.net/$domain/" config.yaml; then
-  echo "$(random_color '域名已设置为：')" $domain
-else
-  echo "$(random_color '替换域名失败，退出脚本。')"
-  exit 1
+  
+  while [ -z "$domain" ]; do
+    echo "$(random_color '域名不能为空，请重新输入: ')"
+    read -p "" domain
+  done
+
+
+  echo "$(random_color '请输入你的邮箱（默认随机邮箱）: ')"
+  read -p "" email
+
+
+  if [ -z "$email" ]; then
+
+    random_part=$(head /dev/urandom | LC_ALL=C tr -dc A-Za-z0-9 | head -c 4 ; echo '')
+
+
+    email="${random_part}@gmail.com"
+  fi
+
+
+  yaml_content="acme:\n  domains:\n    - $domain\n  email: $email"
+
+
+  if [ -f "config.yaml" ]; then
+    echo -e "\nAppending to config.yaml..."
+    echo -e $yaml_content >> config.yaml
+    echo "$(random_color '域名和邮箱已添加到 config.yaml 文件。')"
+  else
+    echo "$(random_color 'config.yaml 文件不存在，无法添加。')"
+    exit 1
+  fi
 fi
 
-# Prompt user to enter email address
-echo "$(random_color '请输入你的邮箱（默认随机邮箱）: ')"
-read -p "" email
 
-# If the mailbox is empty, generate a random mailbox in the format xxxx@gmail.com
-if [ -z "$email" ]; then
-  # Generate a random string of 4 characters (xxxx part)
-  random_part=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 4 ; echo '')
-
-  # Set the email variable in the format xxxx@gmail.com
-  email="${random_part}@gmail.com"
-fi
-
-# Replace email in profile
-if sed -i "s/your@email.com/$email/" config.yaml; then
-  echo "$(random_color '邮箱已设置为：')" $email
-else
-  echo "$(random_color '替换邮箱失败，退出脚本。')"
-  exit 1
-fi
-
-# Prompt user for password
 echo "$(random_color '请输入你的密码（留空将生成随机密码，不超过20个字符）: ')"
 read -p "" password
 
-# If the password is empty, generate a random password
+
 if [ -z "$password" ]; then
   password=$(openssl rand -base64 20 | tr -dc 'a-zA-Z0-9')
 fi
 
-# Replace password in configuration file
+
 if sed -i "s/Se7RAuFZ8Lzg/$password/" config.yaml; then
   echo "$(random_color '密码已设置为：')" $password
 else
@@ -390,16 +423,13 @@ else
   exit 1
 fi
 
-# Prompt the user to enter the disguised domain name
 echo "$(random_color '请输入伪装网址（默认https://news.ycombinator.com/）: ')"
 read -p "" masquerade_url
 
-# If the disguised domain name is empty, the default value is used
 if [ -z "$masquerade_url" ]; then
   masquerade_url="https://news.ycombinator.com/"
 fi
 
-# Replace the disguised domain name in the configuration file
 if sed -i "s|https://news.ycombinator.com/|$masquerade_url|" config.yaml; then
   echo "$(random_color '伪装域名已设置为：')" $masquerade_url
 else
@@ -410,7 +440,6 @@ fi
 fuser -k -n tcp $port
 fuser -k -n udp $port
 
-# Grant permissions to the Hysteria binary
 if sudo setcap cap_net_bind_service=+ep hysteria-linux-amd64; then
   echo "$(random_color '授予权限成功。')"
 else
@@ -476,7 +505,6 @@ hysteria_directory="/root/hy3/"
 hysteria_executable="/root/hy3/hysteria-linux-amd64"
 hysteria_service_file="/etc/systemd/system/hysteria.service"
 
-# Function to create and configure the systemd service file
 create_and_configure_service() {
   if [ -e "$hysteria_directory" ] && [ -e "$hysteria_executable" ]; then
     cat > "$hysteria_service_file" <<EOF
@@ -499,7 +527,7 @@ EOF
   fi
 }
 
-# Function to enable and start the systemd service
+
 enable_and_start_service() {
   if [ -f "$hysteria_service_file" ]; then
     systemctl enable hysteria.service
@@ -511,7 +539,7 @@ enable_and_start_service() {
   fi
 }
 
-# Main script
+
 create_and_configure_service
 enable_and_start_service
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
@@ -520,17 +548,17 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 line_animation
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-# Output Hysteria link
+
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$domain:$port/?mport=$port%2C$start_port-$end_port&sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$ip4$domain:$port/?mport=$port%2C$start_port-$end_port&${ovokk}sni=$domain$domain_name#Hysteria2"
   
 else
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhy2://$password@$domain:$port/?sni=$domain#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhy2://$password@$ip4$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
 fi
 
-# Output installation success information
+
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦,你直接给我坐下')"
