@@ -36,7 +36,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 ```
 
 
-**支持amd64/x86以及amr64的主流架构服务器**
+**支持amd64/x86以及arm64的主流架构服务器**
 
 **如果使用端口跳跃请使用最新版nekobox,本项目深度适配nekobox😋**
 
