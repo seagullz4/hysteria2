@@ -1,12 +1,18 @@
 #!/bin/bash
+
 #中国共产党万岁，中华人民共和国万岁，为人民崛起而读书
+
 # 下面这串是关于文字颜色的，可以自己改数字😇
+
 #好的脚本，就是要有好的注释和简介的代码💩
+
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
   echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
 }
+
 #这个没啥用，就是让用户白等5s看动画的💩
+
 line_animation() {
   lines=0
   while [ $lines -lt 8 ]; do
@@ -25,6 +31,7 @@ else
 fi
 
 #这个y也是给用户看动画的
+
 welcome() {
   clear
 
@@ -39,10 +46,12 @@ echo -e "$(random_color '
 人生有两出悲剧：一是万念俱灰，另一是踌躇满志 ')"
  
 }
+
 #这个welcome就是启动上面的对话😇
+
 welcome
  
-# Prompt user to select an action
+
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
@@ -60,7 +69,9 @@ read -p "输入操作编号 (1/2/3/4/5): " choice
 
 case $choice in
    1)
-     # Default installation operation
+
+     #啥也没有
+
      ;;
 
    2)
@@ -109,40 +120,30 @@ echo "卸载完成(ง ื▿ ื)ว."
 
 # 退出脚本
 exit
+
      ;;
 
    4)
+
      # Exit script
      exit
+
      ;;
    3)
-echo "$(random_color '下面是你的nekobox节点信息')" 
+
+echo "$(random_color '下面是你的nekobox节点信息,记得保存小老弟')" 
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"   
 cd /root/hy3/
 
-config_file="/root/hy3/config.yaml"
+cat /root/hy3/neko.txt
 
-if [ -f "$config_file" ]; then
-    # Extracting information using awk with the updated structure
-    password=$(awk '/password:/ {print $2}' "$config_file")
-    domains=$(awk '/domains:/ {flag=1; next} flag && /^ *-/{print $2; flag=0}' "$config_file")
-    port=$(awk '/listen:/ {gsub(/[^0-9]/, "", $2); print $2}' "$config_file")
-
-    if [ -n "$password" ] && [ -n "$domains" ] && [ -n "$port" ]; then
-        # Adjusting the output format with the new structure
-        output="hy2://$password@$domains:$port/?sni=$domains#Hysteria2"
-        echo "$output"
-    else
-        echo "Error: Failed to extract required information from the configuration file."
-    fi
-else
-    echo "Error: Configuration file not found."
-fi
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '下面是你的clashmate配置')"
+
 cat /root/hy3/clash-mate.yaml
+
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
     exit
     ;;
@@ -179,16 +180,12 @@ echo "更新完成(ง ื▿ ื)ว."
      ;;
 esac
 
-# The following is the default installation operation, you can add installation code here
-
 line_animation
 
-# Create hy3 folder and enter
 cd /root
 mkdir -p ~/hy3
 cd ~/hy3
 
-# Download the Hysteria binary and grant highest permissions
 if wget -O hysteria-linux-amd64 https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-amd64; then
   chmod +x hysteria-linux-amd64
 else
@@ -196,7 +193,6 @@ else
   exit 1
 fi
 
-# Get current username
 current_user=$(whoami)
 
 # 就是写一个配置文件，你可以自己修改，别乱搞就行，安装hysteria2文档修改
@@ -564,9 +560,14 @@ if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
   echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhy2://$password@$ip4$domain:$port/?mport=$port%2C$start_port-$end_port&${ovokk}sni=$domain$domain_name#Hysteria2"
   
+  echo "hy2://$password@$ip4$domain:$port/?mport=$port%2C$start_port-$end_port&${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
+
 else
 
   echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhy2://$password@$ip4$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
+
+  echo "hy2://$password@$ip4$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
+
 fi
 
 
