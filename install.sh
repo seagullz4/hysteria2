@@ -7,9 +7,11 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+#优化一些系统参数
+sysctl -w net.core.rmem_max=16777216
+sysctl -w net.core.wmem_max=16777216
 
-
-# Define commands to install
+# 安装一些缺少的组件
 commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" )
 package_manager=""
 install_command=""
