@@ -53,7 +53,7 @@ echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(目前版本2.2.2)"
 echo "$(random_color 'hy2究极版本v23.12.03')"
-echo "$(random_color 'hysteria2状态:$hy2zt')"
+echo "       hysteria2状态:$hy2zt"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
