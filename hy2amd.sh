@@ -18,11 +18,10 @@ line_animation() {
 
 pid=$(pgrep -f "hysteria-linux-amd64")
 
-
 if [ -n "$pid" ]; then
-  hy2zt=已运行
+  hy2zt="已运行"
 else
-  hy2zt=未运行
+  hy2zt="未运行"
 fi
 
 #这个y也是给用户看动画的
