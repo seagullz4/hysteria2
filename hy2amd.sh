@@ -476,7 +476,7 @@ dns:
 proxies:
   - name: Hysteria2
     type: hysteria2
-    server: $domain@$ip4
+    server: $domain$ip4
     port: $port
     password: $password
     sni: $domain$domain_name
