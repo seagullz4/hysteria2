@@ -16,6 +16,14 @@ line_animation() {
   done
 }
 
+pid=$(pgrep -f "hysteria-linux-amd64")
+
+
+if [ -n "$pid" ]; then
+  hy2zt=已运行
+else
+  hy2zt=未运行
+fi
 
 #这个y也是给用户看动画的
 welcome() {
@@ -46,6 +54,7 @@ echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(目前版本2.2.2)"
 echo "$(random_color 'hy2究极版本v23.12.03')"
+echo "$(random_color 'hysteria2状态:$hy2zt')"
 
 read -p "输入操作编号 (1/2/3/4/5): " choice
 
