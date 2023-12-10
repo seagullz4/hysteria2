@@ -363,6 +363,7 @@ if [ "$cert_choice" == "2" ]; then
     touch /root/hy3/ca
     ip4=$(hostname -I | awk '{print $1}')
     ovokk="insecure=1&"
+    choice1="true"
     echo -e "已将证书和密钥信息写入 /root/hy3/config.yaml 文件。"
 fi
 
@@ -400,6 +401,7 @@ else
     echo -e "\nAppending to config.yaml..."
     echo -e $yaml_content >> config.yaml
     echo "$(random_color '域名和邮箱已添加到 config.yaml 文件。')"
+    choice2="false"
   else
     echo "$(random_color 'config.yaml 文件不存在，无法添加。')"
     exit 1
@@ -474,11 +476,11 @@ dns:
 proxies:
   - name: Hysteria2
     type: hysteria2
-    server: $domain
+    server: $domain@$ip4
     port: $port
     password: $password
-    sni: $domain
-    skip-cert-verify: false
+    sni: $domain$domain_name
+    skip-cert-verify: $choice1$choice2
 proxy-groups:
   - name: auto
     type: select
