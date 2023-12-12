@@ -451,7 +451,7 @@ case $choice in
         ;;
     2)
         if [ $ipv6_exists -eq 0 ]; then
-            ipdz=$ipv6_address
+            ipdz="[$ipv6_address]"
             echo "老登,你的IP地址为IPv6: $ipdz"
         else
             echo "无法获取IPv6地址"
