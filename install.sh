@@ -651,9 +651,9 @@ if [ -n "$start_port" ] && [ -n "$end_port" ]; then
   
 else
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhy2://$password@$ipdz$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhysteria2://$password@$ipdz$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
   
-  echo "hy2://$password@$ipdz$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
+  echo "hysteria2://$password@$ipdz$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
   
 fi
 
