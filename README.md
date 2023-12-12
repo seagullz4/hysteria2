@@ -34,13 +34,9 @@ hysteria2一键安装
 ```
 curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && bash install.sh
 ```
-**测试脚本**
-```
-curl -sSL https://github.com/seagullz4/hysteria2/raw/main/test.sh -o test.sh && chmod +x test.sh && bash test.sh
-```
-**(如果使用的是测试版本可以反馈一下怎么样，要是没问题的话就OK了，arm玩家可以优先，
 
-我的联系方式:[电报](https://t.me/softwareou))**
+**我的联系方式:[电报](https://t.me/softwareou)**
+
 
 **支持amd64/x86以及arm64的主流架构服务器**
 
