@@ -452,8 +452,13 @@ ipv6_exists=$?
 echo "请选择IP类型："
 echo "1. IPv4 模式"
 echo "2. IPv6 模式(纯ipv6首选,我也不知道老登你的ipv6能不能用)"
+echo "3. 回车默认为IPv4 模式"
 
 read -p "请输入选项编号: " choice
+
+if [ -z "$choice" ]; then 
+    choice=3
+fi
 
 case $choice in
     1)
@@ -470,6 +475,14 @@ case $choice in
             echo "老登,你的IP地址为IPv6: $ipdz"
         else
             echo "无法获取IPv6地址"
+        fi
+        ;;
+    3)
+        if [ $ipv4_exists -eq 0 ]; then
+            ipdz=$ipv4_address
+            echo "老登,你的IP地址为IPv4: $ipdz"
+        else
+            echo "无法获取IPv4地址"
         fi
         ;;
     *)
