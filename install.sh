@@ -13,7 +13,7 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps")
+commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables")
 package_manager=""
 install_command=""
 
