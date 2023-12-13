@@ -435,8 +435,8 @@ ipv6_address=$(ip $ip6_opts | grep -oP "(?<=inet6\s)$ipv6_regex")
 ipv6_exists=$?
 
 echo "请选择IP类型："
-echo "1. IPv4 优先"
-echo "2. IPv6 优先"
+echo "1. IPv4 模式"
+echo "2. IPv6 模式(纯ipv6首选,我也不知道老登你的ipv6能不能用)"
 
 read -p "请输入选项编号: " choice
 
