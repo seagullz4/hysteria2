@@ -47,26 +47,41 @@ install_missing_commands() {
 
 install_missing_commands
 
-arch=$(uname -m)
+set_architecture() {
+  case "$(uname -m)" in
+    'i386' | 'i686')
+     
+      arch='386'
+      ;;
+    'amd64' | 'x86_64')
+    
+      arch='amd64'
+      ;;
+    'armv5tel' | 'armv6l' | 'armv7' | 'armv7l')
+      
+      arch='arm'
+      ;;
+    'armv8' | 'aarch64')
+   
+      arch='arm64'
+      ;;
+    'mips' | 'mipsle' | 'mips64' | 'mips64le')
+      
+      arch='mipsle'
+      ;;
+    's390x')
+      
+      arch='s390x'
+      ;;
+    *)
 
-if [ "$arch" = "x86_64" ]; then
+      echo "暂时不支持你的系统哦，可能是因为不在已知架构范围内。"
+      exit 1
+      ;;
+  esac
+}
 
-  arch="amd64"
-  
-elif [ "$arch" = "aarch64" ]; then
-
-  arch="arm64"
-  
-elif [ "$arch" = "i386" ] || [ "$arch" = "i686" ]; then
-
-  arch="386"
-  
-else
-
-  echo "暂时不支持你的系统哦，可能是因为不在已知架构范围内。"
-
-  exit 1
-fi
+set_architecture
 
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
