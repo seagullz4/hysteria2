@@ -38,7 +38,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 **我的联系方式:[电报](https://t.me/softwareou)**
 
 
-**支持一波的主流架构服务器**
+**支持一波浪的主流架构以及纯ipv4和纯ipv6服务器**
 
 **如果使用端口跳跃请使用最新版nekobox,本项目深度适配nekobox😋**
 
