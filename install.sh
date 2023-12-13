@@ -645,7 +645,7 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(请使用nekobox最新版才能兼容端口跳跃,电脑端自行修改端口跳跃,比如443,1000-10000): ')\nhysteria2://$password@$ipdz$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(老登，请使用最新版的neko哦): ')\nhysteria2://$password@$ipdz$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
   
   echo "hysteria2://$password@$ipdz$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2" > neko.txt
   
