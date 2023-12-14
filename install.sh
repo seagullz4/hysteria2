@@ -145,6 +145,8 @@ case $choice in
 
    2)
 
+uninstall_hysteria () {
+
 sudo systemctl stop hysteria.service
 
 sudo systemctl disable hysteria.service
@@ -185,9 +187,12 @@ systemctl stop ipppp.service
 systemctl disable ipppp.service
 rm /etc/systemd/system/ipppp.service
 iptables -F
-echo "卸载完成(ง ื▿ ื)ว."
+echo "卸载完成(ง ื▿ ื)ว." }
 
-# 退出脚本
+echo -e "$(random_color '你别急,别急,正在卸载......')"
+sleep 2
+uninstall_hysteria > /dev/null 2>&1
+
 exit
      ;;
 
