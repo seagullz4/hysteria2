@@ -446,7 +446,7 @@ ipv6_regex='([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}'
 
 check_ip() {
     local ip_address
-    ip_address=$(ip $1 | grep -E -o "$2")
+    ip_address=$(ip $1 | grep -E -o "$2" | head -n 1)
     ip_exists=$?
     if [ $ip_exists -eq 0 ]; then
         echo "$ip_address"
