@@ -193,6 +193,7 @@ echo "卸载完成(ง ื▿ ื)ว."
 uninstall_hysteria > /dev/null 2>&1
 echo -e "$(random_color '你别急,别急,正在卸载......')"
 sleep 2
+echo -e "$(random_color '卸载完成,老登ψ(｀∇´)ψ！')"
 
 exit
      ;;
