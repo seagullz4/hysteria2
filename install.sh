@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#中国共产党万岁，中华人民共和国万岁，为人民崛起而读书
-
-# 下面这串是关于文字颜色的，可以自己改数字😇
-
-#好的脚本，就是要有好的注释和简介的代码💩
-
 # 检测当前用户是否为 root 用户
 if [ "$EUID" -ne 0 ]; then
   echo "请使用 root 用户执行此脚本！"
@@ -13,7 +7,12 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables")
+random_color() {
+  colors=("31" "32" "33" "34" "35" "36" "37")
+  echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
+}
+
+commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables" "iproute2")
 package_manager=""
 install_command=""
 
@@ -45,7 +44,10 @@ install_missing_commands() {
   done
 }
 
-install_missing_commands
+echo -e "$(random_color '安装必要依赖中......')"
+sleep 2
+install_missing_commands > /dev/null 2>&1
+echo -e "$(random_color '依赖安装完成')"
 
 set_architecture() {
   case "$(uname -m)" in
@@ -83,18 +85,13 @@ set_architecture() {
 
 set_architecture
 
-random_color() {
-  colors=("31" "32" "33" "34" "35" "36" "37")
-  echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
-}
-
 #这个没啥用，就是让用户白等5s看动画的💩
 
 line_animation() {
   lines=0
   while [ $lines -lt 8 ]; do
     echo -e "$(random_color '********************************************************************************')"
-    sleep 0.375  # Sleep for 0.375 seconds each time (3 seconds total time / 8 lines)
+    sleep 0.375 
     lines=$((lines + 1))
   done
 }
@@ -110,7 +107,6 @@ fi
 #这个y也是给用户看动画的
 
 welcome() {
-  clear
 
 echo -e "$(random_color '
 ░██  ░██                                                              
@@ -388,21 +384,25 @@ fi
 echo "$(random_color '请选择内核加速类型：')"
 echo "$(random_color '1. 默认系统内核加速')"
 echo "$(random_color '2. Brutal加速')"
-read -p "$(random_color '请输入选项（1/2，推荐系统内核加速）: ')" kernel_choice
+read -p "$(random_color '请输入选项（1/2，回车默认系统内核加速）: ')" kernel_choice
 
 if [ -z "$kernel_choice" ]; then
-  kernel_choice=2
+  kernel_choice=1
 fi
 
-if [ "$kernel_choice" == "1" ]; then
-  sed -i 's/ignoreClientBandwidth: false/ignoreClientBandwidth: true/' config.yaml
-  echo "$(random_color '已启用默认系统内核加速')"
-elif [ "$kernel_choice" == "2" ]; then
-  echo "$(random_color '已启用Brutal加速')"
-else
-  echo "$(random_color '错误的选项，请重新运行脚本并选择正确的内核加速类型。')"
-  exit 1
-fi
+case "$kernel_choice" in
+  1) 
+    sed -i 's/ignoreClientBandwidth: false/ignoreClientBandwidth: true/' config.yaml
+    echo "$(random_color '已启用默认系统内核加速')"
+    ;;
+  2) 
+    echo "$(random_color '已启用Brutal加速')"
+    ;;
+  *) 
+    echo "$(random_color '错误的选项，请输入1或2选择内核加速类型。')"
+    exec "$0"
+    ;;
+esac
 
 generate_certificate() {
     read -p "请输入要用于自签名证书的域名（默认为 bing.com）: " user_domain
@@ -417,7 +417,7 @@ generate_certificate() {
     fi
 }
 
-read -p "请选择证书类型（输入 1 使用ACME证书，输入 2 使用自签名证书）: " cert_choice
+read -p "请选择证书类型（输入 1 使用ACME证书,输入 2 使用自签名证书,回车默认acme证书申请）: " cert_choice
 
 if [ "$cert_choice" == "2" ]; then
     generate_certificate
@@ -438,53 +438,56 @@ if [ "$cert_choice" == "2" ]; then
     choice1="true"
     echo -e "已将证书和密钥信息写入 /root/hy3/config.yaml 文件。"
     
-ip4_opts="-4 addr show scope global"
-ip6_opts="-6 addr show scope global"
+get_ipv4_address() {
+  ipv4=$(ifconfig | grep 'inet ' | awk '{print $2}' | grep -v '127.0.0.1' | head -n1)
 
-ipv4_regex='([0-9]{1,3}\.){3}[0-9]{1,3}'
-ipv6_regex='([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}'
-
-check_ip() {
-    local ip_address
-    ip_address=$(ip $1 | grep -E -o "$2" | head -n 1)
-    ip_exists=$?
-    if [ $ip_exists -eq 0 ]; then
-        echo "$ip_address"
-    else
-        echo "无法获取IP地址"
-    fi
+  if [[ ! -z $ipv4 ]]; then
+    ip_address=$ipv4
+    echo "IPv4 地址为：$ip_address"
+  else
+    echo "没有找到可用的 IPv4 地址。"
+    exit 1
+  fi
 }
 
-echo "请选择IP类型："
-echo "1. IPv4 模式"
-echo "2. IPv6 模式(纯ipv6首选，我也不知道老登你的ipv6能不能用)"
-echo "3. 回车默认为IPv4 模式"
+get_ipv6_address() {
+  ipv6=$(ifconfig | grep 'inet6' | awk '{print $2}' | grep -v '::1' | head -n1)
 
-read -p "请输入选项编号: " choice
+  if [[ ! -z $ipv6 ]]; then
+    ip_address="[$ipv6]"
+    echo "IPv6 地址为：$ip_address"
+  else
+    echo "没有找到可用的 IPv6 地址。"
+    exit 1
+  fi
+}
 
-if [ -z "$choice" ]; then 
-    choice=3
-fi
+while true; do
+  echo "1. IPv4 模式"
+  echo "2. IPv6 模式"
+  echo "按回车键选择默认的 IPv4 模式."
 
-case $choice in
+  read -p "请选择: " choice
+
+  case $choice in
     1)
-        ipdz=$(check_ip "$ip4_opts" "$ipv4_regex")
-        echo "老登，你的IP地址为IPv4: $ipdz"
-        ;;
+      get_ipv4_address
+      break
+      ;;
     2)
-        ipdz=[$(check_ip "$ip6_opts" "$ipv6_regex")]
-        echo "老登，你的IP地址为IPv6: $ipdz"
-        ;;
-    3)
-        ipdz=$(check_ip "$ip4_opts" "$ipv4_regex")
-        echo "老登，你的IP地址为IPv4: $ipdz"
-        ;;
+      get_ipv6_address
+      break
+      ;;
+    "")
+      echo "使用默认的 IPv4 模式。"
+      get_ipv4_address
+      break
+      ;;
     *)
-        ipdz=$(check_ip "$ip4_opts" "$ipv4_regex")
-        echo "错误的选项，已经默认为IPv4模式"
-        echo "老登，你的IP地址为IPv4: $ipdz"
-        ;;
-esac
+      echo "输入无效。请输入1或2，或者按回车键使用默认的 IPv4 模式。"
+      ;;
+  esac
+done
 
 fi
 
@@ -593,7 +596,7 @@ dns:
 proxies:
   - name: Hysteria2
     type: hysteria2
-    server: $domain$ipdz
+    server: $domain$ip_address
     port: $port
     password: $password
     sni: $domain$domain_name
@@ -611,7 +614,7 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "clash-mate.yaml 已保存到当前文件夹"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-# Running the Hysteria server in the background
+
 if nohup ./hysteria-linux-$arch server & then
   echo "$(random_color 'Hysteria 服务器已启动。')"
 else
@@ -669,15 +672,15 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(老登，请使用最新版的neko哦): ')\nhysteria2://$password@$ipdz$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(老登，请使用最新版的neko哦): ')\nhysteria2://$password@$ip_address$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
   
-  echo "hysteria2://$password@$ipdz$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2" > neko.txt
+  echo "hysteria2://$password@$ip_address$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2" > neko.txt
   
 else
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhysteria2://$password@$ipdz$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhysteria2://$password@$ip_address$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
   
-  echo "hysteria2://$password@$ipdz$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
+  echo "hysteria2://$password@$ip_address$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
   
 fi
 
