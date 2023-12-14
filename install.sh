@@ -468,7 +468,7 @@ fi
 
 case $choice in
     1)
-        ipdz=$(check_ip "$ip4_opts" "$ipv4_regex")
+        ipdz=$(check_ip "[$ip4_opts]" "[$ipv4_regex]")
         echo "老登，你的IP地址为IPv4: $ipdz"
         ;;
     2)
