@@ -444,10 +444,15 @@ ip6_opts="-6 addr show scope global"
 ipv4_regex='\d+(\.\d+){3}'
 ipv6_regex='[0-9a-f:]+(:[0-9a-f]+){2,}'
 
-ipv4_address=$(ip $ip4_opts | grep -oP "(?<=inet\s)$ipv4_regex")
-ipv4_exists=$?
-ipv6_address=$(ip $ip6_opts | grep -oP "(?<=inet6\s)$ipv6_regex")
-ipv6_exists=$?
+check_ip() {
+    ip_address=$(ip $1 | grep -oP "(?<=inet$2\s)$3")
+    ip_exists=$?
+    if [ $ip_exists -eq 0 ]; then
+        echo "$ip_address"
+    else
+        echo "无法获取IP地址"
+    fi
+}
 
 echo "请选择IP类型："
 echo "1. IPv4 模式"
@@ -462,31 +467,25 @@ fi
 
 case $choice in
     1)
-        if [ $ipv4_exists -eq 0 ]; then
-            ipdz=$ipv4_address
-            echo "老登,你的IP地址为IPv4: $ipdz"
-        else
-            echo "无法获取IPv4地址"
-        fi
+
+        ipdz=$(check_ip $ip4_opts "" $ipv4_regex)
+        echo "老登,你的IP地址为IPv4: $ipdz"
         ;;
     2)
-        if [ $ipv6_exists -eq 0 ]; then
-            ipdz="[$ipv6_address]"
-            echo "老登,你的IP地址为IPv6: $ipdz"
-        else
-            echo "无法获取IPv6地址"
-        fi
+   
+        ipdz=$(check_ip $ip6_opts "6" $ipv6_regex)
+        echo "老登,你的IP地址为IPv6: [$ipdz]"
         ;;
     3)
-        if [ $ipv4_exists -eq 0 ]; then
-            ipdz=$ipv4_address
-            echo "老登,你的IP地址为IPv4: $ipdz"
-        else
-            echo "无法获取IPv4地址"
-        fi
+      
+        ipdz=$(check_ip $ip4_opts "" $ipv4_regex)
+        echo "老登,你的IP地址为IPv4: $ipdz"
         ;;
     *)
-        echo "错误的选项，请重新输入"
+    
+        ipdz=$(check_ip $ip4_opts "" $ipv4_regex)
+        echo "错误的选项，已经默认为IPv4模式"
+        echo "老登,你的IP地址为IPv4: $ipdz"
         ;;
 esac
 
