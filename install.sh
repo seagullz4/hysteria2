@@ -45,7 +45,7 @@ install_missing_commands() {
 }
 
 echo -e "$(random_color '安装必要依赖中......')"
-sleep 2
+sleep 1
 install_missing_commands > /dev/null 2>&1
 echo -e "$(random_color '依赖安装完成')"
 
@@ -192,7 +192,7 @@ echo "卸载完成(ง ื▿ ื)ว."
 
 uninstall_hysteria > /dev/null 2>&1
 echo -e "$(random_color '你别急,别急,正在卸载......')"
-sleep 2
+sleep 1
 echo -e "$(random_color '卸载完成,老登ψ(｀∇´)ψ！')"
 
 exit
@@ -267,7 +267,7 @@ else
 fi
 }
 echo "$(random_color '正在下载中,老登( ﾟдﾟ)つBye')"
-sleep 2
+sleep 1
 installhy2 > /dev/null 2>&1
 
 # 就是写一个配置文件，你可以自己修改，别乱搞就行，安装hysteria2文档修改
