@@ -385,7 +385,6 @@ get_ipv4_address() {
   if [[ ! -z $ipv4 ]]; then
     ip_address=$ipv4
     echo "IPv4 地址为：$ip_address"
-    ipta=$iptables
   else
     echo "没有找到可用的 IPv4 地址。"
     exit 1
@@ -398,7 +397,6 @@ get_ipv6_address() {
   if [[ ! -z $ipv6 ]]; then
     ip_address="[$ipv6]"
     echo "IPv6 地址为：$ip_address"
-    ipta=$ip6tables
   else
     echo "没有找到可用的 IPv6 地址。"
     exit 1
@@ -415,15 +413,18 @@ while true; do
   case $choice in
     1)
       get_ipv4_address
+      ipta=$iptables
       break
       ;;
     2)
       get_ipv6_address
+      ipta=$ip6tables
       break
       ;;
     "")
       echo "使用默认的 IPv4 模式。"
       get_ipv4_address
+      ipta=$iptables
       break
       ;;
     *)
