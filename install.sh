@@ -424,7 +424,7 @@ while true; do
     "")
       echo "使用默认的 IPv4 模式。"
       get_ipv4_address
-      ipta=$iptables
+      ipta="iptables"
       break
       ;;
     *)
