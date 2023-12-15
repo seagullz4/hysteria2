@@ -413,12 +413,12 @@ while true; do
   case $choice in
     1)
       get_ipv4_address
-      ipta=$iptables
+      ipta="iptables"
       break
       ;;
     2)
       get_ipv6_address
-      ipta=$ip6tables
+      ipta="ip6tables"
       break
       ;;
     "")
