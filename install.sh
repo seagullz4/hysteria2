@@ -464,6 +464,7 @@ else
     echo -e "\nAppending to config.yaml..."
     echo -e $yaml_content >> config.yaml
     echo "$(random_color '域名和邮箱已添加到 config.yaml 文件。')"
+    ipta="iptables"
     choice2="false"
   else
     echo "$(random_color 'config.yaml 文件不存在，无法添加。')"
