@@ -255,19 +255,20 @@ esac
 
 line_animation
 
+installhy2 () {
 cd /root
 mkdir -p ~/hy3
 cd ~/hy3
-
-
 if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
   exit 1
 fi
-
-current_user=$(whoami)
+}
+echo "$(random_color '正在下载中,老登( ﾟдﾟ)つBye')"
+sleep 2
+installhy2
 
 # 就是写一个配置文件，你可以自己修改，别乱搞就行，安装hysteria2文档修改
 cat <<EOL > config.yaml
