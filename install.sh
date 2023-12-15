@@ -19,10 +19,10 @@ install_command=""
 #安装一些东西
 if [ -x "$(command -v apt)" ]; then
   package_manager="apt"
-  install_command="sudo apt install -y"
+  install_command="apt install -y"
 elif [ -x "$(command -v yum)" ]; then
   package_manager="yum"
-  install_command="sudo yum install -y"
+  install_command="yum install -y"
 else
   echo "Unsupported package manager."
   exit 1
@@ -44,10 +44,14 @@ install_missing_commands() {
   done
 }
 
-echo -e "$(random_color '安装必要依赖中......')"
-sleep 1
-install_missing_commands > /dev/null 2>&1
-echo -e "$(random_color '依赖安装完成')"
+line_animation() {
+  lines=0
+  while [ $lines -lt 8 ]; do
+    echo -e "$(random_color '********************************************************************************')"
+    sleep 0.375 
+    lines=$((lines + 1))
+  done
+}
 
 set_architecture() {
   case "$(uname -m)" in
@@ -83,19 +87,15 @@ set_architecture() {
   esac
 }
 
-set_architecture
-
-#这个没啥用，就是让用户白等5s看动画的💩
-
-line_animation() {
-  lines=0
-  while [ $lines -lt 8 ]; do
-    echo -e "$(random_color '********************************************************************************')"
-    sleep 0.375 
-    lines=$((lines + 1))
-  done
+get_installed_version() {
+    if [ -x "/root/hy3/hysteria-linux-$arch" ]; then
+        version="$("/root/hy3/hysteria-linux-$arch" version | grep Version | grep -o 'v[.0-9]*')"
+    else
+        version="你还没有安装,老登"
+    fi
 }
 
+checkact() {
 pid=$(pgrep -f "hysteria-linux-$arch")
 
 if [ -n "$pid" ]; then
@@ -103,8 +103,7 @@ if [ -n "$pid" ]; then
 else
   hy2zt="未运行"
 fi
-
-#这个y也是给用户看动画的
+}
 
 welcome() {
 
@@ -119,10 +118,20 @@ echo -e "$(random_color '
 人生有两出悲剧：一是万念俱灰，另一是踌躇满志 ')"
  
 }
-#这个welcome就是启动上面的对话😇
+
+echo -e "$(random_color '安装必要依赖中......')"
+sleep 1
+install_missing_commands > /dev/null 2>&1
+echo -e "$(random_color '依赖安装完成')"
+
+set_architecture
+
+get_installed_version
+
+checkact
+
 welcome
- 
-# Prompt user to select an action
+
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
@@ -131,7 +140,7 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "5. 在线更新hy2内核(目前版本2.2.2)"
+echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
 echo "$(random_color 'hy2究极版本v23.12.12')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "hysteria2状态: $hy2zt"
@@ -145,7 +154,7 @@ case $choice in
 
    2)
 
-uninstall_hysteria () {
+uninstall_hysteria() {
 
 sudo systemctl stop hysteria.service
 
@@ -238,7 +247,7 @@ cd /root/hy3
 
 rm -r hysteria-linux-$arch
 
-wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch
+wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch
 
 chmod +x hysteria-linux-$arch
 
@@ -259,7 +268,7 @@ installhy2 () {
 cd /root
 mkdir -p ~/hy3
 cd ~/hy3
-if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch; then
+if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
   echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
@@ -335,82 +344,6 @@ while true; do
       exit 1 
     fi 
   
-   
-    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就衮吧，不用开启(ง ื▿ ื)ว，请使用最新版nekobox（回车默认不开启，输入1开启）: ')" 
-    read -p "" port_jump 
-  
-    if [ -z "$port_jump" ]; then 
-      
-      break 
-    elif [ "$port_jump" -eq 1 ]; then 
-    
-      echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')" 
-      read -p "" start_port 
-  
-      echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')" 
-      read -p "" end_port 
-  
-      if [ "$start_port" -lt "$end_port" ]; then 
-        
-        iptables -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port:$end_port" -j DNAT --to-destination :"$port" 
-        echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
-        break 
-      else 
-        echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')" 
-      fi 
-    else 
-      echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')" 
-    fi 
-done 
-
-
-if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
-  echo "#!/bin/bash" > /root/hy3/ipppp.sh 
-  echo "iptables -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh 
-  
- 
-  chmod +x /root/hy3/ipppp.sh 
-  
-  echo "[Unit]" > /etc/systemd/system/ipppp.service 
-  echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service 
-  echo "" >> /etc/systemd/system/ipppp.service 
-  echo "[Service]" >> /etc/systemd/system/ipppp.service 
-  echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service 
-  echo "" >> /etc/systemd/system/ipppp.service 
-  echo "[Install]" >> /etc/systemd/system/ipppp.service 
-  echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service 
-  
-  # 启用开机自启动服务 
-  systemctl enable ipppp.service 
-  
-  # 启动服务 
-  systemctl start ipppp.service 
-  
-  echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
-fi
-
-echo "$(random_color '请选择内核加速类型：')"
-echo "$(random_color '1. 默认系统内核加速')"
-echo "$(random_color '2. Brutal加速')"
-read -p "$(random_color '请输入选项（1/2，回车默认系统内核加速）: ')" kernel_choice
-
-if [ -z "$kernel_choice" ]; then
-  kernel_choice=1
-fi
-
-case "$kernel_choice" in
-  1) 
-    sed -i 's/ignoreClientBandwidth: false/ignoreClientBandwidth: true/' config.yaml
-    echo "$(random_color '已启用默认系统内核加速')"
-    ;;
-  2) 
-    echo "$(random_color '已启用Brutal加速')"
-    ;;
-  *) 
-    echo "$(random_color '错误的选项，请输入1或2选择内核加速类型。')"
-    exec "$0"
-    ;;
-esac
 
 generate_certificate() {
     read -p "请输入要用于自签名证书的域名（默认为 bing.com）: " user_domain
@@ -452,6 +385,7 @@ get_ipv4_address() {
   if [[ ! -z $ipv4 ]]; then
     ip_address=$ipv4
     echo "IPv4 地址为：$ip_address"
+    ipta=$iptables
   else
     echo "没有找到可用的 IPv4 地址。"
     exit 1
@@ -464,6 +398,7 @@ get_ipv6_address() {
   if [[ ! -z $ipv6 ]]; then
     ip_address="[$ipv6]"
     echo "IPv6 地址为：$ip_address"
+    ipta=$ip6tables
   else
     echo "没有找到可用的 IPv6 地址。"
     exit 1
@@ -562,6 +497,59 @@ else
   echo "$(random_color '替换伪装域名失败，退出脚本。')"
   exit 1
 fi
+   
+    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就衮吧，不用开启(ง ื▿ ื)ว（回车默认不开启，输入1开启）: ')" 
+    read -p "" port_jump 
+  
+    if [ -z "$port_jump" ]; then 
+      
+      break 
+    elif [ "$port_jump" -eq 1 ]; then 
+    
+      echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')" 
+      read -p "" start_port 
+  
+      echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')" 
+      read -p "" end_port 
+  
+      if [ "$start_port" -lt "$end_port" ]; then 
+        
+        $ipta -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port:$end_port" -j DNAT --to-destination :"$port" 
+        echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
+        break 
+      else 
+        echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')" 
+      fi 
+    else 
+      echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')" 
+    fi 
+done 
+
+
+if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
+  echo "#!/bin/bash" > /root/hy3/ipppp.sh 
+  echo "$ipta -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh 
+  
+ 
+  chmod +x /root/hy3/ipppp.sh 
+  
+  echo "[Unit]" > /etc/systemd/system/ipppp.service 
+  echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service 
+  echo "" >> /etc/systemd/system/ipppp.service 
+  echo "[Service]" >> /etc/systemd/system/ipppp.service 
+  echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service 
+  echo "" >> /etc/systemd/system/ipppp.service 
+  echo "[Install]" >> /etc/systemd/system/ipppp.service 
+  echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service 
+  
+  # 启用开机自启动服务 
+  systemctl enable ipppp.service 
+  
+  # 启动服务 
+  systemctl start ipppp.service 
+  
+  echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
+fi
 
 fuser -k -n tcp $port
 fuser -k -n udp $port
@@ -599,7 +587,7 @@ dns:
   listen: 0.0.0.0:53
   enhanced-mode: fake-ip
   nameserver:
-    - 114.114.114.114
+    - 223.5.5.5
     - 8.8.8.8
 proxies:
   - name: Hysteria2
@@ -697,5 +685,3 @@ echo -e "$(random_color '
 Hysteria2安装成功，请合理使用哦,你直直-——直直接给我坐下')"
 
 echo "而你，我的朋友，你是恋爱脑里的常青树，Joker里的顶梁柱，麦当劳的吉祥物，哥谭市的大头目，扑克牌的最大数，蝙蝠侠的大客户……"
-#699
-#700🐣
