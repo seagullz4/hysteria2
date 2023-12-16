@@ -393,7 +393,7 @@ get_ipv4_address() {
 }
 
 get_ipv6_address() {
-  ipv6=$(ifconfig | grep 'inet6' | awk '{print $2}' | grep -v '::1' | head -n1)
+  ipv6=$(ifconfig | grep 'inet6' | grep -v '::1' | grep -v 'fe80' | awk '{print $2}' | head -n1)
 
   if [[ ! -z $ipv6 ]]; then
     ip_address="[$ipv6]"
