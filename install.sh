@@ -515,7 +515,7 @@ fi
   
       if [ "$start_port" -lt "$end_port" ]; then 
         
-"$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port:$end_port" -j DNAT --to-destination :"$port" 
+"$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port" 
         echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
         break 
       else 
