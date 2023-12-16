@@ -415,7 +415,6 @@ while true; do
   case $choice in
     1)
       get_ipv4_address
-      ipta="iptables"
       break
       ;;
     2)
