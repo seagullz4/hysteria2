@@ -44,15 +44,6 @@ install_missing_commands() {
   done
 }
 
-line_animation() {
-  lines=0
-  while [ $lines -lt 8 ]; do
-    echo -e "$(random_color '********************************************************************************')"
-    sleep 0.375 
-    lines=$((lines + 1))
-  done
-}
-
 set_architecture() {
   case "$(uname -m)" in
     'i386' | 'i686')
@@ -230,7 +221,7 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
     ;;
     
    5)
-   
+updatehy2 () {
 process_name="hysteria-linux-$arch"
 
 pid=$(pgrep -f "$process_name")
@@ -247,13 +238,27 @@ cd /root/hy3
 
 rm -r hysteria-linux-$arch
 
-wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch
+if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
+  chmod +x hysteria-linux-$arch
+else
+  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch; then
+    chmod +x hysteria-linux-$arch
+  else
+    echo "无法从任何网站下载文件"
+    exit 1
+  fi
+fi
 
 chmod +x hysteria-linux-$arch
 
 nohup ./hysteria-linux-$arch server &
 
 echo "更新完成,不是哥们,你有什么实力,你直接给我坐下(ง ื▿ ื)ว."
+}
+echo "$(random_color '正在更新中,别急,老登')"
+sleep 1
+updatehy2 > /dev/null 2>&1
+echo "$(random_color '更新完成,老登')"
     exit
     ;;
    *)
@@ -262,7 +267,15 @@ echo "更新完成,不是哥们,你有什么实力,你直接给我坐下(ง ื
      ;;
 esac
 
-line_animation
+echo "$(random_color '别急,别急,别急,老登')"
+sleep 1
+
+if [ "$hy2zt" = "运行中" ]; then
+  echo "Hysteria 正在运行，请先卸载再安装。"
+  exit 1
+else
+  echo "原神,启动。"
+fi
 
 installhy2 () {
 cd /root
@@ -271,8 +284,12 @@ cd ~/hy3
 if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
-  echo "$(random_color '下载 Hysteria 二进制文件失败，退出脚本。')"
-  exit 1
+  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch; then
+    chmod +x hysteria-linux-$arch
+  else
+    echo "无法从任何网站下载文件"
+    exit 1
+  fi
 fi
 }
 echo "$(random_color '正在下载中,老登( ﾟдﾟ)つBye')"
@@ -608,12 +625,15 @@ rules:
 EOL
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "clash-mate.yaml 已保存到当前文件夹"
+echo "
+clash-mate.yaml 已保存到当前文件夹
+"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 
 if nohup ./hysteria-linux-$arch server & then
-  echo "$(random_color 'Hysteria 服务器已启动。')"
+  echo "$(random_color '
+  Hysteria 服务器已启动。')"
 else
   echo "$(random_color '启动 Hysteria 服务器失败，退出脚本。')"
   exit 1
@@ -661,11 +681,17 @@ create_and_configure_service
 enable_and_start_service
 
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "完成。"
+echo "
+完成。
+"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-line_animation
-echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+
+echo "$(random_color '老登,马上,马上了------')"
+sleep 2
+
+echo "$(random_color '
+这是你的clash配置:')"
+cat /root/hy3/clash-mate.yaml
 
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
