@@ -249,8 +249,6 @@ else
   fi
 fi
 
-chmod +x hysteria-linux-$arch
-
 nohup ./hysteria-linux-$arch server &
 
 echo "更新完成,不是哥们,你有什么实力,你直接给我坐下(ง ื▿ ื)ว."
