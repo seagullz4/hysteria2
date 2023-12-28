@@ -132,7 +132,7 @@ echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
-echo "$(random_color 'hy2究极版本v23.12.15')"
+echo "$(random_color 'hy2究极版本v24.01.01')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "hysteria2状态: $hy2zt"
 
@@ -394,29 +394,31 @@ if [ "$cert_choice" == "2" ]; then
     choice1="true"
     echo -e "已将证书和密钥信息写入 /root/hy3/config.yaml 文件。"
     
-get_ipv4_address() {
-  ipv4=$(ifconfig | grep 'inet ' | awk '{print $2}' | grep -v '127.0.0.1' | head -n1)
+get_ipv4_info() {
+  ip_address=$(wget -4 -qO- --no-check-certificate --user-agent=Mozilla --tries=2 --timeout=3 http://ip-api.com/json/) &&
+  
+  ispck=$(expr "$ip_address" : '.*isp\":[ ]*\"\([^"]*\).*') 
 
-  if [[ ! -z $ipv4 ]]; then
-    ip_address=$ipv4
-    ipta="iptables"
-    echo "IPv4 地址为：$ip_address"
+  if echo "$ispck" | grep -qi "cloudflare"; then
+    echo "检测到Warp，请输入正确的服务器 IP："
+    read new_ip
+    ipwan="$new_ip"
   else
-    echo "没有找到可用的 IPv4 地址。"
-    exit 1
+    ipwan="$(expr "$ip_address" : '.*query\":[ ]*\"\([^"]*\).*')"
   fi
 }
 
-get_ipv6_address() {
-  ipv6=$(ifconfig | grep 'inet6' | grep -v '::1' | grep -v 'fe80' | awk '{print $2}' | head -n1)
+get_ipv6_info() {
+  ip_address=$(wget -6 -qO- --no-check-certificate --user-agent=Mozilla --tries=2 --timeout=3 https://api.ip.sb/geoip) &&
+  
+  ispck=$(expr "$ip_address" : '.*isp\":[ ]*\"\([^"]*\).*') 
 
-  if [[ ! -z $ipv6 ]]; then
-    ip_address="[$ipv6]"
-    ipta="ip6tables"
-    echo "IPv6 地址为：$ip_address"
+  if echo "$ispck" | grep -qi "cloudflare"; then
+    echo "检测到Warp，请输入正确的服务器 IP："
+    read new_ip
+    ipwan="[$new_ip]"
   else
-    echo "没有找到可用的 IPv6 地址。"
-    exit 1
+    ipwan="[$(expr "$ip_address" : '.*ip\":[ ]*\"\([^"]*\).*')]"
   fi
 }
 
@@ -429,16 +431,22 @@ while true; do
 
   case $choice in
     1)
-      get_ipv4_address
+      get_ipv4_info
+      echo "老登你的IP 地址为：$ipwan"
+      ipta="iptables"
       break
       ;;
     2)
-      get_ipv6_address
+      get_ipv6_info
+      echo "老登你的IP 地址为：$ipwan"
+      ipta="ip6tables"
       break
       ;;
     "")
       echo "使用默认的 IPv4 模式。"
-      get_ipv4_address
+      get_ipv4_info
+      echo "老登你的IP 地址为：$ipwan"
+      ipta="iptables"
       break
       ;;
     *)
@@ -608,7 +616,7 @@ dns:
 proxies:
   - name: Hysteria2
     type: hysteria2
-    server: $domain$ip_address
+    server: $domain$ipwan
     port: $port
     password: $password
     sni: $domain$domain_name
@@ -693,15 +701,15 @@ cat /root/hy3/clash-mate.yaml
 
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(老登，请使用最新版的neko哦): ')\nhysteria2://$password@$ip_address$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(老登，请使用最新版的neko哦): ')\nhysteria2://$password@$ipwan$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
   
-  echo "hysteria2://$password@$ip_address$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2" > neko.txt
+  echo "hysteria2://$password@$ipwan$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2" > neko.txt
   
 else
 
-  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhysteria2://$password@$ip_address$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
+  echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦小崽子: ')\nhysteria2://$password@$ipwan$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2"
   
-  echo "hysteria2://$password@$ip_address$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
+  echo "hysteria2://$password@$ipwan$domain:$port/?${ovokk}sni=$domain$domain_name#Hysteria2" > neko.txt
   
 fi
 
