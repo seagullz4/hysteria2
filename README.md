@@ -32,7 +32,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作,好像不支持端口跳跃)
 
-[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)(neko支持端口)
+[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)(neko支持端口跳跃)
 
  [clash-mate](https://github.com/MetaCubeX/ClashMetaForAndroid)
 
