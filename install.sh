@@ -699,6 +699,9 @@ echo "$(random_color '
 这是你的clash配置:')"
 cat /root/hy3/clash-mate.yaml
 
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+
 if [ -n "$start_port" ] && [ -n "$end_port" ]; then
 
   echo -e "$(random_color '这是你的Hysteria2节点链接信息，请注意保存哦joker(老登，请使用最新版的neko哦): ')\nhysteria2://$password@$ipwan$domain:$port/?${ovokk}mport=$port,$start_port-$end_port&sni=$domain$domain_name#Hysteria2"
