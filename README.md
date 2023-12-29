@@ -30,19 +30,17 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 
 安卓端强烈推荐:
 
+[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)(neko支持端口跳跃,优先推荐)
+
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作,好像不支持端口跳跃)
-
-[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)(neko支持端口跳跃)
-
  [clash-mate](https://github.com/MetaCubeX/ClashMetaForAndroid)
 
 
 电脑端推荐:
 
-[hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作)
-
 [nekoray](https://github.com/MatsuriDayo/nekoray)
 
+[hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作)
  [clash-verge](https://github.com/zzzgydi/clash-verge)
 
 # AD 😇
