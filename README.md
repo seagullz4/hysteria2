@@ -36,7 +36,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
  [clash-mate](https://github.com/MetaCubeX/ClashMetaForAndroid)
 
 
-[hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作,好像不支持端口跳跃) 
+[hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
  
 
 电脑端推荐:
