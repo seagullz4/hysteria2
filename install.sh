@@ -585,10 +585,6 @@ else
   exit 1
 fi
 
-#优化一些系统参数
-sysctl -w net.core.rmem_max=16777216
-sysctl -w net.core.wmem_max=16777216
-
 cat <<EOL > clash-mate.yaml
 system-port: 7890
 external-controller: 127.0.0.1:9090
