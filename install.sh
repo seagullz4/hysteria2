@@ -111,7 +111,6 @@ echo -e "$(random_color '
 }
 
 echo -e "$(random_color '安装必要依赖中......')"
-sleep 1
 install_missing_commands > /dev/null 2>&1
 echo -e "$(random_color '依赖安装完成')"
 
@@ -192,7 +191,6 @@ echo "卸载完成(ง ื▿ ื)ว."
 
 uninstall_hysteria > /dev/null 2>&1
 echo -e "$(random_color '你别急,别急,正在卸载......')"
-sleep 1
 echo -e "$(random_color '卸载完成,老登ψ(｀∇´)ψ！')"
 
 exit
@@ -317,8 +315,8 @@ masquerade:
     statusCode: 200 
 
 bandwidth:
-  up: 99 gbps
-  down: 99 gbps
+  up: 0 gbps
+  down: 0 gbps
 
 udpIdleTimeout: 90s
 
