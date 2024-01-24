@@ -323,10 +323,10 @@ udpIdleTimeout: 90s
 ignoreClientBandwidth: false
 
 quic:
-  initStreamReceiveWindow: 8388608 
-  maxStreamReceiveWindow: 8388608 
-  initConnReceiveWindow: 20971520 
-  maxConnReceiveWindow: 20971520 
+  initStreamReceiveWindow: 26843545 
+  maxStreamReceiveWindow: 26843545 
+  initConnReceiveWindow: 67108864 
+  maxConnReceiveWindow: 67108864
   maxIdleTimeout: 90s 
   maxIncomingStreams: 1800 
   disablePathMTUDiscovery: false 
@@ -624,6 +624,9 @@ rules:
   - MATCH,auto
 EOL
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+# 将发送、接收两个缓冲区都设置为 16 MB
+sysctl -w net.core.rmem_max=16777216
+sysctl -w net.core.wmem_max=16777216
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "
 clash-mate.yaml 已保存到当前文件夹
