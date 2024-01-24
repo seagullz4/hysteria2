@@ -60,7 +60,7 @@ akile小鸡解锁流媒体(解锁奈飞,迪士尼,chatgpt等等)
 
 点击直达————[**akile**](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
-## Stargazers over time
+## 如果觉得可以,请留下你的小星星⭐
 [![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?variant=adaptive)](https://starchart.cc/seagullz4/hysteria2)
 
 ## 免责声明:
