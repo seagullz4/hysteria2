@@ -61,7 +61,7 @@ akile小鸡解锁流媒体(解锁奈飞,迪士尼,chatgpt等等)
 点击直达————[**akile**](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
 ## 如果觉得可以,请留下你的小星星⭐
-[![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?variant=adaptive)](https://starchart.cc/seagullz4/hysteria2)
+[![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?background=%232feaf7&axis=%23e76060&line=%236b63ff)](https://starchart.cc/seagullz4/hysteria2)
 
 ## 免责声明:
 * 本程序仅供学习了解, 非盈利目的，请于下载后 24 小时内删除, 不得用作任何商业用途, 文字、数据及图片均有所属版权, 如转载须注明来源。
