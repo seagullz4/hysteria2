@@ -29,7 +29,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 
 iOS端推荐：
 
-[小火箭]（https://apps.apple.com/us/app/shadowrocket/id932747118）
+[小火箭]（https://apps.apple.com/us/app/shadowrocket/id932747118））
 
 安卓端强烈推荐:
 
