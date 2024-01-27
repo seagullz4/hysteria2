@@ -107,8 +107,6 @@ get_latest_version() {
   rm -f "$tmpfile"
 }
 
-latest_version=$(get_latest_version)
-
 checkact() {
 pid=$(pgrep -f "hysteria-linux-$arch")
 
