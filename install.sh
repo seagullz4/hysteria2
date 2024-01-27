@@ -86,6 +86,29 @@ get_installed_version() {
     fi
 }
 
+get_latest_version() {
+  local tmpfile
+  tmpfile=$(mktemp)
+
+  if ! curl -sS "https://api.hy2.io/v1/update?cver=installscript&plat=linux&arch="$arch"&chan=release&side=server" -o "$tmpfile"; then
+    error "Failed to get the latest version from Hysteria 2 API, please check your network and try again."
+    exit 11
+  fi
+
+  local latest_version
+  latest_version=$(grep -oP '"lver":\s*\K"v.*?"' "$tmpfile" | head -1)
+  latest_version=${latest_version#'"'}
+  latest_version=${latest_version%'"'}
+
+  if [[ -n "$latest_version" ]]; then
+    echo "$latest_version"
+  fi
+
+  rm -f "$tmpfile"
+}
+
+latest_version=$(get_latest_version)
+
 checkact() {
 pid=$(pgrep -f "hysteria-linux-$arch")
 
@@ -118,6 +141,8 @@ set_architecture
 
 get_installed_version
 
+latest_version=$(get_latest_version)
+
 checkact
 
 welcome
@@ -131,7 +156,8 @@ echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
-echo "$(random_color 'hy2究极版本v24.01.01')"
+echo "$(random_color 'hy2究极版本v24.01.27')"
+echo "最新版本为： $latest_version"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "hysteria2状态: $hy2zt"
 
