@@ -219,6 +219,14 @@ echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
     ;;
     
    5)
+get_updated_version() {
+    if [ -x "/root/hy3/hysteria-linux-$arch" ]; then
+        version2="$("/root/hy3/hysteria-linux-$arch" version | grep Version | grep -o 'v[.0-9]*')"
+    else
+        version2="你还没有安装,老登"
+    fi
+}
+
 updatehy2 () {
 process_name="hysteria-linux-$arch"
 
@@ -255,6 +263,8 @@ echo "$(random_color '正在更新中,别急,老登')"
 sleep 1
 updatehy2 > /dev/null 2>&1
 echo "$(random_color '更新完成,老登')"
+get_updated_version
+echo "您当前的更新后hy2版本:$version2"
     exit
     ;;
    *)
