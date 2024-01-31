@@ -568,7 +568,7 @@ fi
       echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')" 
       read -p "" end_port 
   
-         if [ "$start_port" -lt "$end_port" ]; then 
+     if [ "$start_port" -lt "$end_port" ]; then 
 
 "$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port" 
         echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
