@@ -568,19 +568,21 @@ fi
       echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')" 
       read -p "" end_port 
   
-      if [ "$start_port" -lt "$end_port" ]; then 
-        
-"$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port" 
-        echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
-        break 
-      else 
-        echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')" 
-      fi 
-    else 
-      echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')" 
-    fi 
-done 
+   if [ "$start_port" -lt "$end_port" ]; then
 
+  for ((porthop=start_port; porthop<=end_port; porthop++)); do
+    if lsof -Pi :$porthop -sTCP:LISTEN -t >/dev/null; then
+      fuser -k $porthop/tcp $porthop/udp
+    fi
+  done
+
+  "$IPTABLES" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port"
+  echo "$(random_color) 端口跳跃功能已开启，将范围重定向到主端口： $port"
+  break
+else
+
+  echo "$(random_color) 末尾端口必须大于起始端口，请重新输入。"
+fi
 
 if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
   echo "#!/bin/bash" > /root/hy3/ipppp.sh 
