@@ -569,7 +569,6 @@ fi
       read -p "" end_port 
   
    if [ "$start_port" -lt "$end_port" ]; then
-
   for ((porthop=start_port; porthop<=end_port; porthop++)); do
     if lsof -Pi :$porthop -sTCP:LISTEN -t >/dev/null; then
       fuser -k $porthop/tcp $porthop/udp
@@ -578,9 +577,7 @@ fi
 
   "$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port"
   echo "$(random_color) 端口跳跃功能已开启，将范围重定向到主端口： $port"
-  break
 else
-
   echo "$(random_color) 末尾端口必须大于起始端口，请重新输入。"
 fi
 
