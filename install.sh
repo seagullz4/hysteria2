@@ -154,7 +154,7 @@ echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
-echo "$(random_color 'hy2一键安装版本v24.01.27')"
+echo "$(random_color 'hy2一键安装版本v24.02.04')"
 echo "hy2内核最新版本为： $latest_version"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "hysteria2状态: $hy2zt"
@@ -271,7 +271,7 @@ rm -r hysteria-linux-$arch
 if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
-  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch; then
+  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.4/hysteria-linux-$arch; then
     chmod +x hysteria-linux-$arch
   else
     echo "无法从任何网站下载文件"
@@ -306,6 +306,53 @@ if [ "$hy2zt" = "运行中" ]; then
 else
   echo "原神,启动。"
 fi
+
+uninstall_hysteria() {
+
+sudo systemctl stop hysteria.service
+
+sudo systemctl disable hysteria.service
+
+if [ -f "/etc/systemd/system/hysteria.service" ]; then
+  sudo rm "/etc/systemd/system/hysteria.service"
+  echo "Hysteria 服务器服务文件已删除。"
+else
+  echo "Hysteria 服务器服务文件不存在。"
+fi
+
+process_name="hysteria-linux-$arch"
+pid=$(pgrep -f "$process_name")
+
+if [ -n "$pid" ]; then
+  echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
+  kill "$pid"
+  echo "$process_name 进程已被杀死。"
+else
+  echo "未找到 $process_name 进程。"
+fi
+
+if [ -f "/root/hy3/hysteria-linux-$arch" ]; then
+  rm -f "/root/hy3/hysteria-linux-$arch"
+  echo "Hysteria 服务器二进制文件已删除。"
+else
+  echo "Hysteria 服务器二进制文件不存在。"
+fi
+
+if [ -f "/root/hy3/config.yaml" ]; then
+  rm -f "/root/hy3/config.yaml"
+  echo "Hysteria 服务器配置文件已删除。"
+else
+  echo "Hysteria 服务器配置文件不存在。"
+fi
+rm -r /root/hy3
+systemctl stop ipppp.service
+systemctl disable ipppp.service
+rm /etc/systemd/system/ipppp.service
+iptables -F
+echo "卸载完成(ง ื▿ ื)ว."
+ }
+
+uninstall_hysteria > /dev/null 2>&1
 
 installhy2 () {
 cd /root
