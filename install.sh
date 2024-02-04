@@ -143,8 +143,6 @@ latest_version=$(get_latest_version)
 
 checkact
 
-welcome
-
 uninstall_hysteria() {
 
 sudo systemctl stop hysteria.service
@@ -189,6 +187,8 @@ rm /etc/systemd/system/ipppp.service
 iptables -F
 echo "卸载完成(ง ื▿ ื)ว."
  }
+
+welcome
 
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
