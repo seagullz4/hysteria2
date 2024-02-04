@@ -145,29 +145,6 @@ checkact
 
 welcome
 
-#这些就行提示你输入的😇
-echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
-echo "1. 安装(以梦为马)"
-echo "2. 卸载(以心为疆)"
-echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "3. 查看配置(穿越时空)"
-echo "4. 退出脚本(回到未来)"
-echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
-echo "$(random_color 'hy2一键安装版本v24.02.04')"
-echo "hy2内核最新版本为： $latest_version"
-echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "hysteria2状态: $hy2zt"
-
-read -p "输入操作编号 (1/2/3/4/5): " choice
-
-case $choice in
-   1)
-     #啥也没有
-     ;;
-
-   2)
-
 uninstall_hysteria() {
 
 sudo systemctl stop hysteria.service
@@ -212,6 +189,29 @@ rm /etc/systemd/system/ipppp.service
 iptables -F
 echo "卸载完成(ง ื▿ ื)ว."
  }
+
+#这些就行提示你输入的😇
+echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
+echo "1. 安装(以梦为马)"
+echo "2. 卸载(以心为疆)"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "3. 查看配置(穿越时空)"
+echo "4. 退出脚本(回到未来)"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
+echo "$(random_color 'hy2一键安装版本v24.02.04')"
+echo "hy2内核最新版本为： $latest_version"
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
+echo "hysteria2状态: $hy2zt"
+
+read -p "输入操作编号 (1/2/3/4/5): " choice
+
+case $choice in
+   1)
+     #啥也没有
+     ;;
+
+   2)
 
 uninstall_hysteria > /dev/null 2>&1
 echo -e "$(random_color '你别急,别急,正在卸载......')"
@@ -306,51 +306,6 @@ if [ "$hy2zt" = "运行中" ]; then
 else
   echo "原神,启动。"
 fi
-
-uninstall_hysteria() {
-
-sudo systemctl stop hysteria.service
-
-sudo systemctl disable hysteria.service
-
-if [ -f "/etc/systemd/system/hysteria.service" ]; then
-  sudo rm "/etc/systemd/system/hysteria.service"
-  echo "Hysteria 服务器服务文件已删除。"
-else
-  echo "Hysteria 服务器服务文件不存在。"
-fi
-
-process_name="hysteria-linux-$arch"
-pid=$(pgrep -f "$process_name")
-
-if [ -n "$pid" ]; then
-  echo "找到 $process_name 进程 (PID: $pid)，正在杀死..."
-  kill "$pid"
-  echo "$process_name 进程已被杀死。"
-else
-  echo "未找到 $process_name 进程。"
-fi
-
-if [ -f "/root/hy3/hysteria-linux-$arch" ]; then
-  rm -f "/root/hy3/hysteria-linux-$arch"
-  echo "Hysteria 服务器二进制文件已删除。"
-else
-  echo "Hysteria 服务器二进制文件不存在。"
-fi
-
-if [ -f "/root/hy3/config.yaml" ]; then
-  rm -f "/root/hy3/config.yaml"
-  echo "Hysteria 服务器配置文件已删除。"
-else
-  echo "Hysteria 服务器配置文件不存在。"
-fi
-rm -r /root/hy3
-systemctl stop ipppp.service
-systemctl disable ipppp.service
-rm /etc/systemd/system/ipppp.service
-iptables -F
-echo "卸载完成(ง ื▿ ื)ว."
- }
 
 uninstall_hysteria > /dev/null 2>&1
 
