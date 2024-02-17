@@ -52,6 +52,13 @@ iOS端推荐：
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
  
+#AD
+
+我的ChatGPT小店,欢迎各位购买,d哥手下留情
+
+全网最低ChatGPT账号价格,1.5元/独享账号
+
+[seagullz4的小店](https://see.idou.ink/)
 
 ## 免责声明:
 * 本程序仅供学习了解, 非盈利目的，请于下载后 24 小时内删除, 不得用作任何商业用途, 文字、数据及图片均有所属版权, 如转载须注明来源。
