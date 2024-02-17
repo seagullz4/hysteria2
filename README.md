@@ -52,7 +52,7 @@ iOS端推荐：
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
  
-#AD
+# AD
 
 我的ChatGPT小店,欢迎各位购买,d哥手下留情
 
