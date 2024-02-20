@@ -752,4 +752,4 @@ echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦,你直直-——直直接给我坐下')"
 
-echo "希望哥哥姐姐们照顾一下我的生意,全网最低chatgpt账号,1.5元一个独享账号   直达链接: https://see.idou.ink/  谢谢๑•́₃•̀๑购买"
+echo "全网最低chatgpt账号,1.5元一个独享账号   直达链接: https://shop.idou.ink/  谢谢๑•́₃•̀๑购买"
