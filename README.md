@@ -62,6 +62,9 @@ iOS端推荐：
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
+
+[![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?variant=adaptive)](https://starchart.cc/seagullz4/hysteria2)
+
  
 # AD
 
