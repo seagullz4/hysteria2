@@ -5,10 +5,15 @@ hysteria2一键安装
 
 ## **😇使用教程**:
 ☆在服务器终端执行一键脚本
+
 ☆适用于大部分系统,但还是推荐Debian/ubuntu系
+
 ☆适用于有域名的用户使用acme方式申请证书,无域名使用者使用自签证书
+
 ☆适配多个软件如下面所示
+
 ☆一键导入即可使用
+
 ☆支持安装xanmod内核使用bbrv3加速
 
 更多客户端配置请查看[客户端配置](https://v2.hysteria.network/zh/docs/getting-started/Client/)
