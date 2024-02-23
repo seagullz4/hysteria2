@@ -1,11 +1,45 @@
 #!/bin/bash
-
 # 检测当前用户是否为 root 用户
 if [ "$EUID" -ne 0 ]; then
   echo "请使用 root 用户执行此脚本！"
   echo "你可以使用 'sudo -i' 进入 root 用户模式。"
   exit 1
 fi
+
+check_sys() {
+  if [[ -f /etc/redhat-release ]]; then
+    release="centos"
+  elif grep -qi "debian" /etc/issue; then
+    release="debian"
+  elif grep -qi "ubuntu" /etc/issue; then
+    release="ubuntu"
+  elif grep -qi -E "centos|red hat|redhat" /etc/issue || grep -qi -E "centos|red hat|redhat" /proc/version; then
+    release="centos"
+  fi
+
+  if [[ -f /etc/debian_version ]]; then
+    OS_type="Debian"
+    echo "检测为Debian通用系统，判断有误请反馈"
+  elif [[ -f /etc/redhat-release || -f /etc/centos-release || -f /etc/fedora-release ]]; then
+    OS_type="CentOS"
+    echo "检测为CentOS通用系统，判断有误请反馈"
+  else
+    echo "Unknown"
+  fi
+}
+
+_exists() {
+    local cmd="$1"
+    if eval type type >/dev/null 2>&1; then
+      eval type "$cmd" >/dev/null 2>&1
+    elif command >/dev/null 2>&1; then
+      command -v "$cmd" >/dev/null 2>&1
+    else
+      which "$cmd" >/dev/null 2>&1
+    fi
+    local rt=$?
+    return ${rt}
+}
 
 random_color() {
   colors=("31" "32" "33" "34" "35" "36" "37")
@@ -117,6 +151,203 @@ else
 fi
 }
 
+BBR_grub() {
+  if [[ "${OS_type}" == "CentOS" ]]; then
+    if [[ ${version} == "6" ]]; then
+      if [ -f "/boot/grub/grub.conf" ]; then
+        sed -i 's/^default=.*/default=0/g' /boot/grub/grub.conf
+      elif [ -f "/boot/grub/grub.cfg" ]; then
+        grub-mkconfig -o /boot/grub/grub.cfg
+        grub-set-default 0
+      elif [ -f "/boot/efi/EFI/centos/grub.cfg" ]; then
+        grub-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+        grub-set-default 0
+      elif [ -f "/boot/efi/EFI/redhat/grub.cfg" ]; then
+        grub-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+        grub-set-default 0
+      else
+        echo -e "${Error} grub.conf/grub.cfg 找不到，请检查."
+        exit
+      fi
+    elif [[ ${version} == "7" ]]; then
+      if [ -f "/boot/grub2/grub.cfg" ]; then
+        grub2-mkconfig -o /boot/grub2/grub.cfg
+        grub2-set-default 0
+      elif [ -f "/boot/efi/EFI/centos/grub.cfg" ]; then
+        grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+        grub2-set-default 0
+      elif [ -f "/boot/efi/EFI/redhat/grub.cfg" ]; then
+        grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+        grub2-set-default 0
+      else
+        echo -e "${Error} grub.cfg 找不到，请检查."
+        exit
+      fi
+    elif [[ ${version} == "8" ]]; then
+      if [ -f "/boot/grub2/grub.cfg" ]; then
+        grub2-mkconfig -o /boot/grub2/grub.cfg
+        grub2-set-default 0
+      elif [ -f "/boot/efi/EFI/centos/grub.cfg" ]; then
+        grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+        grub2-set-default 0
+      elif [ -f "/boot/efi/EFI/redhat/grub.cfg" ]; then
+        grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+        grub2-set-default 0
+      else
+        echo -e "${Error} grub.cfg 找不到，请检查."
+        exit
+      fi
+      grubby --info=ALL | awk -F= '$1=="kernel" {print i++ " : " $2}'
+    fi
+  elif [[ "${OS_type}" == "Debian" ]]; then
+    if _exists "update-grub"; then
+      update-grub
+    elif [ -f "/usr/sbin/update-grub" ]; then
+      /usr/sbin/update-grub
+    else
+      apt install grub2-common -y
+      update-grub
+    fi
+    #exit 1
+  fi
+}
+check_version() {
+  if [[ -s /etc/redhat-release ]]; then
+    version=$(grep -oE "[0-9.]+" /etc/redhat-release | cut -d . -f 1)
+  else
+    version=$(grep -oE "[0-9.]+" /etc/issue | cut -d . -f 1)
+  fi
+  bit=$(uname -m)
+  check_github
+}
+installxanmod1 () {
+# 检查系统是否为 Debian 或 Ubuntu
+if [[ $(cat /etc/os-release) =~ ^(Debian|Ubuntu) ]]; then
+  echo "OJBK"
+else
+  echo "系统不是 Debian 或 Ubuntu"
+  exit 1
+fi
+
+# 检查系统架构
+if [[ $(uname -m) =~ ^(x86_64|amd64) ]]; then
+  echo "正在安装中,请稍后……"
+else
+  echo "系统架构不是 x86/amd64,牢弟,买个好点的吧"
+  exit 1
+fi
+
+echo "系统符合要求，继续执行脚本"
+wget -qO - https://dl.xanmod.org/archive.key | sudo gpg --dearmor -o /usr/share/keyrings/xanmod-archive-keyring.gpg
+echo 'deb [signed-by=/usr/share/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org releases main' | sudo tee /etc/apt/sources.list.d/xanmod-release.list
+sudo apt update && sudo apt install linux-xanmod-x64v3
+BBR_grub
+echo -e "${Tip} 内核安装完毕，请参考上面的信息检查是否安装成功,默认从排第一的高版本内核启动"
+echo "安装成功,请自行重启系统"
+}
+installxanmod2 () {
+  check_version
+  wget -O check_x86-64_psabi.sh https://dl.xanmod.org/check_x86-64_psabi.sh
+  chmod +x check_x86-64_psabi.sh
+  cpu_level=$(./check_x86-64_psabi.sh | awk -F 'v' '{print $2}')
+  echo -e "CPU supports \033[32m${cpu_level}\033[0m"
+  # exit
+  if [[ ${bit} != "x86_64" ]]; then
+    echo -e "${Error} 不支持x86_64以外的系统 !" && exit 1
+  fi
+
+  if [[ "${OS_type}" == "Debian" ]]; then
+    apt update
+    apt-get install gnupg gnupg2 gnupg1 sudo -y
+    echo 'deb http://deb.xanmod.org releases main' | sudo tee /etc/apt/sources.list.d/xanmod-kernel.list
+    wget -qO - https://dl.xanmod.org/gpg.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/xanmod-kernel.gpg add -
+    if [[ "${cpu_level}" == "4" ]]; then
+      apt update && apt install linux-xanmod-x64v4 -y
+    elif [[ "${cpu_level}" == "3" ]]; then
+      apt update && apt install linux-xanmod-x64v3 -y
+    elif [[ "${cpu_level}" == "2" ]]; then
+      apt update && apt install linux-xanmod-x64v2 -y
+    else
+      apt update && apt install linux-xanmod-x64v1 -y
+    fi
+  else
+    echo -e "${Error} 不支持当前系统 ${release} ${version} ${bit} !" && exit 1
+  fi
+
+  BBR_grub
+  echo -e "${Tip} 内核安装完毕，请参考上面的信息检查是否安装成功,默认从排第一的高版本内核启动,请自行重启系统"
+}
+detele_kernel() {
+  if [[ "${OS_type}" == "CentOS" ]]; then
+    rpm_total=$(rpm -qa | grep kernel | grep -v "${kernel_version}" | grep -v "noarch" | wc -l)
+    if [ "${rpm_total}" ] >"1"; then
+      echo -e "检测到 ${rpm_total} 个其余内核，开始卸载..."
+      for ((integer = 1; integer <= ${rpm_total}; integer++)); do
+        rpm_del=$(rpm -qa | grep kernel | grep -v "${kernel_version}" | grep -v "noarch" | head -${integer})
+        echo -e "开始卸载 ${rpm_del} 内核..."
+        rpm --nodeps -e ${rpm_del}
+        echo -e "卸载 ${rpm_del} 内核卸载完成，继续..."
+      done
+      echo --nodeps -e "内核卸载完毕，继续..."
+    else
+      echo -e " 检测到 内核 数量不正确，请检查 !" && exit 1
+    fi
+  elif [[ "${OS_type}" == "Debian" ]]; then
+    deb_total=$(dpkg -l | grep linux-image | awk '{print $2}' | grep -v "${kernel_version}" | wc -l)
+    if [ "${deb_total}" ] >"1"; then
+      echo -e "检测到 ${deb_total} 个其余内核，开始卸载..."
+      for ((integer = 1; integer <= ${deb_total}; integer++)); do
+        deb_del=$(dpkg -l | grep linux-image | awk '{print $2}' | grep -v "${kernel_version}" | head -${integer})
+        echo -e "开始卸载 ${deb_del} 内核..."
+        apt-get purge -y ${deb_del}
+        apt-get autoremove -y
+        echo -e "卸载 ${deb_del} 内核卸载完成，继续..."
+      done
+      echo -e "内核卸载完毕，继续..."
+    else
+      echo -e " 检测到 内核 数量不正确，请检查 !" && exit 1
+    fi
+  fi
+}
+detele_kernel_head() {
+  if [[ "${OS_type}" == "CentOS" ]]; then
+    rpm_total=$(rpm -qa | grep kernel-headers | grep -v "${kernel_version}" | grep -v "noarch" | wc -l)
+    if [ "${rpm_total}" ] >"1"; then
+      echo -e "检测到 ${rpm_total} 个其余head内核，开始卸载..."
+      for ((integer = 1; integer <= ${rpm_total}; integer++)); do
+        rpm_del=$(rpm -qa | grep kernel-headers | grep -v "${kernel_version}" | grep -v "noarch" | head -${integer})
+        echo -e "开始卸载 ${rpm_del} headers内核..."
+        rpm --nodeps -e ${rpm_del}
+        echo -e "卸载 ${rpm_del} 内核卸载完成，继续..."
+      done
+      echo --nodeps -e "内核卸载完毕，继续..."
+    else
+      echo -e " 检测到 内核 数量不正确，请检查 !" && exit 1
+    fi
+  elif [[ "${OS_type}" == "Debian" ]]; then
+    deb_total=$(dpkg -l | grep linux-headers | awk '{print $2}' | grep -v "${kernel_version}" | wc -l)
+    if [ "${deb_total}" ] >"1"; then
+      echo -e "检测到 ${deb_total} 个其余head内核，开始卸载..."
+      for ((integer = 1; integer <= ${deb_total}; integer++)); do
+        deb_del=$(dpkg -l | grep linux-headers | awk '{print $2}' | grep -v "${kernel_version}" | head -${integer})
+        echo -e "开始卸载 ${deb_del} headers内核..."
+        apt-get purge -y ${deb_del}
+        apt-get autoremove -y
+        echo -e "卸载 ${deb_del} 内核卸载完成，继续..."
+      done
+      echo -e "内核卸载完毕，继续..."
+    else
+      echo -e " 检测到 内核 数量不正确，请检查 !" && exit 1
+    fi
+  fi
+}
+detele_kernel_custom() {
+  BBR_grub
+  read -p " 查看上面内核输入需保留保留保留的内核关键词(如:5.15.0-11) :" kernel_version
+  detele_kernel
+  detele_kernel_head
+  BBR_grub
+}
 welcome() {
 
 echo -e "$(random_color '
@@ -199,7 +430,7 @@ echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
-echo "$(random_color 'hy2一键安装版本v24.02.04')"
+echo "6. 安装bbr v3(更好的调动网络资源)"
 echo "hy2内核最新版本为： $latest_version"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "hysteria2状态: $hy2zt"
@@ -291,6 +522,23 @@ get_updated_version
 echo "您当前的更新后hy2版本:$version2"
     exit
     ;;
+   6)
+echo "输入y安装,输入n取消,输入o卸载 (y/n/o)"
+read answer
+if [ "$answer" == "y" ]; then
+check_sys
+installxanmod2
+elif [ "$answer" == "n" ]; then
+  echo "Canceling and exiting..."
+  exit 0
+elif [ "$answer" == "o" ]; then
+check_sys
+detele_kernel_custom
+else
+  echo "Invalid input. Please enter y, n, or o."
+fi
+   exit
+   ;;
    *)
      echo "$(random_color '无效的选择，退出脚本。')"
      exit
@@ -751,5 +999,3 @@ fi
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦,你直直-——直直接给我坐下')"
-
-echo "全网最低chatgpt账号,1.5元一个独享账号   直达链接: https://shop.idou.ink/  谢谢๑•́₃•̀๑购买"
