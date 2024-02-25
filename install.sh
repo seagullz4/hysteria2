@@ -46,7 +46,7 @@ random_color() {
   echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
 }
 
-commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables" "iproute2")
+commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables" "iproute2" "ca-certificates")
 package_manager=""
 install_command=""
 
