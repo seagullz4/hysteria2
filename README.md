@@ -1,4 +1,3 @@
-
 # [Hysteria2](https://github.com/apernet/hysteria)
 hysteria2一键安装
 宝宝们如果觉得好用，记得点个小星星⭐️哦
