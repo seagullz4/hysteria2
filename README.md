@@ -63,9 +63,9 @@ iOS端推荐：
 
 ## 服务器推荐
 
-akile的dns解锁流媒体vps [akile]（https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5）
+akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
-vmiss香港cn2线路vps [vmiss]（https://app.vmiss.com/aff.php?aff=1770）
+vmiss香港cn2线路vps [vmiss](https://app.vmiss.com/aff.php?aff=1770)
 
 ## 欢迎添加小⭐⭐
 
