@@ -61,6 +61,12 @@ iOS端推荐：
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
+## 服务器推荐
+
+akile的dns解锁流媒体vps [akile]（https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5）
+
+vmiss香港cn2线路vps [vmiss]（https://app.vmiss.com/aff.php?aff=1770）
+
 ## 欢迎添加小⭐⭐
 
 [![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?variant=adaptive)](https://starchart.cc/seagullz4/hysteria2)
