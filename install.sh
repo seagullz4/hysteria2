@@ -50,17 +50,32 @@ commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables" "iprou
 package_manager=""
 install_command=""
 
-#安装一些东西
 if [ -x "$(command -v apt)" ]; then
   package_manager="apt"
   install_command="apt install -y"
+  update_command="apt update"
 elif [ -x "$(command -v yum)" ]; then
   package_manager="yum"
   install_command="yum install -y"
+  update_command="yum makecache"
 else
   echo "Unsupported package manager."
   exit 1
 fi
+
+if [ "$package_manager" = "apt" ]; then
+  echo "Updating package list..."
+  sudo $update_command
+fi
+
+for cmd in "${commands[@]}"; do
+  if ! command -v $cmd &> /dev/null; then
+    echo "Installing $cmd..."
+    sudo $install_command $cmd
+  else
+    echo "$cmd is already installed."
+  fi
+done
 
 install_missing_commands() {
   for cmd in "${commands[@]}"; do
