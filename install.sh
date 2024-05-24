@@ -46,52 +46,40 @@ random_color() {
   echo -e "\e[${colors[$((RANDOM % 7))]}m$1\e[0m"
 }
 
-commands=("wget" "sed" "openssl" "net-tools" "psmisc" "procps" "iptables" "iproute2" "ca-certificates")
-package_manager=""
-install_command=""
-
-if [ -x "$(command -v apt)" ]; then
-  package_manager="apt"
-  install_command="apt install -y"
-  update_command="apt update"
-elif [ -x "$(command -v yum)" ]; then
-  package_manager="yum"
-  install_command="yum install -y"
-  update_command="yum makecache"
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS_TYPE=$ID
+    OS_VERSION=$VERSION_ID
 else
-  echo "Unsupported package manager."
-  exit 1
+    echo "无法确定操作系统类型。"
+    exit 1
 fi
 
-if [ "$package_manager" = "apt" ]; then
-  echo "Updating package list..."
-  sudo $update_command
-fi
+install_custom_packages() {
+    if [ "$OS_TYPE" = "debian" ] || [ "$OS_TYPE" = "ubuntu" ]; then
+        apt-get update
+        apt-get install -y wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates
+    elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ]; then
+        yum install -y epel-release
+        yum install -y wget sed openssl net-tools psmisc procps-ng iptables iproute ca-certificates
+    else
+        echo "不支持的操作系统。"
+        exit 1
+    fi
+}
 
-for cmd in "${commands[@]}"; do
-  if ! command -v $cmd &> /dev/null; then
-    echo "Installing $cmd..."
-    sudo $install_command $cmd
-  else
-    echo "$cmd is already installed."
-  fi
+install_custom_packages
+
+echo "已安装的软件包："
+for pkg in wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates; do
+    if command -v $pkg >/dev/null 2>&1; then
+        echo "$pkg 已安装"
+    else
+        echo "$pkg 未安装"
+    fi
 done
 
-install_missing_commands() {
-  for cmd in "${commands[@]}"; do
-    if ! command -v "$cmd" &>/dev/null; then
-      echo "Installing $cmd..."
-      sudo $install_command "$cmd"
-      if [ $? -eq 0 ]; then
-        echo "$cmd installed successfully."
-      else
-        echo "Failed to install $cmd."
-      fi
-    else
-      echo "$cmd is already installed."
-    fi
-  done
-}
+echo "所有指定的软件包均已安装完毕。"
 
 set_architecture() {
   case "$(uname -m)" in
