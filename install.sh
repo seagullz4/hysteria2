@@ -902,9 +902,6 @@ rules:
   - MATCH,auto
 EOL
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-# 将发送、接收两个缓冲区都设置为 16 MB
-sysctl -w net.core.rmem_max=16777216
-sysctl -w net.core.wmem_max=16777216
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "
 clash-mate.yaml 已保存到当前文件夹
