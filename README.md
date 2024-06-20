@@ -67,6 +67,9 @@ akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=9953229
 
 vmiss香港cn2线路vps [vmiss](https://app.vmiss.com/aff.php?aff=1770)
 
+日月免费查档
+[日月](https://t.me/RYSGKBOT?start=6022655572)
+
 ## 欢迎添加小⭐⭐
 
 [![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?variant=adaptive)](https://starchart.cc/seagullz4/hysteria2)
