@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # 检测当前用户是否为 root 用户
 if [ "$EUID" -ne 0 ]; then
   echo "请使用 root 用户执行此脚本！"
@@ -652,7 +651,7 @@ generate_certificate() {
     domain_name=${user_domain:-"bing.com"}
     if curl --output /dev/null --silent --head --fail "$domain_name"; then
         openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout "/etc/ssl/private/$domain_name.key" -out "/etc/ssl/private/$domain_name.crt" -subj "/CN=$domain_name" -days 36500
-        chmod 600 "/etc/ssl/private/$domain_name.key" "/etc/ssl/private/$domain_name.crt"
+        chmod 777 "/etc/ssl/private/$domain_name.key" "/etc/ssl/private/$domain_name.crt"
         echo -e "自签名证书和私钥已生成！"
     else
         echo -e "无效的域名或域名不可用，请输入有效的域名！"
