@@ -13,20 +13,21 @@ check_sys() {
     release="debian"
   elif grep -qi "ubuntu" /etc/issue; then
     release="ubuntu"
-  elif grep -qi -E "centos|red hat|redhat" /etc/issue || grep -qi -E "centos|red hat|redhat" /proc/version; then
+  elif grep -qi -E "centos|red hat|redhat|rocky" /etc/issue || grep -qi -E "centos|red hat|redhat|rocky" /proc/version; then
     release="centos"
   fi
 
   if [[ -f /etc/debian_version ]]; then
     OS_type="Debian"
     echo "检测为Debian通用系统，判断有误请反馈"
-  elif [[ -f /etc/redhat-release || -f /etc/centos-release || -f /etc/fedora-release ]]; then
+  elif [[ -f /etc/redhat-release || -f /etc/centos-release || -f /etc/fedora-release || -f /etc/rocky-release ]]; then
     OS_type="CentOS"
     echo "检测为CentOS通用系统，判断有误请反馈"
   else
     echo "Unknown"
   fi
 }
+
 
 _exists() {
     local cmd="$1"
@@ -59,7 +60,7 @@ install_custom_packages() {
     if [ "$OS_TYPE" = "debian" ] || [ "$OS_TYPE" = "ubuntu" ]; then
         apt-get update
         apt-get install -y wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates
-    elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ]; then
+    elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ] || [ "$OS_TYPE" = "rocky" ]; then
         yum install -y epel-release
         yum install -y wget sed openssl net-tools psmisc procps-ng iptables iproute ca-certificates
     else
@@ -354,11 +355,11 @@ detele_kernel_custom() {
 welcome() {
 
 echo -e "$(random_color '
-░██  ░██                                                              
-░██  ░██       ░████        ░█         ░█        ░█░█░█  
-░██  ░██     ░█      █      ░█         ░█        ░█    ░█ 
-░██████     ░██████         ░█         ░█        ░█    ░█ 
-░██  ░██     ░█             ░█ ░█      ░█  ░█     ░█░█░█ 
+░██  ░██
+░██  ░██       ░████        ░█         ░█        ░█░█░█
+░██  ░██     ░█      █      ░█         ░█        ░█    ░█
+░██████     ░██████         ░█         ░█        ░█    ░█
+░██  ░██     ░█             ░█ ░█      ░█  ░█     ░█░█░█
 ░██  ░██      ░██  █         ░█         ░█                   ')"
  echo -e "$(random_color '
 人生有两出悲剧：一是万念俱灰，另一是踌躇满志 ')"
@@ -459,9 +460,9 @@ exit
      exit
      ;;
    3)
-echo "$(random_color '下面是你的nekobox节点信息')" 
+echo "$(random_color '下面是你的nekobox节点信息')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"   
+echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 cd /root/hy3/
 
 cat /root/hy3/neko.txt
@@ -496,7 +497,7 @@ if [ -n "$pid" ]; then
   echo "$process_name 进程已被杀死。"
 else
   echo "未找到 $process_name 进程。"
-fi   
+fi
 
 cd /root/hy3
 
@@ -590,16 +591,16 @@ auth:
 masquerade:
   type: proxy
   file:
-    dir: /www/masq 
+    dir: /www/masq
   proxy:
     url: https://news.ycombinator.com/
-    rewriteHost: true 
+    rewriteHost: true
   string:
-    content: hello stupid world 
-    headers: 
+    content: hello stupid world
+    headers:
       content-type: text/plain
       custom-stuff: ice cream so good
-    statusCode: 200 
+    statusCode: 200
 
 bandwidth:
   up: 0 gbps
@@ -610,47 +611,48 @@ udpIdleTimeout: 90s
 ignoreClientBandwidth: false
 
 quic:
-  initStreamReceiveWindow: 26843545 
-  maxStreamReceiveWindow: 26843545 
-  initConnReceiveWindow: 67108864 
+  initStreamReceiveWindow: 26843545
+  maxStreamReceiveWindow: 26843545
+  initConnReceiveWindow: 67108864
   maxConnReceiveWindow: 67108864
-  maxIdleTimeout: 90s 
-  maxIncomingStreams: 1800 
-  disablePathMTUDiscovery: false 
+  maxIdleTimeout: 90s
+  maxIncomingStreams: 1800
+  disablePathMTUDiscovery: false
 EOL
 
-while true; do 
-    echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')" 
-    read -p "" port 
+while true; do
+    echo "$(random_color '请输入端口号（留空默认443，输入0随机2000-60000，你可以输入1-65630指定端口号）: ')"
+    read -p "" port
   
-    if [ -z "$port" ]; then 
-      port=443 
-    elif [ "$port" -eq 0 ]; then 
-      port=$((RANDOM % 58001 + 2000)) 
-    elif ! [[ "$port" =~ ^[0-9]+$ ]]; then 
-      echo "$(random_color '我的动物朋友，请输入数字好吧，请重新输入端口号：')" 
-      continue 
-    fi 
+    if [ -z "$port" ]; then
+      port=443
+    elif [ "$port" -eq 0 ]; then
+      port=$((RANDOM % 58001 + 2000))
+    elif ! [[ "$port" =~ ^[0-9]+$ ]]; then
+      echo "$(random_color '我的动物朋友，请输入数字好吧，请重新输入端口号：')"
+      continue
+    fi
   
-    while netstat -tuln | grep -q ":$port "; do 
-      echo "$(random_color '端口已被占用，请重新输入端口号：')" 
-      read -p "" port 
-    done 
+    while netstat -tuln | grep -q ":$port "; do
+      echo "$(random_color '端口已被占用，请重新输入端口号：')"
+      read -p "" port
+    done
   
-    if sed -i "s/443/$port/" config.yaml; then 
-      echo "$(random_color '端口号已设置为：')" "$port" 
-    else 
-      echo "$(random_color '替换端口号失败，退出脚本。')" 
-      exit 1 
-    fi 
+    if sed -i "s/443/$port/" config.yaml; then
+      echo "$(random_color '端口号已设置为：')" "$port"
+    else
+      echo "$(random_color '替换端口号失败，退出脚本。')"
+      exit 1
+    fi
   
 
 generate_certificate() {
     read -p "请输入要用于自签名证书的域名（默认为 bing.com）: " user_domain
     domain_name=${user_domain:-"bing.com"}
     if curl --output /dev/null --silent --head --fail "$domain_name"; then
+        mkdir -p /etc/ssl/private
         openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout "/etc/ssl/private/$domain_name.key" -out "/etc/ssl/private/$domain_name.crt" -subj "/CN=$domain_name" -days 36500
-        chmod 600 "/etc/ssl/private/$domain_name.key" "/etc/ssl/private/$domain_name.crt"
+        chmod 777 "/etc/ssl/private/$domain_name.key" "/etc/ssl/private/$domain_name.crt"
         echo -e "自签名证书和私钥已生成！"
     else
         echo -e "无效的域名或域名不可用，请输入有效的域名！"
@@ -682,7 +684,7 @@ if [ "$cert_choice" == "2" ]; then
 get_ipv4_info() {
   ip_address=$(wget -4 -qO- --no-check-certificate --user-agent=Mozilla --tries=2 --timeout=3 http://ip-api.com/json/) &&
   
-  ispck=$(expr "$ip_address" : '.*isp\":[ ]*\"\([^"]*\).*') 
+  ispck=$(expr "$ip_address" : '.*isp\":[ ]*\"\([^"]*\).*')
 
   if echo "$ispck" | grep -qi "cloudflare"; then
     echo "检测到Warp，请输入正确的服务器 IP："
@@ -696,7 +698,7 @@ get_ipv4_info() {
 get_ipv6_info() {
   ip_address=$(wget -6 -qO- --no-check-certificate --user-agent=Mozilla --tries=2 --timeout=3 https://api.ip.sb/geoip) &&
   
-  ispck=$(expr "$ip_address" : '.*isp\":[ ]*\"\([^"]*\).*') 
+  ispck=$(expr "$ip_address" : '.*isp\":[ ]*\"\([^"]*\).*')
 
   if echo "$ispck" | grep -qi "cloudflare"; then
     echo "检测到Warp，请输入正确的服务器 IP："
@@ -807,54 +809,54 @@ else
   exit 1
 fi
    
-    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就衮吧，不用开启(ง ื▿ ื)ว（回车默认不开启，输入1开启）: ')" 
-    read -p "" port_jump 
+    echo "$(random_color '是否要开启端口跳跃功能？如果你不知道是干啥的，就衮吧，不用开启(ง ื▿ ื)ว（回车默认不开启，输入1开启）: ')"
+    read -p "" port_jump
   
-    if [ -z "$port_jump" ]; then 
+    if [ -z "$port_jump" ]; then
       
-      break 
-    elif [ "$port_jump" -eq 1 ]; then 
+      break
+    elif [ "$port_jump" -eq 1 ]; then
     
-      echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')" 
-      read -p "" start_port 
+      echo "$(random_color '请输入起始端口号(起始端口必须小于末尾端口): ')"
+      read -p "" start_port
   
-      echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')" 
-      read -p "" end_port 
+      echo "$(random_color '请输入末尾端口号(末尾端口必须大于起始端口): ')"
+      read -p "" end_port
   
-     if [ "$start_port" -lt "$end_port" ]; then 
+     if [ "$start_port" -lt "$end_port" ]; then
 
-"$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port" 
-        echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port" 
-        break 
-      else 
-        echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')" 
-      fi 
-    else 
-      echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')" 
-    fi 
-done 
+"$ipta" -t nat -A PREROUTING -i eth0 -p udp --dport "$start_port":"$end_port" -j DNAT --to-destination :"$port"
+        echo "$(random_color '端口跳跃功能已开启，将范围重定向到主端口：')" "$port"
+        break
+      else
+        echo "$(random_color '末尾端口必须大于起始端口，请重新输入。')"
+      fi
+    else
+      echo "$(random_color '输入无效，请输入1开启端口跳跃功能，或直接按回车跳过。')"
+    fi
+done
 
 if [ -n "$port_jump" ] && [ "$port_jump" -eq 1 ]; then
-  echo "#!/bin/bash" > /root/hy3/ipppp.sh 
-  echo "$ipta -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh 
+  echo "#!/bin/bash" > /root/hy3/ipppp.sh
+  echo "$ipta -t nat -A PREROUTING -i eth0 -p udp --dport $start_port:$end_port -j DNAT --to-destination :$port" >> /root/hy3/ipppp.sh
   
  
-  chmod +x /root/hy3/ipppp.sh 
+  chmod +x /root/hy3/ipppp.sh
   
-  echo "[Unit]" > /etc/systemd/system/ipppp.service 
-  echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service 
-  echo "" >> /etc/systemd/system/ipppp.service 
-  echo "[Service]" >> /etc/systemd/system/ipppp.service 
-  echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service 
-  echo "" >> /etc/systemd/system/ipppp.service 
-  echo "[Install]" >> /etc/systemd/system/ipppp.service 
-  echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service 
+  echo "[Unit]" > /etc/systemd/system/ipppp.service
+  echo "Description=IP Port Redirect" >> /etc/systemd/system/ipppp.service
+  echo "" >> /etc/systemd/system/ipppp.service
+  echo "[Service]" >> /etc/systemd/system/ipppp.service
+  echo "ExecStart=/root/hy3/ipppp.sh" >> /etc/systemd/system/ipppp.service
+  echo "" >> /etc/systemd/system/ipppp.service
+  echo "[Install]" >> /etc/systemd/system/ipppp.service
+  echo "WantedBy=multi-user.target" >> /etc/systemd/system/ipppp.service
   
-  # 启用开机自启动服务 
-  systemctl enable ipppp.service 
+  # 启用开机自启动服务
+  systemctl enable ipppp.service
   
-  # 启动服务 
-  systemctl start ipppp.service 
+  # 启动服务
+  systemctl start ipppp.service
   
   echo "$(random_color '已创建/ipppp.sh脚本文件并设置开机自启动。')"
 fi
