@@ -419,7 +419,6 @@ rm -r /root/hy3
 systemctl stop ipppp.service
 systemctl disable ipppp.service
 rm /etc/systemd/system/ipppp.service
-iptables -F
 echo "卸载完成(ง ื▿ ื)ว."
  }
 
