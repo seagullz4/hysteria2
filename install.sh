@@ -617,16 +617,6 @@ bandwidth:
 
 udpIdleTimeout: 90s
 
-ignoreClientBandwidth: false
-
-quic:
-  initStreamReceiveWindow: 26843545
-  maxStreamReceiveWindow: 26843545
-  initConnReceiveWindow: 67108864
-  maxConnReceiveWindow: 67108864
-  maxIdleTimeout: 90s
-  maxIncomingStreams: 1800
-  disablePathMTUDiscovery: false
 EOL
 
 while true; do
