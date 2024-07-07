@@ -59,10 +59,10 @@ fi
 install_custom_packages() {
     if [ "$OS_TYPE" = "debian" ] || [ "$OS_TYPE" = "ubuntu" ]; then
         apt-get update
-        apt-get install -y wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates
+        apt-get install -y wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates jq
     elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ] || [ "$OS_TYPE" = "rocky" ]; then
         yum install -y epel-release
-        yum install -y wget sed openssl net-tools psmisc procps-ng iptables iproute ca-certificates
+        yum install -y wget sed openssl net-tools psmisc procps-ng iptables iproute ca-certificates jq
     else
         echo "不支持的操作系统。"
         exit 1
@@ -72,7 +72,7 @@ install_custom_packages() {
 install_custom_packages
 
 echo "已安装的软件包："
-for pkg in wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates; do
+for pkg in wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates jq; do
     if command -v $pkg >/dev/null 2>&1; then
         echo "$pkg 已安装"
     else
@@ -506,7 +506,7 @@ rm -r hysteria-linux-$arch
 if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
-  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.4/hysteria-linux-$arch; then
+  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.5.0/hysteria-linux-$arch; then
     chmod +x hysteria-linux-$arch
   else
     echo "无法从任何网站下载文件"
@@ -562,20 +562,29 @@ fi
 uninstall_hysteria > /dev/null 2>&1
 
 installhy2 () {
-cd /root
-mkdir -p ~/hy3
-cd ~/hy3
-if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
-  chmod +x hysteria-linux-$arch
-else
-  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.2.2/hysteria-linux-$arch; then
+  cd /root
+  mkdir -p ~/hy3
+  cd ~/hy3
+
+  REPO_URL="https://github.com/apernet/hysteria/releases"
+  LATEST_RELEASE=$(curl -s $REPO_URL/latest | jq -r '.tag_name')
+  DOWNLOAD_URL="https://github.com/apernet/hysteria/releases/download/$LATEST_RELEASE/hysteria-linux-$arch"
+
+  if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
     chmod +x hysteria-linux-$arch
   else
-    echo "无法从任何网站下载文件"
-    exit 1
+    if wget -O hysteria-linux-$arch $DOWNLOAD_URL; then
+      chmod +x hysteria-linux-$arch
+    else
+      echo "无法从任何网站下载文件"
+      exit 1
+    fi
   fi
-fi
+
+  echo "Latest release version: $LATEST_RELEASE"
+  echo "Download URL: $DOWNLOAD_URL"
 }
+
 echo "$(random_color '正在下载中,老登( ﾟдﾟ)つBye')"
 sleep 1
 installhy2 > /dev/null 2>&1
