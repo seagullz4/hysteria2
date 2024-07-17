@@ -65,11 +65,6 @@ iOS端推荐：
 
 akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
-vmiss香港cn2线路vps [vmiss](https://app.vmiss.com/aff.php?aff=1770)
-
-日月免费查档
-[日月](http://t.me/sgk2023_03_30bot?start=SGK_3R9ZOBM3)
-
 ## 欢迎添加小⭐⭐
 
 [![Stargazers over time](https://starchart.cc/seagullz4/hysteria2.svg?variant=adaptive)](https://starchart.cc/seagullz4/hysteria2)
