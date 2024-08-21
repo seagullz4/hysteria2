@@ -505,7 +505,7 @@ rm -r hysteria-linux-$arch
 if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
-  if wget -O hysteria-linux-$arch https://github.com/apernet/hysteria/releases/download/app/v2.5.0/hysteria-linux-$arch; then
+  if wget -O hysteria-linux-$arch https://github.tax/apernet/hysteria/releases/download/app/v2.5.0/hysteria-linux-$arch; then
     chmod +x hysteria-linux-$arch
   else
     echo "无法从任何网站下载文件"
@@ -566,9 +566,9 @@ installhy2 () {
   mkdir -p ~/hy3
   cd ~/hy3
 
-  REPO_URL="https://github.com/apernet/hysteria/releases"
+  REPO_URL="https://github.tax/apernet/hysteria/releases"
   LATEST_RELEASE=$(curl -s $REPO_URL/latest | jq -r '.tag_name')
-  DOWNLOAD_URL="https://github.com/apernet/hysteria/releases/download/$LATEST_RELEASE/hysteria-linux-$arch"
+  DOWNLOAD_URL="https://github.tax/apernet/hysteria/releases/download/$LATEST_RELEASE/hysteria-linux-$arch"
 
   if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
     chmod +x hysteria-linux-$arch
