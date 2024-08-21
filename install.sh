@@ -505,7 +505,7 @@ rm -r hysteria-linux-$arch
 if wget -O hysteria-linux-$arch https://download.hysteria.network/app/latest/hysteria-linux-$arch; then
   chmod +x hysteria-linux-$arch
 else
-  if wget -O hysteria-linux-$arch https://github.tax/apernet/hysteria/releases/download/app/v2.5.0/hysteria-linux-$arch; then
+  if wget -O hysteria-linux-$arch https://github.tax/apernet/hysteria/releases/download/app/v2.5.1/hysteria-linux-$arch; then
     chmod +x hysteria-linux-$arch
   else
     echo "无法从任何网站下载文件"
