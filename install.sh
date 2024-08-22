@@ -761,7 +761,7 @@ else
 
   if [ -z "$email" ]; then
 
-    random_part=$(head /dev/urandom | LC_ALL=C tr -dc A-Za-z0-9 | head -c 4 ; echo '')
+    random_part=$(head /dev/urandom | LC_ALL=C tr -dc A-Za-z0-9 | head -c 6 ; echo '')
 
     email="${random_part}@gmail.com"
   fi
