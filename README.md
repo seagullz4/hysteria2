@@ -23,6 +23,11 @@ hysteria2一键安装
 curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && bash install.sh
 ```
 
+**🙃备用脚本(首先推荐ubuntu的系统):**
+```
+wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh
+```
+
 **我的联系方式:[电报](https://t.me/seagullz44)**
 
 
