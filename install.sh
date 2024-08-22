@@ -780,6 +780,36 @@ else
   fi
 fi
 
+echo "请选择一个选项:"
+echo "1. 是否开启dns申请证书方式(默认cloudflare申请方式,需要api令牌,邮箱必须为注册邮箱)"
+echo "2. 跳过(自签用户不用管这个)"
+
+read -p "请输入你的选择 (1或2): " choice
+
+if [ "$choice" -eq 1 ]; then
+    read -p "请输入Cloudflare的API令牌: " api_key
+
+    # 查找email行的位置
+    line_number=$(grep -n "email" /root/hy3/config.yaml | cut -d: -f1)
+
+    if [ -z "$line_number" ]; then
+        echo "未找到email行，请检查配置文件。"
+        exit 1
+    fi
+
+    sed -i "${line_number}a\\
+type: dns\\
+dns:\\
+  name: cloudflare\\
+  config:\\
+    cloudflare_api_token: $api_key" /root/hy3/config.yaml
+
+    echo "配置已成功添加到/root/hy3/config.yaml"
+else
+    echo "跳过DNS配置步骤。"
+fi
+
+
 echo "$(random_color '请输入你的密码（留空将生成随机密码，不超过20个字符）: ')"
 read -p "" password
 
