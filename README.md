@@ -15,7 +15,7 @@ hysteria2一键安装
 
 ☆支持安装xanmod内核使用bbrv3加速（脚本来自[ylx2016](https://github.com/ylx2016/Linux-NetSpeed)）
 
-更多客户端配置请查看[客户端配置](https://v2.hysteria.network/zh/docs/getting-started/Client/)
+更多客户端配置请查看[客户端配置](https://v2.hysteria.network/zh/docs/getting-started/Client/)  [cloudflare令牌]（https://dash.cloudflare.com/profile/api-tokens）
 
 
 **🙃安装脚本(首先推荐ubuntu的系统):**
