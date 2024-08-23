@@ -786,6 +786,11 @@ echo "2. 跳过(自签用户和不知道这个的直接跳过就行)"
 
 read -p "请输入你的选择 (1或2): " choice
 
+# 如果用户直接按回车，默认选择2
+if [ -z "$choice" ]; then
+    choice=2
+fi
+
 if [ "$choice" -eq 1 ]; then
     read -p "请输入Cloudflare的API令牌: " api_key
 
@@ -808,7 +813,6 @@ dns:\\
 else
     echo "跳过DNS配置步骤。"
 fi
-
 
 echo "$(random_color '请输入你的密码（留空将生成随机密码，不超过20个字符）: ')"
 read -p "" password
