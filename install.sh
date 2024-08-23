@@ -62,7 +62,7 @@ install_custom_packages() {
         apt install -y wget sed sudo openssl net-tools psmisc procps iptables iproute2 ca-certificates jq
     elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ] || [ "$OS_TYPE" = "rocky" ]; then
         yum install -y epel-release
-        yum install -y wget sed openssl net-tools psmisc procps-ng iptables iproute ca-certificates jq
+        yum install -y wget sed sudo openssl net-tools psmisc procps-ng iptables iproute ca-certificates jq
     else
         echo "不支持的操作系统。"
         exit 1
@@ -415,10 +415,15 @@ if [ -f "/root/hy3/config.yaml" ]; then
 else
   echo "Hysteria 服务器配置文件不存在。"
 fi
+
 rm -r /root/hy3
 systemctl stop ipppp.service
 systemctl disable ipppp.service
 rm /etc/systemd/system/ipppp.service
+
+sed -i '/alias hy2=/d' ~/.bashrc
+source ~/.bashrc
+echo "已删除快捷键 hy2"
 echo "卸载完成(ง ื▿ ื)ว."
  }
 
@@ -1026,3 +1031,9 @@ fi
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦,你直直-——直直接给我坐下')"
+
+echo "alias hy2='wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh'" >> ~/.bashrc
+
+source ~/.bashrc
+
+echo "已添加快捷键,输入hy2快速执行脚本,see you~"
