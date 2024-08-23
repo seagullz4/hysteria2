@@ -420,25 +420,22 @@ rm -r /root/hy3
 systemctl stop ipppp.service
 systemctl disable ipppp.service
 rm /etc/systemd/system/ipppp.service
-
-sed -i '/alias hy2=/d' ~/.bashrc
-source ~/.bashrc
-echo "已删除快捷键 hy2"
+rm -r /usr/local/bin/hy2
 echo "卸载完成(ง ื▿ ื)ว."
  }
 
 hy2easy() {
-if ! grep -q "alias hy2=" ~/.bashrc; then
-    echo "alias hy2='wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh'" >> ~/.bashrc
-    source ~/.bashrc
-    echo "已添加快捷键,输入hy2快速执行脚本,see you~"
+if [ -f /usr/local/bin/hy2 ]; then
+    echo "嘻嘻嘻嘻"
 else
-    echo "......"
+    echo 'wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh' > hy2.sh
+    cp -f ./hy2.sh /usr/local/bin/hy2 > /dev/null 2>&1
+    chmod +x /usr/local/bin/hy2
+    echo "已添加hy2快捷方式"
 fi
 }
-
-welcome
 hy2easy
+welcome
 
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
