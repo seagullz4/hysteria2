@@ -27,6 +27,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 ```
 wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh
 ```
+**新增快捷方式终端输入hy2一键打开**
 
 **我的联系方式:[电报](https://t.me/seagullz44)**
 
