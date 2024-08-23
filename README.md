@@ -18,12 +18,12 @@ hysteria2一键安装
 更多客户端配置请查看[客户端配置](https://v2.hysteria.network/zh/docs/getting-started/Client/)  [cloudflare令牌](https://dash.cloudflare.com/profile/api-tokens)
 
 
-**🙃安装脚本(首先推荐ubuntu的系统):**
+**🙃安装脚本(首先推荐debian的系统):**
 ```
 curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && bash install.sh
 ```
 
-**🙃备用脚本(首先推荐ubuntu的系统):**
+**🙃备用脚本(首先推荐debian的系统):**
 ```
 wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh
 ```
