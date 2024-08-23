@@ -427,8 +427,18 @@ echo "已删除快捷键 hy2"
 echo "卸载完成(ง ื▿ ื)ว."
  }
 
-welcome
+hy2easy() {
+if ! grep -q "alias hy2=" ~/.bashrc; then
+    echo "alias hy2='wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh'" >> ~/.bashrc
+    source ~/.bashrc
+    echo "已添加快捷键,输入hy2快速执行脚本,see you~"
+else
+    echo "......"
+fi
+}
 
+welcome
+hy2easy
 #这些就行提示你输入的😇
 echo "$(random_color '选择一个操作，小崽子(ง ื▿ ื)ว：')"
 echo "1. 安装(以梦为马)"
@@ -1031,9 +1041,3 @@ fi
 echo -e "$(random_color '
 
 Hysteria2安装成功，请合理使用哦,你直直-——直直接给我坐下')"
-
-echo "alias hy2='wget file.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh'" >> ~/.bashrc
-
-source ~/.bashrc
-
-echo "已添加快捷键,输入hy2快速执行脚本,see you~"
