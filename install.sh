@@ -60,7 +60,7 @@ install_custom_packages() {
     if [ "$OS_TYPE" = "debian" ] || [ "$OS_TYPE" = "ubuntu" ]; then
         apt update
         apt install -y wget sed sudo openssl net-tools psmisc procps iptables iproute2 ca-certificates jq
-    elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ] || [ "$OS_TYPE" = "rocky" ]; then
+    elif [ "$OS_TYPE" = "centos" ] || [ "$OS_TYPE" = "rhel" ] || [ "$OS_TYPE" = "fedora" ] || [ "$OS_TYPE" = "rocky" ]; then
         yum install -y epel-release
         yum install -y wget sed sudo openssl net-tools psmisc procps-ng iptables iproute ca-certificates jq
     else
