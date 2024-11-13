@@ -608,6 +608,8 @@ auth:
   type: password
   password: Se7RAuFZ8Lzg
 
+
+
 masquerade:
   type: proxy
   file:
@@ -777,11 +779,9 @@ else
     email="${random_part}@gmail.com"
   fi
 
-  yaml_content="acme:\n  domains:\n    - $domain\n  email: $email"
-
   if [ -f "config.yaml" ]; then
     echo -e "\nAppending to config.yaml..."
-    echo -e $yaml_content >> config.yaml
+    sed -i '3i\acme:\n  domains:\n    - '$domain'\n  email: '$email'' config.yaml
     echo "$(random_color '域名和邮箱已添加到 config.yaml 文件。')"
     ipta="iptables"
     choice2="false"
