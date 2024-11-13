@@ -425,14 +425,11 @@ echo "卸载完成(ง ื▿ ื)ว."
  }
 
 hy2easy() {
-if [ -f /usr/local/bin/hy2 ]; then
-    echo "嘻嘻嘻嘻"
-else
+    rm -rf /usr/local/bin/hy2
     echo 'wget hy2.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh' > hy2.sh
     cp -f ./hy2.sh /usr/local/bin/hy2 > /dev/null 2>&1
     chmod +x /usr/local/bin/hy2
     echo "已添加hy2快捷方式"
-fi
 }
 hy2easy
 welcome
