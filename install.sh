@@ -552,10 +552,13 @@ echo "输入1启动hy2内核,输入2关闭hy2内核,输入3重启hy2内核"
 read choicehy2
 if [ "$choicehy2" = "1" ]; then
 sudo systemctl start hysteria.service
+echo "hy2内核启动成功"
 elif [ "$choicehy2" = "2" ]; then
 sudo systemctl stop hysteria.service
+echo "hy2内核关闭成功"
 elif [ "$choicehy2" = "3" ]; then
 sudo systemctl restart hysteria.service
+echo "hy2内核重启成功"
 else
   echo "请输入正确选项"
 fi
