@@ -816,11 +816,11 @@ if [ "$choice" -eq 1 ]; then
     fi
 
     sed -i "${line_number}a\\
-type: dns\\
-dns:\\
-  name: cloudflare\\
-  config:\\
-    cloudflare_api_token: $api_key" /root/hy3/config.yaml
+  type: dns\\
+  dns:\\
+    name: cloudflare\\
+    config:\\
+      cloudflare_api_token: $api_key" /root/hy3/config.yaml
 
     echo "配置已成功添加到/root/hy3/config.yaml"
 else
