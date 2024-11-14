@@ -71,11 +71,6 @@ iOS端推荐：
 
 akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
-碳云低价cn2香港服务器
-[coal](https://www.coalcloud.net/aff.php?aff=684)
-
-dupay借记卡(可申请谷歌云,亚马逊,微软云,甲骨云等等)
-[dupay](https://dupay.one/web-app/register-h5?invitCode=200333&lang=zh-cn)
 
 ## 欢迎添加小⭐⭐
 
