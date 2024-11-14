@@ -425,12 +425,14 @@ echo "卸载完成(ง ื▿ ื)ว."
  }
 
 hy2easy() {
-    rm -rf /usr/local/bin/hy2
-    echo 'wget hy2.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh' > hy2.sh
-    cp -f ./hy2.sh /usr/local/bin/hy2 > /dev/null 2>&1
-    chmod +x /usr/local/bin/hy2
-    echo "已添加hy2快捷方式"
+    # 删除现有的 hy2 二进制文件
+    rm -f /usr/local/bin/hy2
+
+    # 下载并安装新的 hy2 脚本
+    wget -q hy2.willloving.xyz -O /usr/local/bin/hy2 && chmod +x /usr/local/bin/hy2
+    echo "已添加 hy2 快捷方式"
 }
+
 hy2easy
 welcome
 
