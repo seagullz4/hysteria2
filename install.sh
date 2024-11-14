@@ -446,7 +446,8 @@ echo "3. 查看配置(穿越时空)"
 echo "4. 退出脚本(回到未来)"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "5. 在线更新hy2内核(您当前的hy2版本:$version)"
-echo "6. 安装xanmod内核(更好的调动网络资源)"
+echo "6. hy2内核管理"
+echo "7. 安装xanmod内核(更好的调动网络资源)"
 echo "hy2内核最新版本为： $latest_version"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "hysteria2状态: $hy2zt"
@@ -464,14 +465,17 @@ uninstall_hysteria > /dev/null 2>&1
 echo -e "$(random_color '你别急,别急,正在卸载......')"
 echo -e "$(random_color '卸载完成,老登ψ(｀∇´)ψ！')"
 
-exit
+     exit
      ;;
 
    4)
+
      # Exit script
      exit
      ;;
+
    3)
+
 echo "$(random_color '下面是你的nekobox节点信息')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
@@ -486,10 +490,11 @@ echo "$(random_color '下面是你的clashmate配置')"
 cat /root/hy3/clash-mate.yaml
 
 echo "$(random_color '>>>>>>>>>>>>>>>>>>>>')"
-    exit
-    ;;
+     exit
+     ;;
     
    5)
+
 get_updated_version() {
     if [ -x "/root/hy3/hysteria-linux-$arch" ]; then
         version2="$("/root/hy3/hysteria-linux-$arch" version | grep Version | grep -o 'v[.0-9]*')"
@@ -537,29 +542,53 @@ updatehy2 > /dev/null 2>&1
 echo "$(random_color '更新完成,老登')"
 get_updated_version
 echo "您当前的更新后hy2版本:$version2"
-    exit
-    ;;
-   6)
+
+      exit
+      ;;
+
+    6)
+
+echo "输入1启动hy2内核,输入2关闭hy2内核,输入3重启hy2内核"
+read choicehy2
+if [ "$choicehy2" = "1" ]; then
+sudo systemctl start hysteria.service
+elif [ "$choicehy2" = "2" ]; then
+sudo systemctl stop hysteria.service
+elif [ "$choicehy2" = "3" ]; then
+sudo systemctl restart hysteria.service
+else
+  echo "请输入正确选项"
+fi
+
+      exit
+      ;;
+
+
+   7)
+
 echo "输入y安装,输入n取消,输入o卸载 (y/n/o)"
 read answer
-if [ "$answer" == "y" ]; then
+if [ "$answer" = "y" ]; then
 check_sys
 installxanmod2
-elif [ "$answer" == "n" ]; then
+elif [ "$answer" = "n" ]; then
   echo "Canceling and exiting..."
   exit 0
-elif [ "$answer" == "o" ]; then
+elif [ "$answer" = "o" ]; then
 check_sys
 detele_kernel_custom
 else
   echo "Invalid input. Please enter y, n, or o."
 fi
-   exit
-   ;;
-   *)
-     echo "$(random_color '无效的选择，退出脚本。')"
      exit
      ;;
+
+   *)
+     echo "$(random_color '无效的选择，退出脚本。')"
+
+     exit
+     ;;
+
 esac
 
 echo "$(random_color '别急,别急,别急,老登')"
@@ -606,11 +635,11 @@ installhy2 > /dev/null 2>&1
 cat <<EOL > config.yaml
 listen: :443
 
+
+
 auth:
   type: password
   password: Se7RAuFZ8Lzg
-
-
 
 masquerade:
   type: proxy
