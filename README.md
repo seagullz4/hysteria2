@@ -51,8 +51,7 @@ iOS端推荐：
 
 [nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)(neko支持端口跳跃,优先推荐)
 
- [clash-mate](https://github.com/MetaCubeX/ClashMetaForAndroid)
-
+[Clash-Meta](https://github.com/MetaCubeX/ClashMetaForAndroid)
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
  
@@ -62,8 +61,7 @@ iOS端推荐：
 
 [nekoray](https://github.com/MatsuriDayo/nekoray)
 
- [clash-verge](https://github.com/zzzgydi/clash-verge)
-
+[Clash-Verge](https://github.com/zzzgydi/clash-verge)
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
