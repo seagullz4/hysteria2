@@ -416,17 +416,17 @@ else
   echo "Hysteria 服务器配置文件不存在。"
 fi
 
-rm -r /root/hy3
+rm -rf /root/hy3
 systemctl stop ipppp.service
 systemctl disable ipppp.service
-rm /etc/systemd/system/ipppp.service
-rm -r /usr/local/bin/hy2
+rm -rf /etc/systemd/system/ipppp.service
+rm -rf /bin/hy2
 echo "卸载完成(ง ื▿ ื)ว."
  }
 
 hy2easy() {
     # 删除现有的 hy2 二进制文件
-    rm -f /bin/hy2
+    rm -rf /bin/hy2
 
     # 下载并安装新的 hy2 脚本
     wget -q hy2.willloving.xyz -O /bin/hy2 && chmod +x /bin/hy2
