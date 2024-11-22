@@ -426,10 +426,10 @@ echo "卸载完成(ง ื▿ ื)ว."
 
 hy2easy() {
     # 删除现有的 hy2 二进制文件
-    rm -f /usr/local/bin/hy2
+    rm -f /bin/hy2
 
     # 下载并安装新的 hy2 脚本
-    wget -q hy2.willloving.xyz -O /usr/local/bin/hy2 && chmod +x /usr/local/bin/hy2
+    wget -q hy2.willloving.xyz -O /bin/hy2 && chmod +x /bin/hy2
     echo "已添加 hy2 快捷方式"
 }
 
