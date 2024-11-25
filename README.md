@@ -61,7 +61,7 @@ iOS端推荐：
 
 [nekoray](https://github.com/MatsuriDayo/nekoray)
 
-[Clash-Verge](https://github.com/zzzgydi/clash-verge)
+[Clash-Verge](https://github.com/clash-verge-rev/clash-verge-rev)
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
