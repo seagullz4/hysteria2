@@ -72,7 +72,7 @@ install_custom_packages() {
 install_custom_packages
 
 echo "已安装的软件包："
-for pkg in wget sed openssl net-tools psmisc procps iptables iproute2 ca-certificates jq; do
+for pkg in wget sed openssl iptables jq; do
     if command -v $pkg >/dev/null 2>&1; then
         echo "$pkg 已安装"
     else
