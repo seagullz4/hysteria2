@@ -20,12 +20,12 @@ hysteria2一键安装
 
 **🙃安装脚本(首先推荐debian的系统):**
 ```
-curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod +x install.sh && bash install.sh
+curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.sh && chmod 777 install.sh && bash install.sh
 ```
 
 **🙃备用脚本(首先推荐debian的系统):**
 ```
-wget hy2.willloving.xyz -O install.sh && chmod +x install.sh && bash install.sh
+wget hy2.willloving.xyz -O install.sh && chmod 777 install.sh && bash install.sh
 ```
 **新增快捷方式终端输入hy2一键执行脚本**
 
