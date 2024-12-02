@@ -429,7 +429,7 @@ hy2easy() {
     rm -rf /bin/hy2
 
     # 下载并安装新的 hy2 脚本
-    wget -q hy2.willloving.xyz -O /bin/hy2 && chmod 777 /bin/hy2
+    sudo wget -q hy2.willloving.xyz -O /bin/hy2 && chmod 777 /bin/hy2
     echo "已添加 hy2 快捷方式"
 }
 
