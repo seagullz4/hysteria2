@@ -6,7 +6,7 @@ from pathlib import Path
 print("\033[91mHELLO HYSTERIA2 !\033[m")    # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
 
 def agree_treaty():       #此函数作用为：用户是否同意此条款
-    file_agree = Path(r"/root/project-hy2/agree.txt")  # 提取文件名
+    file_agree = Path(r"agree.txt")  # 提取文件名
     if file_agree.exists():       #.exists()判断文件是否存在，存在则为true跳过此步骤
         print("你已经同意过谢谢")
     else:
@@ -55,7 +55,7 @@ def hysteria2_install():    #安装hysteria2
                 print("输入错误，请重新输入")
         elif choice_1 == "n":
             print("已取消安装hysteria2")
-            sys.exit()
+            break
         else:
             print("输入错误，请重新输入")
 
@@ -65,32 +65,19 @@ def hysteria2_uninstall():   #卸载hysteria2
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
-            hy2_uninstall_1_2 = subprocess.run("rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload",shell=True)  # 删除禁用systemd服务
+            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && userdel -r hysteria && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload",shell=True)  # 删除禁用systemd服务
             print(hy2_uninstall_1_2)
             print("卸载hysteria2完成")
-            while True:
-                choice_2 = input("是否删除配置文件和 ACME 证书? (y/n) ：")
-                if choice_2 == "y":
-                    hy2_uninstall_2 = subprocess.run("rm -rf /etc/hysteria && userdel -r hysteria", shell=True)  # 删除hysteria2配置文件和acme证书
-                    print(hy2_uninstall_2)
-                    print("已删除")
-                    sys.exit()
-                elif choice_2 == "n":
-                    print("已取消")
-                    sys.exit()
-                else:
-                    print("输入错误，请重新输入")
+            sys.exit()
         elif choice_1 == "n":
             print("已取消卸载hysteria2")
-            sys.exit()
+            break
         else:
             print("输入错误，请重新输入")
 
 def server_manage():   #hysteria2服务管理
     while True:
-        choice_1 = input("是否进行hysteria2服务管理 (y/n) ：")
-        if choice_1 == "y":
-            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 手动编辑配置文件\n6. 退出")
+            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 手动编辑配置文件\n6. 返回")
             choice_2 = input("请输入选项：")
             if choice_2 == "1":
                 hy2_start = subprocess.run("systemctl enable --now hysteria-server.service",shell=True)
@@ -108,22 +95,22 @@ def server_manage():   #hysteria2服务管理
                 hy2_edit = subprocess.run("nano /etc/hysteria/config.yaml",shell=True)
                 print(hy2_edit)
             elif choice_2 == "6":
-                print("已退出服务管理")
-                sys.exit()
+                break
             else:
                 print("输入错误，请重新输入")
-        elif choice_1 == "n":
-            print("已取消服务管理")
-            sys.exit()
-        else:
-            print("输入错误，请重新输入")
 
 def hysteria2_config():
     while True:
         choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 返回\n请输入选项：")
         if choice_1 == "1":
-            hy2_config = Path(r"/etc/hysteria/config.yaml")   #查看配置文件
-            print(hy2_config.read_text())
+            while True:
+                    try:
+                        hy2_config = Path(r"/etc/hysteria/config.yaml")   #查看配置文件
+                        print(hy2_config.read_text())
+                        break
+                    except FileNotFoundError:     #捕获错误，如果找不到配置文件则输出未找到配置文件
+                        print("未找到配置文件")
+                    break
         elif choice_1 == "2":
             while True:
                 try:
@@ -144,23 +131,23 @@ def hysteria2_config():
                     hy2_url = input("请输入您需要伪装的域名：\n")
                     hy2_config = Path(r"/etc/hysteria/config.yaml")
                     hy2_write_config = f'''
-                    listen: :{hy2_port} 
+listen: :{hy2_port} 
 
-                    acme:
-                      domains:
-                        - {hy2_domain} 
-                      email: {hy2_email} 
+acme:
+  domains:
+    - {hy2_domain} 
+  email: {hy2_email} 
 
-                    auth:
-                      type: password
-                      password: {hy2_passwd} 
+auth:
+  type: password
+  password: {hy2_passwd} 
 
-                    masquerade: 
-                      type: proxy
-                      proxy:
-                        url: {hy2_url} 
-                        rewriteHost: true
-                    '''
+masquerade: 
+  type: proxy
+  proxy:
+    url: {hy2_url} 
+    rewriteHost: true
+'''
                     hy2_config.write_text(hy2_write_config)
                     print("配置已写入")
                     break
@@ -170,23 +157,23 @@ def hysteria2_config():
                     hy2_url = input("请输入您需要伪装的域名：\n")
                     hy2_config = Path(r"/etc/hysteria/config.yaml")
                     hy2_write_config = f'''
-                    listen: :{hy2_port} 
+listen: :{hy2_port} 
 
-                    acme:
-                      domains:
-                        - bing.com 
-                      email: {hy2_email} 
+acme:
+  domains:
+    - bing.com 
+  email: {hy2_email} 
 
-                    auth:
-                      type: password
-                      password: {hy2_passwd} 
+auth:
+  type: password
+  password: {hy2_passwd} 
 
-                    masquerade: 
-                      type: proxy
-                      proxy:
-                        url: {hy2_url} 
-                        rewriteHost: true
-                    '''
+masquerade: 
+  type: proxy
+  proxy:
+    url: {hy2_url} 
+    rewriteHost: true
+'''
                     hy2_config.write_text(hy2_write_config)
                     print("配置已写入")
                     break
@@ -197,22 +184,22 @@ def hysteria2_config():
                     hy2_url = input("请输入您需要伪装的域名：\n")
                     hy2_config = Path(r"/etc/hysteria/config.yaml")
                     hy2_write_config = f'''
-                    listen: :443 
-                    
-                    tls:
-                      cert: {hy2_cert} 
-                      key: {hy2_key} 
-                    
-                    auth:
-                      type: password
-                      password: {hy2_passwd} 
-                    
-                    masquerade: 
-                      type: proxy
-                      proxy:
-                        url: {hy2_url} 
-                        rewriteHost: true
-                    '''
+listen: :443 
+
+tls:
+  cert: {hy2_cert} 
+  key: {hy2_key} 
+
+auth:
+  type: password
+  password: {hy2_passwd} 
+
+masquerade: 
+  type: proxy
+  proxy:
+    url: {hy2_url} 
+    rewriteHost: true
+'''
                     hy2_config.write_text(hy2_write_config)
                     print("配置已写入")
                     break
@@ -220,8 +207,7 @@ def hysteria2_config():
                     print("输入错误，请重新输入")
 
 #接下来写主程序
-agree_treaty()
-check_linux_system()
+
 while True:
     print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2服务管理\n4. hysteria2配置\n5. 退出")
     choice = input("请输入选项：")
