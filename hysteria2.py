@@ -1,6 +1,8 @@
 # hysteria2  一键安装脚本  完全免费开源  禁止用于商业用途 请在当地法律允许下使用
 import sys
 import subprocess   #可以用来执行外部命令
+import urllib
+from urllib import parse
 from pathlib import Path
 
 print("\033[91mHELLO HYSTERIA2 !\033[m")    # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
@@ -14,7 +16,7 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
             choose_1 = input("是否同意并阅读安装hysteria2相关条款? (y/n) ：")
             if choose_1 == "y":
                 print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责")
-                check_file = subprocess.run("touch agree.txt",shell = True)
+                check_file = subprocess.run("mkdir /root/hy2config && touch /root/hy2config/agree.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
                 break
             elif choose_1 == "n":
@@ -26,10 +28,10 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
 def check_linux_system():    #检查Linux系统为哪个进行对应的安装
     sys_version = Path(r"/etc/os-release")    #获取Linux系统版本
     if "ubuntu" in sys_version.read_text().lower() or "debian" in sys_version.read_text().lower():
-        check_file = subprocess.run("apt update && apt install -y wget sed sudo openssl net-tools psmisc procps iptables iproute2 ca-certificates jq",shell = True)   #安装依赖
+        check_file = subprocess.run("apt update && apt install -y wget sudo openssl net-tools psmisc procps iptables iproute2 ca-certificates",shell = True)   #安装依赖
         print(check_file)
     elif "rocky" in sys_version.read_text().lower() or "centos" in sys_version.read_text().lower() or "fedora" in sys_version.read_text().lower():
-        check_file = subprocess.run("dnf install -y epel-release wget sed sudo openssl net-tools psmisc procps iptables iproute2 ca-certificates jq",shell=True)
+        check_file = subprocess.run("dnf install -y epel-release wget sudo openssl net-tools psmisc procps iptables iproute2 ca-certificates",shell=True)
         print(check_file)
     else:
         print("\033[91m暂时不支持该系统，推荐使用Debian 11/Ubuntu 22.04 LTS/Rocky Linux 8/CentOS Stream 8/Fedora 37 更高以上的系统\033[m")
@@ -77,7 +79,7 @@ def hysteria2_uninstall():   #卸载hysteria2
 
 def server_manage():   #hysteria2服务管理
     while True:
-            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 手动编辑配置文件\n6. 返回")
+            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 返回")
             choice_2 = input("请输入选项：")
             if choice_2 == "1":
                 hy2_start = subprocess.run("systemctl enable --now hysteria-server.service",shell=True)
@@ -92,14 +94,11 @@ def server_manage():   #hysteria2服务管理
                 hy2_status = subprocess.run("systemctl status hysteria-server.service",shell=True)
                 print(hy2_status)
             elif choice_2 == "5":
-                hy2_edit = subprocess.run("nano /etc/hysteria/config.yaml",shell=True)
-                print(hy2_edit)
-            elif choice_2 == "6":
                 break
             else:
                 print("输入错误，请重新输入")
 
-def hysteria2_config():
+def hysteria2_config():     #hysteria2配置
     while True:
         choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 返回\n请输入选项：")
         if choice_1 == "1":
@@ -112,102 +111,112 @@ def hysteria2_config():
                         print("未找到配置文件")
                     break
         elif choice_1 == "2":
-            while True:
-                try:
-                    hy2_port = int(input("请输入端口号："))
-                    if hy2_port <= 0 or hy2_port >= 65536:
-                        print("端口号范围为1~65535，请重新输入")
-                    else:
+            try:
+                while True:
+                    try:
+                        hy2_port = int(input("请输入端口号："))
+                        if hy2_port <= 0 or hy2_port >= 65536:
+                            print("端口号范围为1~65535，请重新输入")
+                        else:
+                            break
+                    except ValueError:     #收集错误，判断用户是否输入为数字，上面int已经转换为数字，输入小数点或者其他字符串都会引发这个报错
+                        print("端口号只能为数字且不能包含小数点，请重新输入")
+                hy2_username = input("请输入您用户名：\n")
+                hy2_username = urllib.parse.quote(hy2_username)
+                while True:
+                    print("1. 自动申请域名证书\n2. 使用自签证书(不需要域名)\n3. 手动选择证书路径")
+                    choice_2 = input("请输入您选项：")
+                    if choice_2 == "1":
+                        hy2_domain = input("请输入您自己的域名：\n")
+                        hy2_email = input("请输入您的邮箱：\n")
+                        hy2_passwd = input("请输入您的强密码：\n")
+                        hy2_url = input("请输入您需要伪装的域名：\n")
+                        hy2_config = Path(r"/etc/hysteria/config.yaml")
+                        hy2_write_config = f'''
+    listen: :{hy2_port} 
+    
+    acme:
+      domains:
+        - {hy2_domain} 
+      email: {hy2_email} 
+    
+    auth:
+      type: password
+      password: {hy2_passwd} 
+    
+    masquerade: 
+      type: proxy
+      proxy:
+        url: {hy2_url} 
+        rewriteHost: true
+    '''
+                        hy2_config.write_text(hy2_write_config)
+                        print(f"您的hy2配置为：hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}")
+                        print("配置已写入")
                         break
-                except ValueError:     #收集错误，判断用户是否输入为数字，上面int已经转换为数字，输入小数点或者其他字符串都会引发这个报错
-                    print("端口号只能为数字且不能包含小数点，请重新输入")
-            while True:
-                print("1. 自动申请域名证书\n2. 使用自签证书(不需要域名)\n3. 手动选择证书路径")
-                choice_2 = input("请输入您选项：")
-                if choice_2 == "1":
-                    hy2_domain = input("请输入您自己的域名：\n")
-                    hy2_email = input("请输入您的邮箱：\n")
-                    hy2_passwd = input("请输入您的强密码：\n")
-                    hy2_url = input("请输入您需要伪装的域名：\n")
-                    hy2_config = Path(r"/etc/hysteria/config.yaml")
-                    hy2_write_config = f'''
-listen: :{hy2_port} 
-
-acme:
-  domains:
-    - {hy2_domain} 
-  email: {hy2_email} 
-
-auth:
-  type: password
-  password: {hy2_passwd} 
-
-masquerade: 
-  type: proxy
-  proxy:
-    url: {hy2_url} 
-    rewriteHost: true
-'''
-                    hy2_config.write_text(hy2_write_config)
-                    print("配置已写入")
-                    break
-                elif choice_2 == "2":    #这里需要重写一下，自动帮用户申请证书并且填入路径
-                    hy2_email = input("请输入您的邮箱：\n")
-                    hy2_passwd = input("请输入您的强密码：\n")
-                    hy2_url = input("请输入您需要伪装的域名：\n")
-                    hy2_config = Path(r"/etc/hysteria/config.yaml")
-                    hy2_write_config = f'''
-listen: :{hy2_port} 
-
-acme:
-  domains:
-    - bing.com 
-  email: {hy2_email} 
-
-auth:
-  type: password
-  password: {hy2_passwd} 
-
-masquerade: 
-  type: proxy
-  proxy:
-    url: {hy2_url} 
-    rewriteHost: true
-'''
-                    hy2_config.write_text(hy2_write_config)
-                    print("配置已写入")
-                    break
-                elif choice_2 == "3":
-                    hy2_cert = input("请输入您的证书路径：\n")
-                    hy2_key = input("请输入您的密钥路径：\n")
-                    hy2_passwd = input("请输入您的强密码：\n")
-                    hy2_url = input("请输入您需要伪装的域名：\n")
-                    hy2_config = Path(r"/etc/hysteria/config.yaml")
-                    hy2_write_config = f'''
-listen: :443 
-
-tls:
-  cert: {hy2_cert} 
-  key: {hy2_key} 
-
-auth:
-  type: password
-  password: {hy2_passwd} 
-
-masquerade: 
-  type: proxy
-  proxy:
-    url: {hy2_url} 
-    rewriteHost: true
-'''
-                    hy2_config.write_text(hy2_write_config)
-                    print("配置已写入")
-                    break
-                else:
-                    print("输入错误，请重新输入")
+                    elif choice_2 == "2":    #这里需要重写一下，自动帮用户申请证书并且填入路径
+                        hy2_ssl_1 = subprocess.run("bash <(curl -fsSL https://file.willloving.xyz/api/public/dl/cm7R-REl?inline=true)",shell = True,executable="/bin/bash")
+                        print(hy2_ssl_1)
+                        hy2_ssl_domain = input("请输入你刚才输入的自签证书域名：\n")
+                        hy2_passwd = input("请输入您的强密码：\n")
+                        hy2_url = input("请输入您需要伪装的域名：\n")
+                        hy2_config = Path(r"/etc/hysteria/config.yaml")
+                        hy2_write_config = f'''
+    listen: :{hy2_port} 
+    
+    tls:
+      cert: /etc/ssl/private/{hy2_ssl_domain}.crt
+      key: /etc/ssl/private/{hy2_ssl_domain}.key 
+    
+    auth:
+      type: password
+      password: {hy2_passwd} 
+    
+    masquerade: 
+      type: proxy
+      proxy:
+        url: {hy2_url} 
+        rewriteHost: true
+    '''
+                        hy2_config.write_text(hy2_write_config)
+                        print("配置已写入")
+                        break
+                    elif choice_2 == "3":
+                        hy2_cert = input("请输入您的证书路径：\n")
+                        hy2_key = input("请输入您的密钥路径：\n")
+                        hy2_passwd = input("请输入您的强密码：\n")
+                        hy2_url = input("请输入您需要伪装的域名：\n")
+                        hy2_config = Path(r"/etc/hysteria/config.yaml")
+                        hy2_write_config = f'''
+    listen: :{hy2_port} 
+    
+    tls:
+      cert: {hy2_cert} 
+      key: {hy2_key} 
+    
+    auth:
+      type: password
+      password: {hy2_passwd} 
+    
+    masquerade: 
+      type: proxy
+      proxy:
+        url: {hy2_url} 
+        rewriteHost: true
+    '''
+                        hy2_config.write_text(hy2_write_config)
+                        print("配置已写入")
+                        break
+                    else:
+                        print("输入错误，请重新输入")
+            except FileNotFoundError:
+                print("未找到配置文件,请先安装hysteria2")
+        elif choice_1 == "3":
+            break
 
 #接下来写主程序
-
+agree_treaty()
+check_linux_system()
 while True:
     print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2服务管理\n4. hysteria2配置\n5. 退出")
     choice = input("请输入选项：")
