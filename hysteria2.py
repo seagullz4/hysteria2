@@ -84,31 +84,29 @@ def hysteria2_uninstall():   #卸载hysteria2
 
 def server_manage():   #hysteria2服务管理
     while True:
-            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 返回")
+            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 日志查询\n6. 返回")
             choice_2 = input("请输入选项：")
             if choice_2 == "1":
-                hy2_start = subprocess.run("systemctl enable --now hysteria-server.service",shell=True)
-                print(hy2_start)
+                print(subprocess.run("systemctl enable --now hysteria-server.service",shell=True))
             elif choice_2 == "2":
-                hy2_stop = subprocess.run("systemctl stop hysteria-server.service",shell=True)
-                print(hy2_stop)
+                print(subprocess.run("systemctl stop hysteria-server.service",shell=True))
             elif choice_2 == "3":
-                hy2_restart = subprocess.run("systemctl restart hysteria-server.service",shell=True)
-                print(hy2_restart)
+                print(subprocess.run("systemctl restart hysteria-server.service",shell=True))
             elif choice_2 == "4":
-                print("输入q退出查看")
-                hy2_status = subprocess.run("systemctl status hysteria-server.service",shell=True)
-                print(hy2_status)
+                print("\033[91m输入q退出查看\033[m")
+                print(subprocess.run("systemctl status hysteria-server.service",shell=True))
             elif choice_2 == "5":
+                print(subprocess.run("journalctl --no-pager -e -u hysteria-server.service",shell=True))
+            elif choice_2 == "6":
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
-hy2_ip = "你很帅"
+hy2_ip = "你很帅"   #这两个变量纯纯是为了夸奖正在观看我的代码的你
 domain_name = "超级帅"
 def hysteria2_config():     #hysteria2配置
     global hy2_ip,domain_name
-    hy2_config = Path(r"/etc/hysteria/config.yaml")  # 查看配置文件路径
-    hy2_url_scheme = Path(r"/root/hy2config/hy2_url_scheme.txt")  # 查看配置文件路径
+    hy2_config = Path(r"/etc/hysteria/config.yaml")  # 配置文件路径
+    hy2_url_scheme = Path(r"/root/hy2config/hy2_url_scheme.txt")  # 配置文件路径
     while True:
         choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 返回\n请输入选项：")
         if choice_1 == "1":
@@ -144,7 +142,7 @@ def hysteria2_config():     #hysteria2配置
                     if choice_2 == "1":
                         hy2_domain = input("请输入您自己的域名：\n")
                         hy2_email = input("请输入您的邮箱：\n")
-                        hy2_write_config = f"""
+                        hy2_config.write_text(f"""
 listen: :{hy2_port} 
 
 acme:
@@ -161,14 +159,13 @@ masquerade:
   proxy:
     url: {hy2_url} 
     rewriteHost: true
-"""
-                        hy2_config.write_text(hy2_write_config)
+""")
                         os.system("clear")
                         hy2_qrcode = subprocess.run(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -',shell=True)
                         print("您的二维码为：")
                         print(hy2_qrcode)
                         time.sleep(2)
-                        print(f"您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}")
+                        print(f"\033[91m您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}\033[m")
                         time.sleep(2)
                         hy2_qrcode_save = subprocess.run(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}" | qrencode -o /root/hy2config/hy2.png',shell=True)
                         print(hy2_qrcode_save)
@@ -280,7 +277,7 @@ masquerade:
                                 break
                             else:
                                 print("\033[91m输入错误，请重新输入！\033[m")
-                        hy2_write_config = f"""
+                        hy2_config.write_text(f"""
 listen: :{hy2_port} 
 
 tls:
@@ -296,15 +293,14 @@ masquerade:
   proxy:
     url: {hy2_url} 
     rewriteHost: true
-"""
-                        hy2_config.write_text(hy2_write_config)
+""")
                         os.system("clear")
                         hy2_qrcode = subprocess.run(f'echo "hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={domain_name}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -',shell=True)
                         print("您的二维码为：")
                         time.sleep(2)
                         print(hy2_qrcode)
                         time.sleep(2)
-                        print(f"您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={domain_name}#{hy2_username}")
+                        print(f"\033[91m您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={hy2_ip}#{hy2_username}\033[m")
                         hy2_qrcode_save = subprocess.run(f'echo "hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={domain_name}#{hy2_username}" | qrencode -o /root/hy2config/hy2.png',shell=True)
                         time.sleep(2)
                         print(hy2_qrcode_save)
@@ -320,7 +316,7 @@ masquerade:
                         hy2_cert = input("请输入您的证书路径：\n")
                         hy2_key = input("请输入您的密钥路径：\n")
                         hy2_domain = input("请输入您自己的域名：\n")
-                        hy2_write_config = f"""
+                        hy2_config.write_text(f"""
 listen: :{hy2_port} 
 
 tls:
@@ -336,14 +332,13 @@ masquerade:
   proxy:
     url: {hy2_url} 
     rewriteHost: true
-"""
-                        hy2_config.write_text(hy2_write_config)
+""")
                         os.system("clear")
                         hy2_qrcode = subprocess.run(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -',shell=True)
                         print("您的二维码为：")
                         print(hy2_qrcode)
                         time.sleep(2)
-                        print(f"您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}")
+                        print(f"\033[91m您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}\033[m")
                         time.sleep(2)
                         hy2_qrcode_save = subprocess.run(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?sni={hy2_domain}#{hy2_username}" | qrencode -o /root/hy2config/hy2.png',shell=True)
                         print(hy2_qrcode_save)
@@ -369,23 +364,27 @@ masquerade:
             print("\033[91m请重新输入\033[m")
 
 #接下来写主程序
-agree_treaty()
-check_linux_system()
+
 while True:
     os.system("clear")
     print("\033[91mHELLO HYSTERIA2 !\033[m")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
-    print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2服务管理\n4. hysteria2配置\n5. 退出")
+    print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2配置\n4. hysteria2服务管理\n5. 退出")
     choice = input("请输入选项：")
     if choice == "1":
+        os.system("clear")
         hysteria2_install()
     elif choice == "2":
+        os.system("clear")
         hysteria2_uninstall()
     elif choice == "3":
-        server_manage()
-    elif choice == "4":
+        os.system("clear")
         hysteria2_config()
+    elif choice == "4":
+        os.system("clear")
+        server_manage()
     elif choice == "5":
         print("已退出")
         sys.exit()
     else:
         print("\033[91m输入错误，请重新输入\033[m")
+        time.sleep(1)
