@@ -66,7 +66,7 @@ iOS端推荐：
 电脑端推荐:
 
 
-[nekoray](https://github.com/MatsuriDayo/nekoray)
+[nekoray](https://github.com/MatsuriDayo/nekoray)（我最喜欢的）
 
 [Clash-Verge](https://github.com/clash-verge-rev/clash-verge-rev)
 
