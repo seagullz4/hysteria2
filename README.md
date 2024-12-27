@@ -28,7 +28,13 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 **🙃备用脚本(首先推荐debian的系统):**
 ```
 wget hy2.willloving.xyz -O install.sh && chmod 777 install.sh && bash install.sh
+
 ```
+**🙃py新脚本(需要安装python3):**
+```
+wget py.willloving.xyz -O hy2.py && python3 hy2.py
+```
+
 **新增快捷方式终端输入hy2一键执行脚本**
 
 **我的联系方式:[电报](https://t.me/seagullz44)**
