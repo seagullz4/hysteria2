@@ -9,6 +9,16 @@ import os
 from urllib import parse
 from pathlib import Path
 
+def check_root():
+    # 获取当前用户的 UID
+    uid = os.getuid()
+
+    if uid != 0:
+        print("请以 root 用户权限运行此脚本。")
+        sys.exit(1)  # 非 root 用户退出程序
+    else:
+        print("你好同学")
+
 def agree_treaty():       #此函数作用为：用户是否同意此条款
     file_agree = Path(r"/root/hy2config/agree.txt")  # 提取文件名
     if file_agree.exists():       #.exists()判断文件是否存在，存在则为true跳过此步骤
@@ -48,14 +58,16 @@ def hysteria2_install():    #安装hysteria2
                 hy2_install = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/)",shell = True,executable="/bin/bash")  # 调用hy2官方脚本进行安装
                 print(hy2_install)
                 print("hysteria2安装完成")
-                print("请手动返回进行配置一键修改")
+                print("\033[91m请手动返回进行配置一键修改\033[m")
+                time.sleep(2)
                 break
             elif choice_2 == "2":
                 version_1 = input("请输入您需要安装的版本号(直接输入版本号数字即可，不需要加v，如2.6.0)：")
                 hy2_install_2 = subprocess.run(f"bash <(curl -fsSL https://get.hy2.sh/) --version v{version_1}",shell=True,executable="/bin/bash")  # 进行指定版本进行安装
                 print(hy2_install_2)
                 print(f"hysteria2指定{version_1}版本安装完成")
-                print("请手动返回进行配置一键修改")
+                print("\033[91m请手动返回进行配置一键修改\033[m")
+                time.sleep(2)
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
@@ -358,6 +370,7 @@ masquerade:
             print("\033[91m请重新输入\033[m")
 
 #接下来写主程序
+check_root()
 agree_treaty()
 check_linux_system()
 while True:
