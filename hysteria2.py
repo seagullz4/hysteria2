@@ -358,7 +358,8 @@ masquerade:
             print("\033[91m请重新输入\033[m")
 
 #接下来写主程序
-
+agree_treaty()
+check_linux_system()
 while True:
     os.system("clear")
     print("\033[91mHELLO HYSTERIA2 !\033[m")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
