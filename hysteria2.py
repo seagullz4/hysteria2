@@ -147,6 +147,16 @@ def hysteria2_config():     #hysteria2配置
                 hy2_username = urllib.parse.quote(hy2_username)
                 hy2_passwd = input("请输入您的强密码：\n")
                 hy2_url = input("请输入您需要伪装成的域名(请在前面加上https://或者http://)：\n")
+                hy2_brutal = input("是否开启Brutal模式(默认不推荐开启)？(y/n)：")
+                while True:
+                    if hy2_brutal == "y":
+                        brutal_mode = "false"
+                        break
+                    elif hy2_brutal == "n":
+                        brutal_mode = "true"
+                        break
+                    else:
+                        print("\033[91m输入错误请重新输入\033[m")
                 while True:
                     print("1. 自动申请域名证书\n2. 使用自签证书(不需要域名)\n3. 手动选择证书路径")
                     choice_2 = input("请输入您选项：")
@@ -170,6 +180,8 @@ masquerade:
   proxy:
     url: {hy2_url} 
     rewriteHost: true
+    
+ignoreClientBandwidth: {brutal_mode}
 """)
                         os.system("clear")
                         print("您的二维码为：\n")
@@ -302,6 +314,8 @@ masquerade:
   proxy:
     url: {hy2_url} 
     rewriteHost: true
+    
+ignoreClientBandwidth: {brutal_mode}
 """)
                         os.system("clear")
                         print("您的二维码为：")
@@ -338,6 +352,8 @@ masquerade:
   proxy:
     url: {hy2_url} 
     rewriteHost: true
+
+ignoreClientBandwidth: {brutal_mode}
 """)
                         os.system("clear")
                         print("您的二维码为：")
