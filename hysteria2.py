@@ -9,16 +9,6 @@ import os
 from urllib import parse
 from pathlib import Path
 
-def check_root():
-    # 获取当前用户的 UID
-    uid = os.getuid()
-
-    if uid != 0:
-        print("请以 root 用户权限运行此脚本。")
-        sys.exit(1)  # 非 root 用户退出程序
-    else:
-        print("你好同学")
-
 def agree_treaty():       #此函数作用为：用户是否同意此条款
     file_agree = Path(r"/root/hy2config/agree.txt")  # 提取文件名
     if file_agree.exists():       #.exists()判断文件是否存在，存在则为true跳过此步骤
@@ -447,7 +437,6 @@ ignoreClientBandwidth: {brutal_mode}
             print("\033[91m请重新输入\033[m")
 
 #接下来写主程序
-check_root()
 agree_treaty()
 check_linux_system()
 while True:
