@@ -73,7 +73,7 @@ def hysteria2_uninstall():   #卸载hysteria2
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
-            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && userdel -r hysteria && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && ./root/hy2config/jump_port_back.sh && rm -rf /root/hy2config",shell=True)  # 删除禁用systemd服务
+            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && userdel -r hysteria && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && rm -rf /root/hy2config",shell=True)  # 删除禁用systemd服务
             print(hy2_uninstall_1_2)
             print("卸载hysteria2完成")
             sys.exit()
