@@ -163,25 +163,24 @@ def hysteria2_config():     #hysteria2配置
                 while True:
                     jump_port = input("是否开启端口跳跃(y/n)：")
                     if jump_port == "y":
-                        while True:
-                            try:
-                                first_port = int(input("请输入起始端口号："))
-                                last_port = int(input("请输入结束端口号："))
-                                if first_port <= 0 or first_port >= 65536:
-                                    print("起始端口号范围为1~65535，请重新输入")
-                                elif last_port <= 0 or last_port >= 65536:
-                                    print("结束端口号范围为1~65535，请重新输入")
-                                elif first_port > last_port:
-                                    print("起始端口号不能大于结束端口号，请重新输入")
-                                else:
-                                    os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
-                                    os.system(f"ip6tables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
-                                    jump_port_back = Path(r"/root/hy2config/jump_port_back.sh")
-                                    jump_port_back.write_text(f"iptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} && ip6tables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
-                                    jump_ports = f",{first_port}-{last_port}/"
-                                    break
-                            except ValueError:  # 收集错误，判断用户是否输入为数字，上面int已经转换为数字，输入小数点或者其他字符串都会引发这个报错
-                                print("端口号只能为数字且不能包含小数点，请重新输入")
+                        try:
+                            first_port = int(input("请输入起始端口号："))
+                            last_port = int(input("请输入结束端口号："))
+                            if first_port <= 0 or first_port >= 65536:
+                                print("起始端口号范围为1~65535，请重新输入")
+                            elif last_port <= 0 or last_port >= 65536:
+                                print("结束端口号范围为1~65535，请重新输入")
+                            elif first_port > last_port:
+                                print("起始端口号不能大于结束端口号，请重新输入")
+                            else:
+                                os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                os.system(f"ip6tables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                jump_port_back = Path(r"/root/hy2config/jump_port_back.sh")
+                                jump_port_back.write_text(f"iptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} && ip6tables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                jump_ports = f",{first_port}-{last_port}/"
+                                break
+                        except ValueError:  # 收集错误，判断用户是否输入为数字，上面int已经转换为数字，输入小数点或者其他字符串都会引发这个报错
+                            print("端口号只能为数字且不能包含小数点，请重新输入")
                     elif jump_port == "n":
                         jump_ports = ""
                         break
