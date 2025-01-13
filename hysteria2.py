@@ -107,7 +107,7 @@ domain_name = "超级帅"
 def hysteria2_config():     #hysteria2配置
     global hy2_ip,domain_name
     hy2_config = Path(r"/etc/hysteria/config.yaml")  # 配置文件路径
-    hy2_url_scheme = Path(r"/root/hy2config/hy2_url_scheme_neko.txt")  # 配置文件路径
+    hy2_url_scheme = Path(r"/root/hy2config/hy2_url_scheme.txt")  # 配置文件路径
     while True:
         choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 返回\n请输入选项：")
         if choice_1 == "1":
@@ -254,7 +254,7 @@ def hysteria2_config():     #hysteria2配置
                         time.sleep(1)
                         print(f"\033[91m您的 v2ray hy2配置链接为：\n{hy2_share_v2ray}\033[m")
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /root/hy2config/hy2-v2ray.png')
-                        hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：\n{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}\n")
+                        hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}")
                         print("hy2配置已写入/root/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
@@ -372,8 +372,6 @@ def hysteria2_config():     #hysteria2配置
                         time.sleep(1)
                         os.system(f'echo "{hy2_share_neko}" | qrencode -o /root/hy2config/hy2-neko.png')
                         print("二维码已保存到/root/hy2config目录")
-                        hy2_url_scheme.write_text(f"您的hy2配置为：\n{hy2_share_neko}\n{hy2_share_v2ray}")
-                        print("配置已写入/root/hy2config目录")
                         print("您的v2ray二维码为：")
                         time.sleep(3)
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
@@ -382,6 +380,8 @@ def hysteria2_config():     #hysteria2配置
                         time.sleep(1)
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /root/hy2config/hy2-v2ray.png')
                         print("二维码已保存到/root/hy2config目录")
+                        hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}")
+                        print("配置已写入/root/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
                         print("hy2服务已启动")
@@ -409,7 +409,7 @@ def hysteria2_config():     #hysteria2配置
                         time.sleep(1)
                         print(f"\033[91m您的 v2ray hy2配置链接为：\n{hy2_share_v2ray}\033[m")
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /root/hy2config/hy2-v2ray.png')
-                        hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：\n{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}\n")
+                        hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}")
                         print("hy2配置已写入/root/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
