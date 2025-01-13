@@ -10,7 +10,7 @@ from urllib import parse
 from pathlib import Path
 
 def agree_treaty():       #此函数作用为：用户是否同意此条款
-    file_agree = Path(r"/root/hy2config/agree.txt")  # 提取文件名
+    file_agree = Path(r"/etc/hy2config/agree.txt")  # 提取文件名
     if file_agree.exists():       #.exists()判断文件是否存在，存在则为true跳过此步骤
         print("你已经同意过谢谢")
     else:
@@ -18,7 +18,7 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
             choose_1 = input("是否同意并阅读安装hysteria2相关条款? (y/n) ：")
             if choose_1 == "y":
                 print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责")
-                check_file = subprocess.run("mkdir /root/hy2config && touch /root/hy2config/agree.txt && touch /root/hy2config/hy2_url_scheme.txt",shell = True)
+                check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
                 break
             elif choose_1 == "n":
@@ -73,7 +73,7 @@ def hysteria2_uninstall():   #卸载hysteria2
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
-            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && rm -rf /root/hy2config",shell=True)  # 删除禁用systemd服务
+            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && rm -rf /etc/hy2config",shell=True)  # 删除禁用systemd服务
             print(hy2_uninstall_1_2)
             print("卸载hysteria2完成")
             sys.exit()
@@ -107,7 +107,7 @@ domain_name = "超级帅"
 def hysteria2_config():     #hysteria2配置
     global hy2_ip,domain_name
     hy2_config = Path(r"/etc/hysteria/config.yaml")  # 配置文件路径
-    hy2_url_scheme = Path(r"/root/hy2config/hy2_url_scheme.txt")  # 配置文件路径
+    hy2_url_scheme = Path(r"/etc/hy2config/hy2_url_scheme.txt")  # 配置文件路径
     while True:
         choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 返回\n请输入选项：")
         if choice_1 == "1":
@@ -174,8 +174,8 @@ def hysteria2_config():     #hysteria2配置
                                 print("起始端口号不能大于结束端口号，请重新输入")
                             else:
                                 os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
-                                os.system("touch /root/hy2config/jump_port_back.sh")
-                                jump_port_back = Path(r"/root/hy2config/jump_port_back.sh")
+                                os.system("touch /etc/hy2config/jump_port_back.sh")
+                                jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
                                 jump_port_back.write_text(f"#!/bin/sh\niptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} && ip6tables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
                                 jump_ports_neko = f"mport={hy2_port},{first_port}-{last_port}&"
                                 jump_ports_v2ray = f"&mport={first_port}-{last_port}"
@@ -245,17 +245,17 @@ def hysteria2_config():     #hysteria2配置
                         os.system(f'echo "{hy2_share_neko}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
                         print(f"\033[91m您的 nekoray|nekobox hy2配置链接为：\n{hy2_share_neko}\033[m")
-                        os.system(f'echo "{hy2_share_neko}" | qrencode -o /root/hy2config/hy2-neko.png')
+                        os.system(f'echo "{hy2_share_neko}" | qrencode -o /etc/hy2config/hy2-neko.png')
                         time.sleep(1)
-                        print("二维码已保存到当前/root/hy2config目录")
+                        print("二维码已保存到当前/etc/hy2config目录")
                         print("您的 v2ray 二维码为：\n")
                         time.sleep(3)
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
                         print(f"\033[91m您的 v2ray hy2配置链接为：\n{hy2_share_v2ray}\033[m")
-                        os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /root/hy2config/hy2-v2ray.png')
+                        os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /etc/hy2config/hy2-v2ray.png')
                         hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}")
-                        print("hy2配置已写入/root/hy2config目录")
+                        print("hy2配置已写入/etc/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
                         print("hy2服务已启动")
@@ -370,18 +370,18 @@ def hysteria2_config():     #hysteria2配置
                         time.sleep(1)
                         print(f"\033[91m您的 nekoray|nekobox hy2配置链接为：\n{hy2_share_neko}\033[m")
                         time.sleep(1)
-                        os.system(f'echo "{hy2_share_neko}" | qrencode -o /root/hy2config/hy2-neko.png')
-                        print("二维码已保存到/root/hy2config目录")
+                        os.system(f'echo "{hy2_share_neko}" | qrencode -o /etc/hy2config/hy2-neko.png')
+                        print("二维码已保存到/etc/hy2config目录")
                         print("您的v2ray二维码为：")
                         time.sleep(3)
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
                         print(f"\033[91m您的 v2ray hy2配置链接为：\n{hy2_share_v2ray}\033[m")
                         time.sleep(1)
-                        os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /root/hy2config/hy2-v2ray.png')
-                        print("二维码已保存到/root/hy2config目录")
+                        os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /etc/hy2config/hy2-v2ray.png')
+                        print("二维码已保存到/etc/hy2config目录")
                         hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}")
-                        print("配置已写入/root/hy2config目录")
+                        print("配置已写入/etc/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
                         print("hy2服务已启动")
@@ -400,17 +400,17 @@ def hysteria2_config():     #hysteria2配置
                         os.system(f'echo "{hy2_share_neko}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
                         print(f"\033[91m您的 nekoray|nekobox hy2配置链接为：\n{hy2_share_neko}\033[m")
-                        os.system(f'echo "{hy2_share_neko}" | qrencode -o /root/hy2config/hy2-neko.png')
+                        os.system(f'echo "{hy2_share_neko}" | qrencode -o /etc/hy2config/hy2-neko.png')
                         time.sleep(1)
-                        print("二维码已保存到当前/root/hy2config目录")
+                        print("二维码已保存到当前/etc/hy2config目录")
                         print("您的 v2ray 二维码为：\n")
                         time.sleep(3)
                         os.system(f'echo "{hy2_share_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
                         print(f"\033[91m您的 v2ray hy2配置链接为：\n{hy2_share_v2ray}\033[m")
-                        os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /root/hy2config/hy2-v2ray.png')
+                        os.system(f'echo "{hy2_share_v2ray}" | qrencode -o /etc/hy2config/hy2-v2ray.png')
                         hy2_url_scheme.write_text(f"您的 nekoray|nekobox hy2配置链接为：{hy2_share_neko}\n您的 v2ray hy2配置链接为：{hy2_share_v2ray}")
-                        print("hy2配置已写入/root/hy2config目录")
+                        print("hy2配置已写入/etc/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
                         print("hy2服务已启动")
