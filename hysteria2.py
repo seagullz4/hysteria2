@@ -339,7 +339,7 @@ def hysteria2_config():     #hysteria2配置
                                 subprocess.run(cmd, check=True)
 
                                 # 设置文件权限
-                                os.system(f"chmod 666 {target_dir}/{domain_name}.key && chmod 666 {target_dir}/{domain_name}.crt")
+                                os.system(f"chmod 666 {target_dir}/{domain_name}.key && chmod 666 {target_dir}/{domain_name}.crt && chmod 777 /etc/ssl/private/")
 
                                 print("自签名证书和私钥已生成！")
                                 print(f"证书文件已保存到 {target_dir}/{domain_name}.crt")
