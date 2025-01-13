@@ -9,16 +9,6 @@ import os
 from urllib import parse
 from pathlib import Path
 
-def check_root():
-    # 获取当前用户的 UID
-    uid = os.getuid()
-
-    if uid != 0:
-        print("请以 root 用户权限运行此脚本。")
-        sys.exit(1)  # 非 root 用户退出程序
-    else:
-        print("你好同学")
-
 def agree_treaty():       #此函数作用为：用户是否同意此条款
     file_agree = Path(r"/root/hy2config/agree.txt")  # 提取文件名
     if file_agree.exists():       #.exists()判断文件是否存在，存在则为true跳过此步骤
@@ -83,7 +73,7 @@ def hysteria2_uninstall():   #卸载hysteria2
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
-            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && userdel -r hysteria && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && rm -rf /root/hy2config",shell=True)  # 删除禁用systemd服务
+            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && userdel -r hysteria && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && ./root/hy2config/jump_port_back.sh && rm -rf /root/hy2config",shell=True)  # 删除禁用systemd服务
             print(hy2_uninstall_1_2)
             print("卸载hysteria2完成")
             sys.exit()
@@ -171,6 +161,33 @@ def hysteria2_config():     #hysteria2配置
                     else:
                         print("\033[91m输入错误请重新输入\033[m")
                 while True:
+                    jump_port = input("是否开启端口跳跃(y/n)：")
+                    if jump_port == "y":
+                        while True:
+                            try:
+                                first_port = int(input("请输入起始端口号："))
+                                last_port = int(input("请输入结束端口号："))
+                                if first_port <= 0 or first_port >= 65536:
+                                    print("起始端口号范围为1~65535，请重新输入")
+                                elif last_port <= 0 or last_port >= 65536:
+                                    print("结束端口号范围为1~65535，请重新输入")
+                                elif first_port > last_port:
+                                    print("起始端口号不能大于结束端口号，请重新输入")
+                                else:
+                                    os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                    os.system(f"ip6tables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                    jump_port_back = Path(r"/root/hy2config/jump_port_back.sh")
+                                    jump_port_back.write_text(f"iptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} && ip6tables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                    jump_ports = f",{first_port}-{last_port}/"
+                                    break
+                            except ValueError:  # 收集错误，判断用户是否输入为数字，上面int已经转换为数字，输入小数点或者其他字符串都会引发这个报错
+                                print("端口号只能为数字且不能包含小数点，请重新输入")
+                    elif jump_port == "n":
+                        jump_ports = ""
+                        break
+                    else:
+                        print("\033[91m输入错误请重新输入\033[m")
+                while True:
                     print("1. 自动申请域名证书\n2. 使用自签证书(不需要域名)\n3. 手动选择证书路径")
                     choice_2 = input("请输入您选项：")
                     if choice_2 == "1":
@@ -217,39 +234,18 @@ def hysteria2_config():     #hysteria2配置
                                 break
                             else:
                                 print("输入错误，请重新输入")
-                        hy2_config.write_text(f"""
-listen: :{hy2_port} 
-
-acme:
-  domains:
-    - {hy2_domain} 
-  email: {hy2_email} 
-{acme_dns} 
-
-auth:
-  type: password
-  password: {hy2_passwd} 
-
-masquerade: 
-  type: proxy
-  proxy:
-    url: {hy2_url} 
-    rewriteHost: true
-    
-ignoreClientBandwidth: {brutal_mode}
-
-{obfs_mode}
-""")
+                        # 一长串的配置文件
+                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n{acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n")
                         os.system("clear")
                         print("您的二维码为：\n")
                         time.sleep(1)
-                        os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?{obfs_scheme}sni={hy2_domain}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
+                        os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}{jump_ports}?{obfs_scheme}sni={hy2_domain}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
-                        print(f"\033[91m您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?{obfs_scheme}sni={hy2_domain}#{hy2_username}\033[m")
-                        os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?{obfs_scheme}sni={hy2_domain}#{hy2_username}" | qrencode -o /root/hy2config/hy2.png')
+                        print(f"\033[91m您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}{jump_ports}?{obfs_scheme}sni={hy2_domain}#{hy2_username}\033[m")
+                        os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}{jump_ports}?{obfs_scheme}sni={hy2_domain}#{hy2_username}" | qrencode -o /root/hy2config/hy2.png')
                         time.sleep(1)
                         print("二维码已保存到当前/root/hy2config目录")
-                        hy2_url_scheme.write_text(f"您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?{obfs_scheme}sni={hy2_domain}#{hy2_username}")
+                        hy2_url_scheme.write_text(f"您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}{jump_ports}?{obfs_scheme}sni={hy2_domain}#{hy2_username}")
                         print("hy2配置已写入/root/hy2config目录")
                         os.system("systemctl enable --now hysteria-server.service")
                         os.system("systemctl restart hysteria-server.service")
@@ -355,31 +351,11 @@ ignoreClientBandwidth: {brutal_mode}
                                 break
                             else:
                                 print("\033[91m输入错误，请重新输入！\033[m")
-                        hy2_config.write_text(f"""
-listen: :{hy2_port} 
-
-tls:
-  cert: /etc/ssl/private/{domain_name}.crt
-  key: /etc/ssl/private/{domain_name}.key 
-
-auth:
-  type: password
-  password: {hy2_passwd} 
-
-masquerade: 
-  type: proxy
-  proxy:
-    url: {hy2_url} 
-    rewriteHost: true
-    
-ignoreClientBandwidth: {brutal_mode}
-
-{obfs_mode}
-""")
+                        hy2_config.write_text(f"listen: :{hy2_port} \n\ntls: \n  cert: /etc/ssl/private/{domain_name}.crt \n  key: /etc/ssl/private/{domain_name}.key \n\nauth: \n  type: password \n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy \n  proxy: \n    url: {hy2_url} \n    rewriteHost: true \n\nignoreClientBandwidth: {brutal_mode} \n\n{obfs_mode}")
                         os.system("clear")
                         print("您的二维码为：")
                         time.sleep(1)
-                        os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={domain_name}{obfs_scheme}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
+                        os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}{jump_ports}?insecure=1&sni={domain_name}{obfs_scheme}#{hy2_username}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                         time.sleep(1)
                         print(f"\033[91m您的hy2配置为：\nhysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={hy2_ip}{obfs_scheme}#{hy2_username}\033[m")
                         os.system(f'echo "hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?insecure=1&sni={domain_name}{obfs_scheme}#{hy2_username}" | qrencode -o /root/hy2config/hy2.png')
@@ -395,27 +371,7 @@ ignoreClientBandwidth: {brutal_mode}
                         hy2_cert = input("请输入您的证书路径：\n")
                         hy2_key = input("请输入您的密钥路径：\n")
                         hy2_domain = input("请输入您自己的域名：\n")
-                        hy2_config.write_text(f"""
-listen: :{hy2_port} 
-
-tls:
-  cert: {hy2_cert} 
-  key: {hy2_key} 
-
-auth:
-  type: password
-  password: {hy2_passwd} 
-
-masquerade: 
-  type: proxy
-  proxy:
-    url: {hy2_url} 
-    rewriteHost: true
-
-ignoreClientBandwidth: {brutal_mode}
-
-{obfs_mode}
-""")
+                        hy2_config.write_text(f"listen: :{hy2_port}\n\ntls:\n  cert: {hy2_cert}\n  key: {hy2_key}\n\nauth:\n  type: password\n  password: {hy2_passwd}\n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url}\n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n")
                         os.system("clear")
                         print("您的二维码为：")
                         time.sleep(1)
@@ -447,7 +403,6 @@ ignoreClientBandwidth: {brutal_mode}
             print("\033[91m请重新输入\033[m")
 
 #接下来写主程序
-check_root()
 agree_treaty()
 check_linux_system()
 while True:
