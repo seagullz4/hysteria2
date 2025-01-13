@@ -30,10 +30,10 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
 def check_linux_system():    #检查Linux系统为哪个进行对应的安装
     sys_version = Path(r"/etc/os-release")    #获取Linux系统版本
     if "ubuntu" in sys_version.read_text().lower() or "debian" in sys_version.read_text().lower():
-        check_file = subprocess.run("apt update && apt install -y wget sudo openssl qrencode net-tools procps iptables ca-certificates",shell = True)   #安装依赖
+        check_file = subprocess.run("apt update && apt install -y sudo openssl qrencode net-tools procps iptables ca-certificates curl",shell = True)   #安装依赖
         print(check_file)
     elif "rocky" in sys_version.read_text().lower() or "centos" in sys_version.read_text().lower() or "fedora" in sys_version.read_text().lower():
-        check_file = subprocess.run("dnf install -y epel-release wget sudo openssl qrencode net-tools procps iptables-services ca-certificates",shell=True)
+        check_file = subprocess.run("dnf install -y epel-release sudo openssl qrencode net-tools procps iptables-services ca-certificates curl",shell=True)
         print(check_file)
     else:
         print("\033[91m暂时不支持该系统，推荐使用Debian 11/Ubuntu 22.04 LTS/Rocky Linux 8/CentOS Stream 8/Fedora 37 更高以上的系统\033[m")
