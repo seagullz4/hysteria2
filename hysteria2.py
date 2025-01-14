@@ -177,6 +177,7 @@ def hysteria2_config():     #hysteria2配置
                                 os.system("touch /etc/hy2config/jump_port_back.sh")
                                 jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
                                 jump_port_back.write_text(f"#!/bin/sh\niptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                os.system("chmod 777 /etc/hy2config/jump_port_back.sh")
                                 jump_ports_neko = f"mport={hy2_port},{first_port}-{last_port}&"
                                 jump_ports_v2ray = f"&mport={first_port}-{last_port}"
                                 break
