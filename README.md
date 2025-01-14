@@ -29,7 +29,7 @@ curl -sSL https://github.com/seagullz4/hysteria2/raw/main/install.sh -o install.
 ```
 wget hy2.willloving.xyz -O install.sh && chmod 777 install.sh && bash install.sh
 ```
-**🙃py新脚本(需要安装python3):**
+**🙃py新脚本(需要安装python3,一个非常不错的脚本):**
 ```
 wget -O hy2.py http://py.willloving.xyz && python3 hy2.py
 ```
