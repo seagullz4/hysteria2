@@ -30,10 +30,10 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
 def check_linux_system():    #检查Linux系统为哪个进行对应的安装
     sys_version = Path(r"/etc/os-release")    #获取Linux系统版本
     if "ubuntu" in sys_version.read_text().lower() or "debian" in sys_version.read_text().lower():
-        check_file = subprocess.run("apt update && apt install -y sudo openssl qrencode net-tools procps iptables ca-certificates curl",shell = True)   #安装依赖
+        check_file = subprocess.run("apt update && apt install -y wget sudo openssl qrencode net-tools procps iptables ca-certificates",shell = True)   #安装依赖
         print(check_file)
     elif "rocky" in sys_version.read_text().lower() or "centos" in sys_version.read_text().lower() or "fedora" in sys_version.read_text().lower():
-        check_file = subprocess.run("dnf install -y epel-release sudo openssl qrencode net-tools procps iptables-services ca-certificates curl",shell=True)
+        check_file = subprocess.run("dnf install -y epel-release wget sudo openssl qrencode net-tools procps iptables ca-certificates",shell=True)
         print(check_file)
     else:
         print("\033[91m暂时不支持该系统，推荐使用Debian 11/Ubuntu 22.04 LTS/Rocky Linux 8/CentOS Stream 8/Fedora 37 更高以上的系统\033[m")
@@ -73,7 +73,7 @@ def hysteria2_uninstall():   #卸载hysteria2
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
-            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service && rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service && systemctl daemon-reload && rm -rf /etc/ssl/private/ && rm -rf /etc/hy2config",shell=True)  # 删除禁用systemd服务
+            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria; rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service; rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service; systemctl daemon-reload; /etc/hy2config/jump_port_back.sh; rm -rf /etc/ssl/private/ rm -rf /etc/hy2config",shell=True)  # 删除禁用systemd服务
             print(hy2_uninstall_1_2)
             print("卸载hysteria2完成")
             sys.exit()
@@ -176,7 +176,7 @@ def hysteria2_config():     #hysteria2配置
                                 os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
                                 os.system("touch /etc/hy2config/jump_port_back.sh")
                                 jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
-                                jump_port_back.write_text(f"#!/bin/sh\niptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} && ip6tables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
+                                jump_port_back.write_text(f"#!/bin/sh\niptables -t nat -D PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
                                 jump_ports_neko = f"mport={hy2_port},{first_port}-{last_port}&"
                                 jump_ports_v2ray = f"&mport={first_port}-{last_port}"
                                 break
@@ -339,7 +339,7 @@ def hysteria2_config():     #hysteria2配置
                                 subprocess.run(cmd, check=True)
 
                                 # 设置文件权限
-                                os.system(f"chmod 666 {target_dir}/{domain_name}.key && chmod 666 {target_dir}/{domain_name}.crt && chmod 777 /etc/ssl/private/")
+                                os.system(f"chmod 666 {target_dir}/{domain_name}.key && chmod 666 {target_dir}/{domain_name}.crt && chmod 666 /etc/ssl/private/")
 
                                 print("自签名证书和私钥已生成！")
                                 print(f"证书文件已保存到 {target_dir}/{domain_name}.crt")
