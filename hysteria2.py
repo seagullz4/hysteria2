@@ -239,7 +239,7 @@ def hysteria2_config():     #hysteria2配置
                         # 一长串的配置文件
                         hy2_share_neko = f"hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}/?{jump_ports_neko}sni={hy2_domain}{obfs_scheme}#{hy2_username}"
                         hy2_share_v2ray = f"hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?security=tls{obfs_scheme}&insecure=1{jump_ports_v2ray}&sni={hy2_domain}#{hy2_username}"
-                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n{acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n")
+                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n  {acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n")
                         os.system("clear")
                         print("您的 nekoray|nekobox 二维码为：\n")
                         time.sleep(1)
