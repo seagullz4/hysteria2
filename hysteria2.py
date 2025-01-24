@@ -15,7 +15,7 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
         print("你已经同意过谢谢")
     else:
         while True:
-            choose_1 = input("是否同意并阅读安装hysteria2相关条款? (y/n) ：")
+            choose_1 = input("是否同意并阅读安装hysteria2相关条款? [y/n] ：")
             if choose_1 == "y":
                 print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责")
                 check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
@@ -40,7 +40,7 @@ def check_linux_system():    #检查Linux系统为哪个进行对应的安装
 
 def hysteria2_install():    #安装hysteria2
     while True:
-        choice_1 = input("是否安装hysteria2 (y/n) ：")
+        choice_1 = input("是否安装hysteria2 [y/n] ：")
         if choice_1 == "y":
             print("1. 默认安装最新版本\n2. 安装指定版本")
             choice_2 = input("请输入选项：")
@@ -49,6 +49,7 @@ def hysteria2_install():    #安装hysteria2
                 print(hy2_install)
                 print("hysteria2安装完成,请进行配置一键修改")
                 hysteria2_config()
+                time.sleep(3)
                 break
             elif choice_2 == "2":
                 version_1 = input("请输入您需要安装的版本号(直接输入版本号数字即可，不需要加v，如2.6.0)：")
@@ -56,6 +57,7 @@ def hysteria2_install():    #安装hysteria2
                 print(hy2_install_2)
                 print(f"hysteria2指定{version_1}版本安装完成,请进行配置一键修改")
                 hysteria2_config()
+                time.sleep(3)
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
@@ -67,7 +69,7 @@ def hysteria2_install():    #安装hysteria2
 
 def hysteria2_uninstall():   #卸载hysteria2
     while True:
-        choice_1 = input("是否进行卸载hysteria2 (y/n) ：")
+        choice_1 = input("是否进行卸载hysteria2 [y/n] ：")
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
@@ -136,7 +138,7 @@ def hysteria2_config():     #hysteria2配置
                 hy2_passwd = input("请输入您的强密码：\n")
                 hy2_url = input("请输入您需要伪装成的域名(请在前面加上https://或者http://)：\n")
                 while True:
-                    hy2_brutal = input("是否开启Brutal模式(默认不推荐开启)？(y/n)：")
+                    hy2_brutal = input("是否开启Brutal模式(默认不推荐开启)？[y/n]：")
                     if hy2_brutal == "y":
                         brutal_mode = "false"
                         break
@@ -146,7 +148,7 @@ def hysteria2_config():     #hysteria2配置
                     else:
                         print("\033[91m输入错误请重新输入\033[m")
                 while True:
-                    hy2_obfs = input("是否开启混淆模式(默认不推荐开启，开启将会失去伪装能力)？(y/n)：")
+                    hy2_obfs = input("是否开启混淆模式(默认不推荐开启，开启将会失去伪装能力)？[y/n]：")
                     if hy2_obfs == "y":
                         obfs_passwd = input("请输入您的混淆密码：\n")
                         obfs_mode = f"obfs:\n  type: salamander\n  \n  salamander:\n    password: {obfs_passwd}"
@@ -155,6 +157,16 @@ def hysteria2_config():     #hysteria2配置
                     elif hy2_obfs == "n":
                         obfs_mode = ""
                         obfs_scheme = ""
+                        break
+                    else:
+                        print("\033[91m输入错误请重新输入\033[m")
+                while True:
+                    hy2_sniff = input("是否开启协议嗅探 (Sniff)[y/n]：")
+                    if hy2_sniff == "y":
+                        sniff_mode = "sniff:\n  enable: true\n  timeout: 2s\n  rewriteDomain: false\n  tcpPorts: 80,443,8000-9000\n  udpPorts: all"
+                        break
+                    elif hy2_sniff == "n":
+                        sniff_mode = ""
                         break
                     else:
                         print("\033[91m输入错误请重新输入\033[m")
@@ -194,7 +206,7 @@ def hysteria2_config():     #hysteria2配置
                         hy2_domain = input("请输入您自己的域名：\n")
                         hy2_email = input("请输入您的邮箱：\n")
                         while True:
-                            choice_acme = input("是否设置acme dns配置(如果不知道是什么请不要选择) y/n:")
+                            choice_acme = input("是否设置acme dns配置(如果不知道是什么请不要选择) [y/n]:")
                             if choice_acme == 'y':
                                 while True:
                                     os.system('clear')
@@ -237,7 +249,7 @@ def hysteria2_config():     #hysteria2配置
                         # 一长串的配置文件
                         hy2_share_neko = f"hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}/?{jump_ports_neko}sni={hy2_domain}{obfs_scheme}#{hy2_username}"
                         hy2_share_v2ray = f"hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?security=tls{obfs_scheme}&insecure=1{jump_ports_v2ray}&sni={hy2_domain}#{hy2_username}"
-                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n  {acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n")
+                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n  {acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n{sniff_mode}\n")
                         os.system("clear")
                         print("您的 nekoray|nekobox 二维码为：\n")
                         time.sleep(1)
@@ -349,7 +361,7 @@ def hysteria2_config():     #hysteria2配置
 
                         generate_certificate()
                         while True:
-                            ip_mode = input("1. ipv4模式\n2. ipv6模式\n请输入您的选项：\n")
+                            ip_mode = input("1. ipv4模式\n2. ipv6模式\n请输入您的选项：")
                             if ip_mode == '1':
                                 get_ipv4_info()
                                 break
@@ -360,7 +372,7 @@ def hysteria2_config():     #hysteria2配置
                                 print("\033[91m输入错误，请重新输入！\033[m")
                         hy2_share_neko = f"hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}/?{jump_ports_neko}insecure=1&sni={domain_name}{obfs_scheme}#{hy2_username}"
                         hy2_share_v2ray = f"hysteria2://{hy2_passwd}@{hy2_ip}:{hy2_port}?security=tls{obfs_scheme}&insecure=1{jump_ports_v2ray}&sni={domain_name}#{hy2_username}"
-                        hy2_config.write_text(f"listen: :{hy2_port} \n\ntls: \n  cert: /etc/ssl/private/{domain_name}.crt \n  key: /etc/ssl/private/{domain_name}.key \n\nauth: \n  type: password \n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy \n  proxy: \n    url: {hy2_url} \n    rewriteHost: true \n\nignoreClientBandwidth: {brutal_mode} \n\n{obfs_mode}")
+                        hy2_config.write_text(f"listen: :{hy2_port} \n\ntls: \n  cert: /etc/ssl/private/{domain_name}.crt \n  key: /etc/ssl/private/{domain_name}.key \n\nauth: \n  type: password \n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy \n  proxy: \n    url: {hy2_url} \n    rewriteHost: true \n\nignoreClientBandwidth: {brutal_mode} \n\n{obfs_mode}\n{sniff_mode}\n")
                         os.system("clear")
                         print("您的nekoray|nekobox二维码为：")
                         time.sleep(1)
@@ -389,7 +401,7 @@ def hysteria2_config():     #hysteria2配置
                         hy2_cert = input("请输入您的证书路径：\n")
                         hy2_key = input("请输入您的密钥路径：\n")
                         hy2_domain = input("请输入您自己的域名：\n")
-                        hy2_config.write_text(f"listen: :{hy2_port}\n\ntls:\n  cert: {hy2_cert}\n  key: {hy2_key}\n\nauth:\n  type: password\n  password: {hy2_passwd}\n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url}\n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n")
+                        hy2_config.write_text(f"listen: :{hy2_port}\n\ntls:\n  cert: {hy2_cert}\n  key: {hy2_key}\n\nauth:\n  type: password\n  password: {hy2_passwd}\n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url}\n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n{sniff_mode}\n")
                         os.system("clear")
                         hy2_share_neko = f"hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}/?{jump_ports_neko}sni={hy2_domain}{obfs_scheme}#{hy2_username}"
                         hy2_share_v2ray = f"hysteria2://{hy2_passwd}@{hy2_domain}:{hy2_port}?security=tls{obfs_scheme}&insecure=1{jump_ports_v2ray}&sni={hy2_domain}#{hy2_username}"
