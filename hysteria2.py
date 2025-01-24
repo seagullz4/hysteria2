@@ -48,16 +48,14 @@ def hysteria2_install():    #安装hysteria2
                 hy2_install = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/)",shell = True,executable="/bin/bash")  # 调用hy2官方脚本进行安装
                 print(hy2_install)
                 print("hysteria2安装完成")
-                print("\033[91m请手动返回进行配置一键修改\033[m")
-                time.sleep(3)
+                hysteria2_config()
                 break
             elif choice_2 == "2":
                 version_1 = input("请输入您需要安装的版本号(直接输入版本号数字即可，不需要加v，如2.6.0)：")
                 hy2_install_2 = subprocess.run(f"bash <(curl -fsSL https://get.hy2.sh/) --version v{version_1}",shell=True,executable="/bin/bash")  # 进行指定版本进行安装
                 print(hy2_install_2)
                 print(f"hysteria2指定{version_1}版本安装完成")
-                print("\033[91m请手动返回进行配置一键修改\033[m")
-                time.sleep(3)
+                hysteria2_config()
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
