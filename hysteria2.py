@@ -54,7 +54,7 @@ def hysteria2_install():    #安装hysteria2
                 version_1 = input("请输入您需要安装的版本号(直接输入版本号数字即可，不需要加v，如2.6.0)：")
                 hy2_install_2 = subprocess.run(f"bash <(curl -fsSL https://get.hy2.sh/) --version v{version_1}",shell=True,executable="/bin/bash")  # 进行指定版本进行安装
                 print(hy2_install_2)
-                print(f"hysteria2指定{version_1}版本安装完成,,请进行配置一键修改")
+                print(f"hysteria2指定{version_1}版本安装完成,请进行配置一键修改")
                 hysteria2_config()
                 break
             else:
