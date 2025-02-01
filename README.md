@@ -67,7 +67,7 @@ iOS端推荐：
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
 
-## AD推荐
+## 服务器推荐
 
 akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
