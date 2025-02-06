@@ -19,6 +19,7 @@ hysteria2一键安装(轻量级超低占用)
 
 更多客户端配置请查看[客户端配置](https://v2.hysteria.network/zh/docs/getting-started/Client/)  [cloudflare令牌](https://dash.cloudflare.com/profile/api-tokens)
 
+在线订阅转换网站(支持多种协议互转:[订阅转换](https://sub.willloving.xyz/))
 
 **🙃安装脚本(首先推荐debian的系统):**
 ```
