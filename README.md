@@ -25,7 +25,7 @@ wget hy2.willloving.xyz -O install.sh && chmod 777 install.sh && bash install.sh
 ```
 **🙃py新脚本(需要安装python3,一个非常不错的脚本):**
 ```
-wget -O hy2.py http://py.willloving.xyz && python3 hy2.py
+wget -O hy2.py py.willloving.xyz && python3 hy2.py
 ```
 
 **新增快捷方式终端输入hy2一键执行脚本**
