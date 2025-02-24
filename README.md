@@ -25,7 +25,7 @@ curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/install.sh 
 ```
 **🙃py新脚本(需要安装python3,一个非常不错的脚本):**
 ```
-curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py | python3
+wget -0 hy2.py py.willloving.xyz && python3 hy2.py
 ```
 
 **新增快捷方式终端输入hy2一键执行脚本**
