@@ -21,7 +21,7 @@ hysteria2一键安装(轻量级超低占用)
 
 **🙃安装脚本(首先推荐debian的系统):**
 ```
-curl -sSL https://raw.githubusercontent.com/seagullz4/hysteria2/main/install.sh | bash
+wget -O hy2.py py.willloving.xyz && python3 hy2.py
 ```
 **🙃py新脚本(需要安装python3,一个非常不错的脚本):**
 ```
