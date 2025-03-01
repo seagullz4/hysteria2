@@ -425,11 +425,9 @@ echo "卸载完成(ง ื▿ ื)ว."
  }
 
 hy2easy() {
-    # 删除现有的 hy2 二进制文件
-    rm -rf /bin/hy2
-
-    # 下载并安装新的 hy2 脚本
-    sudo wget -q hy2.willloving.xyz -O /bin/hy2 && chmod 777 /bin/hy2
+    rm -rf /usr/local/bin/hy2
+    sudo wget -q hy2.crazyact.com -O /usr/local/bin/hy2
+    sudo chmod +x /usr/local/bin/hy2
     echo "已添加 hy2 快捷方式"
 }
 
