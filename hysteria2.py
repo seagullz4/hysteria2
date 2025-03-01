@@ -21,7 +21,7 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
                 check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
                 hy2_shortcut = Path(r"/usr/local/bin/hy2")  # 创建快捷方式
-                hy2_shortcut.write_text("#!/bin/bash\nwget -O hy2.py http://py.willloving.xyz && python3 hy2.py")  # 写入内容
+                hy2_shortcut.write_text("#!/bin/bash\nwget -O hy2.py py.crazyact.com && python3 hy2.py")  # 写入内容
                 hy2_shortcut.chmod(0o755)
                 break
             elif choose_1 == "n":
