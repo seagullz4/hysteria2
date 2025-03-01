@@ -43,7 +43,7 @@ def check_linux_system():    #检查Linux系统为哪个进行对应的安装
 
 def hysteria2_install():    #安装hysteria2
     while True:
-        choice_1 = input("是否安装hysteria2 [y/n] ：")
+        choice_1 = input("是否安装/更新hysteria2 [y/n] ：")
         if choice_1 == "y":
             print("1. 默认安装最新版本\n2. 安装指定版本")
             choice_2 = input("请输入选项：")
