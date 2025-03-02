@@ -50,15 +50,19 @@ iOS端推荐：
 
 安卓端强烈推荐:
 
-[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)(neko支持端口跳跃,优先推荐)
+[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)
+
+[husi](https://github.com/xchacha20-poly1305/husi)(非常不错+nice)
 
 [Clash-Meta](https://github.com/MetaCubeX/ClashMetaForAndroid)
 
 [hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
- 
+
+[v2ray](https://github.com/2dust/v2rayN)
 
 电脑端推荐:
 
+[v2ray](https://github.com/2dust/v2rayN)
 
 [nekoray](https://github.com/MatsuriDayo/nekoray)（我最喜欢的）
 
