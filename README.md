@@ -21,7 +21,7 @@ hysteria2一键安装(轻量级超低占用)
 
 **🙃安装脚本(首先推荐ubuntu的系统):**
 ```
-wget -O hy2.py py.crazyact.com && python3 hy2.py
+wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py && chmod +x hy2.py && python3 hy2.py
 ```
 **🙃备用脚本:**
 ```
