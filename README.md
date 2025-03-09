@@ -7,7 +7,7 @@ hysteria2一键安装(轻量级超低占用)
 
 ☆在服务器终端执行一键脚本
 
-☆适用于大部分系统,但还是推荐Debian/ubuntu系
+☆适用于大部分系统,但还是推荐Debian/ubuntu系统
 
 ☆适用于有域名的用户使用acme方式申请证书,无域名使用者使用自签证书
 
@@ -19,11 +19,11 @@ hysteria2一键安装(轻量级超低占用)
 
 **在线订阅转换网站**(支持多种协议互转):[订阅转换](https://sub.willloving.xyz/)
 
-**🙃安装脚本(首先推荐ubuntu的系统):**
+**🙃安装脚本(python版):**
 ```
 wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py && chmod +x hy2.py && python3 hy2.py
 ```
-**🙃备用脚本:**
+**🙃备用脚本(shell版):**
 ```
 wget -O install.sh https://raw.githubusercontent.com/seagullz4/hysteria2/main/install.sh && chmod +x install.sh && bash install.sh
 ```
