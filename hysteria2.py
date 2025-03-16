@@ -139,7 +139,7 @@ def hysteria2_config():     #hysteria2配置
                 hy2_username = input("请输入您用户名：\n")
                 hy2_username = urllib.parse.quote(hy2_username)
                 hy2_passwd = input("请输入您的强密码：\n")
-                hy2_url = input("请输入您需要伪装成的域名(请在前面加上https://或者http://)：\n")
+                hy2_url = input("请输入您需要伪装成的域名(请在前面加上https://)：\n")
                 while True:
                     hy2_brutal = input("是否开启Brutal模式(默认不推荐开启)？[y/n]：")
                     if hy2_brutal == "y":
@@ -186,6 +186,14 @@ def hysteria2_config():     #hysteria2配置
                             elif first_port > last_port:
                                 print("起始端口号不能大于结束端口号，请重新输入")
                             else:
+                                jump_port_ipv6 = input("是否开启ipv6端口跳跃(y/n)")
+                                if jump_port_ipv6 == "y":
+                                    hy2_jump_port_ipv6 = f"ip6tables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}"
+                                    os.system(hy2_jump_port_ipv6)
+                                elif jump_port_ipv6 == "n":
+                                    pass
+                                else:
+                                    print("\033[91m输入错误请重新输入\033[m")
                                 os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
                                 os.system("touch /etc/hy2config/jump_port_back.sh")
                                 jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
