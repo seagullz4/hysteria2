@@ -17,7 +17,7 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
         while True:
             choose_1 = input("是否同意并阅读安装hysteria2相关条款? [y/n] ：")
             if choose_1 == "y":
-                print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责")
+                print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责。")
                 check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
                 hy2_shortcut = Path(r"/usr/local/bin/hy2")  # 创建快捷方式
@@ -52,7 +52,6 @@ def hysteria2_install():    #安装hysteria2
                 print(hy2_install)
                 print("hysteria2安装完成,请进行配置一键修改")
                 hysteria2_config()
-                time.sleep(3)
                 break
             elif choice_2 == "2":
                 version_1 = input("请输入您需要安装的版本号(直接输入版本号数字即可，不需要加v，如2.6.0)：")
@@ -60,7 +59,6 @@ def hysteria2_install():    #安装hysteria2
                 print(hy2_install_2)
                 print(f"hysteria2指定{version_1}版本安装完成,请进行配置一键修改")
                 hysteria2_config()
-                time.sleep(3)
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
@@ -186,14 +184,19 @@ def hysteria2_config():     #hysteria2配置
                             elif first_port > last_port:
                                 print("起始端口号不能大于结束端口号，请重新输入")
                             else:
-                                jump_port_ipv6 = input("是否开启ipv6端口跳跃(y/n)")
-                                if jump_port_ipv6 == "y":
-                                    hy2_jump_port_ipv6 = f"ip6tables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}"
-                                    os.system(hy2_jump_port_ipv6)
-                                elif jump_port_ipv6 == "n":
-                                    pass
-                                else:
-                                    print("\033[91m输入错误请重新输入\033[m")
+                                def jump_port_v6 ():
+                                    while True:
+                                        jump_port_ipv6 = input("是否开启ipv6端口跳跃(y/n)：")
+                                        if jump_port_ipv6 == "y":
+                                            hy2_jump_port_ipv6 = f"ip6tables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}"
+                                            os.system(hy2_jump_port_ipv6)
+                                            break
+                                        elif jump_port_ipv6 == "n":
+                                            pass
+                                            break
+                                        else:
+                                            print("\033[91m输入错误请重新输入\033[m")
+                                jump_port_v6()
                                 os.system(f"iptables -t nat -A PREROUTING -i eth0 -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
                                 os.system("touch /etc/hy2config/jump_port_back.sh")
                                 jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
