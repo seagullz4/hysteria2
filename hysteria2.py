@@ -455,6 +455,13 @@ def hysteria2_config():     #hysteria2配置
         else:
             print("\033[91m请重新输入\033[m")
 
+def check_hysteria2_version():  #检查hysteria2版本
+    check_version = subprocess.run("/usr/local/bin/hysteria version | grep '^Version' | grep -o 'v[.0-9]*'",shell=True)
+    if check_version.returncode == 0:
+        print(f"您的hysteria2版本为 {check_version}")
+    else:
+        print("hysteria2未安装")
+
 #接下来写主程序
 agree_treaty()
 check_linux_system()
@@ -474,6 +481,7 @@ while True:
         hysteria2_config()
     elif choice == "4":
         os.system("clear")
+        check_hysteria2_version()
         server_manage()
     elif choice == "5":
         print("已退出")
