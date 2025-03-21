@@ -27,6 +27,7 @@ wget -O install.sh https://raw.githubusercontent.com/seagullz4/hysteria2/main/in
 ```
 #执行安装依赖:
 wget -O phy2.sh https://raw.githubusercontent.com/seagullz4/hysteria2/main/phy2.sh && chmod +x phy2.sh && bash phy2.sh
+
 #执行安装脚本:
 wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py && chmod +x hy2.py && python3 hy2.py
 ```
