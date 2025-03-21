@@ -1,13 +1,15 @@
 # hysteria2  一键安装脚本
-import sys
-import subprocess
-import urllib.request
-import time
-import requests
-import re
 import os
-from urllib import parse
+import re
+import subprocess
+import sys
+import time
+import urllib.request
 from pathlib import Path
+from urllib import parse
+
+import requests
+
 
 def agree_treaty():       #此函数作用为：用户是否同意此条款
     file_agree = Path(r"/etc/hy2config/agree.txt")  # 提取文件名
@@ -15,13 +17,13 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
         print("你已经同意过谢谢")
     else:
         while True:
-            choose_1 = input("是否同意并阅读安装hysteria2相关条款? [y/n] ：")
+            choose_1 = input("是否同意并阅读安装hysteria2相关条款 [y/n]：")
             if choose_1 == "y":
                 print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责。")
                 check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
                 hy2_shortcut = Path(r"/usr/local/bin/hy2")  # 创建快捷方式
-                hy2_shortcut.write_text("#!/bin/bash\nwget -O hy2.py py.crazyact.com && python3 hy2.py")  # 写入内容
+                hy2_shortcut.write_text("#!/bin/bash\nwget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py && chmod +x hy2.py && python3 hy2.py")  # 写入内容
                 hy2_shortcut.chmod(0o755)
                 break
             elif choose_1 == "n":
@@ -455,12 +457,17 @@ def hysteria2_config():     #hysteria2配置
         else:
             print("\033[91m请重新输入\033[m")
 
-def check_hysteria2_version():  #检查hysteria2版本
-    check_version = subprocess.run("/usr/local/bin/hysteria version | grep '^Version' | grep -o 'v[.0-9]*'",shell=True)
-    if check_version.returncode == 0:
-        print(f"您的hysteria2版本为 {check_version}")
-    else:
-        print("hysteria2未安装")
+def check_hysteria2_version():  # 检查hysteria2版本
+    try:
+        output = subprocess.check_output("/usr/local/bin/hysteria version | grep '^Version' | grep -o 'v[.0-9]*'",shell=True, stderr=subprocess.STDOUT)
+        version = output.decode('utf-8').strip()
+
+        if "v" in version:
+            print(f"当前hysteria2版本为：{version}")
+        else:
+            print("未找到hysteria2版本")
+    except subprocess.CalledProcessError as e:
+        print(f"命令执行失败: {e.output.decode('utf-8')}")
 
 #接下来写主程序
 agree_treaty()
