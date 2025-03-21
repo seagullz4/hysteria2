@@ -17,9 +17,9 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
         print("你已经同意过谢谢")
     else:
         while True:
-            choose_1 = input("是否同意并阅读安装hysteria2相关条款 [y/n]：")
+            print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责。且本程序仅供学习交流使用，不得用于任何商业用途。")
+            choose_1 = input("是否同意并阅读(在上面)安装hysteria2相关条款 [y/n]：")
             if choose_1 == "y":
-                print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责。")
                 check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
                 hy2_shortcut = Path(r"/usr/local/bin/hy2")  # 创建快捷方式
@@ -31,17 +31,6 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
                 sys.exit()
             else:
                 print("\033[91m请输入正确选项！\033[m")
- 
-def check_linux_system():    #检查Linux系统为哪个进行对应的安装
-    sys_version = Path(r"/etc/os-release")    #获取Linux系统版本
-    if "ubuntu" in sys_version.read_text().lower() or "debian" in sys_version.read_text().lower():
-        check_file = subprocess.run("apt update && apt install -y curl sudo openssl qrencode net-tools procps iptables ca-certificates",shell = True)   #安装依赖
-        print(check_file)
-    elif "rocky" in sys_version.read_text().lower() or "centos" in sys_version.read_text().lower() or "fedora" in sys_version.read_text().lower():
-        check_file = subprocess.run("dnf install -y epel-release curl sudo openssl qrencode net-tools procps iptables-services ca-certificates",shell=True)
-        print(check_file)
-    else:
-        print("\033[91m暂时不支持该系统，推荐使用Debian 11/Ubuntu 22.04 LTS/Rocky Linux 8/CentOS Stream 8/Fedora 37 更高以上的系统\033[m")
 
 def hysteria2_install():    #安装hysteria2
     while True:
@@ -471,7 +460,6 @@ def check_hysteria2_version():  # 检查hysteria2版本
 
 #接下来写主程序
 agree_treaty()
-check_linux_system()
 while True:
     os.system("clear")
     print("\033[91mHELLO HYSTERIA2 !\033[m")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
