@@ -12,9 +12,14 @@ import requests
 
 
 def agree_treaty():       #此函数作用为：用户是否同意此条款
+    def hy_shortcut():   #添加hy2快捷键
+        hy2_shortcut = Path(r"/usr/local/bin/hy2")  # 创建快捷方式
+        hy2_shortcut.write_text("#!/bin/bash\nwget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py && chmod +x hy2.py && python3 hy2.py\n")  # 写入内容
+        hy2_shortcut.chmod(0o755)
     file_agree = Path(r"/etc/hy2config/agree.txt")  # 提取文件名
     if file_agree.exists():       #.exists()判断文件是否存在，存在则为true跳过此步骤
         print("你已经同意过谢谢")
+        hy_shortcut()
     else:
         while True:
             print("我同意使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责。且本程序仅供学习交流使用，不得用于任何商业用途。")
@@ -22,9 +27,7 @@ def agree_treaty():       #此函数作用为：用户是否同意此条款
             if choose_1 == "y":
                 check_file = subprocess.run("mkdir /etc/hy2config && touch /etc/hy2config/agree.txt && touch /etc/hy2config/hy2_url_scheme.txt",shell = True)
                 print(check_file)    #当用户同意安装时创建该文件，下次自动检查时跳过此步骤
-                hy2_shortcut = Path(r"/usr/local/bin/hy2")  # 创建快捷方式
-                hy2_shortcut.write_text("#!/bin/bash\nwget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hysteria2.py && chmod +x hy2.py && python3 hy2.py")  # 写入内容
-                hy2_shortcut.chmod(0o755)
+                hy_shortcut()
                 break
             elif choose_1 == "n":
                 print("清同意此条款进行安装")
@@ -77,7 +80,7 @@ def hysteria2_uninstall():   #卸载hysteria2
 
 def server_manage():   #hysteria2服务管理
     while True:
-            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 日志查询\n6. 返回")
+            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 日志查询\n6. 查看hy2版本具体信息\n7. 返回")
             choice_2 = input("请输入选项：")
             if choice_2 == "1":
                 print(subprocess.run("systemctl enable --now hysteria-server.service",shell=True))
@@ -91,6 +94,8 @@ def server_manage():   #hysteria2服务管理
             elif choice_2 == "5":
                 print(subprocess.run("journalctl --no-pager -e -u hysteria-server.service",shell=True))
             elif choice_2 == "6":
+                os.system("/usr/local/bin/hysteria version")
+            elif choice_2 == "7":
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
@@ -462,7 +467,7 @@ def check_hysteria2_version():  # 检查hysteria2版本
 agree_treaty()
 while True:
     os.system("clear")
-    print("\033[91mHELLO HYSTERIA2 !\033[m")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
+    print("\033[91mHELLO HYSTERIA2 !\033[m  (输入hy2快捷启动)")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
     print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2配置\n4. hysteria2服务管理\n5. 退出")
     choice = input("请输入选项：")
     if choice == "1":
