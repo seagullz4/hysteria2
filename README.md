@@ -50,13 +50,6 @@ wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hyster
 
 必须客户端支持hysteria2才行，否则就是你安装了也无法使用。
 
-iOS端推荐：
-
-[小火箭](https://apps.apple.com/us/app/shadowrocket/id932747118)
-
-安卓端强烈推荐:
-
-[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid)
 
 [husi](https://github.com/xchacha20-poly1305/husi)(非常不错+nice)
 
@@ -68,9 +61,7 @@ iOS端推荐：
 
 电脑端推荐:
 
-[v2ray](https://github.com/2dust/v2rayN)
-
-[nekoray](https://github.com/MatsuriDayo/nekoray)（我最喜欢的）
+[v2ray](https://github.com/2dust/v2rayN)(推荐)
 
 [Clash-Verge](https://github.com/clash-verge-rev/clash-verge-rev)
 
