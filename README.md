@@ -48,24 +48,25 @@ wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hyster
 本项目原hysteria2地址请点击[hysteria](https://github.com/apernet/hysteria)
 
 
-必须客户端支持hysteria2才行，否则就是你安装了也无法使用。
+安卓端推荐：
 
+[nekobox](https://github.com/MatsuriDayo/NekoBoxForAndroid/releases)
 
-[husi](https://github.com/xchacha20-poly1305/husi)(非常不错+nice)
+[husi](https://github.com/xchacha20-poly1305/husi/releases)(非常不错+nice)
 
-[Clash-Meta](https://github.com/MetaCubeX/ClashMetaForAndroid)
+[Clash-Meta](https://github.com/MetaCubeX/ClashMetaForAndroid/releases)
 
-[hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
+[hiddify](https://github.com/hiddify/hiddify-next/releases)(国外大神制作) 
 
-[v2ray](https://github.com/2dust/v2rayN)
+[v2rayNG](https://github.com/2dust/v2rayNG/releases)
 
 电脑端推荐:
 
-[v2ray](https://github.com/2dust/v2rayN)(推荐)
+[v2ray](https://github.com/2dust/v2rayN/releases)(推荐)
 
-[Clash-Verge](https://github.com/clash-verge-rev/clash-verge-rev)
+[Clash-Verge](https://github.com/clash-verge-rev/clash-verge-rev/releases)
 
-[hiddify](https://github.com/hiddify/hiddify-next)(国外大神制作) 
+[hiddify](https://github.com/hiddify/hiddify-next/releases)(国外大神制作) 
 
 ## 服务器推荐
 
