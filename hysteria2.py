@@ -390,7 +390,7 @@ def hysteria2_config():     #hysteria2配置
                 hy2_url_scheme.write_text(f"您的 v2ray hy2配置链接为：{hy2_v2ray}\n")
                 print("正在下载clash配置文件到/etc/hy2config/clash.yaml")
                 hy2_v2ray_url = urllib.parse.quote(hy2_v2ray)
-                os.system(f"curl -o /etc/hy2config/clash.yaml https://sub.crazyact.com/clash?config={hy2_v2ray_url}&ua=&selectedRules=%22balanced%22&customRules=%5B%5D")
+                os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}&ua=&selectedRules=%22balanced%22&customRules=%5B%5D'")
                 print("clash配置文件已保存到/etc/hy2config/clash.yaml")
                 os.system("systemctl enable --now hysteria-server.service")
                 os.system("systemctl restart hysteria-server.service")
