@@ -388,6 +388,10 @@ def hysteria2_config():     #hysteria2配置
                 os.system(f'echo "{hy2_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                 print(f"\n\n\033[91m您的hy2链接为: {hy2_v2ray}\n请使用v2ray/nekobox/v2rayNG/nekoray软件导入\033[m\n\n")
                 hy2_url_scheme.write_text(f"您的 v2ray hy2配置链接为：{hy2_v2ray}\n")
+                print("正在下载clash配置文件到/etc/hy2config/clash.yaml")
+                hy2_v2ray_url = urllib.parse.quote(hy2_v2ray)
+                os.system(f"curl -o /etc/hy2config/clash.yaml https://sub.crazyact.com/clash?config={hy2_v2ray_url}&ua=&selectedRules=%22balanced%22&customRules=%5B%5D")
+                print("clash配置文件已保存到/etc/hy2config/clash.yaml")
                 os.system("systemctl enable --now hysteria-server.service")
                 os.system("systemctl restart hysteria-server.service")
 
