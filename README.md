@@ -23,7 +23,7 @@ hysteria2一键安装(轻量级超低占用)
 ```
 wget -O install.sh https://raw.githubusercontent.com/seagullz4/hysteria2/main/install.sh && chmod +x install.sh && bash install.sh
 ```
-**🙃备用脚本(python版)(推荐):**
+**🙃安装脚本2(python版)(推荐):**
 ```
 #执行安装依赖(请执一次依赖安装在进行安装脚本):
 
