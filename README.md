@@ -38,15 +38,7 @@ wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hyster
 
 **我的联系方式:[电报](https://t.me/seagullz44)**
 
-
-**支持一波浪的主流架构以及纯ipv4和纯ipv6服务器**
-
-**如果使用端口跳跃请使用最新版nekobox,本项目深度适配nekobox😋**
-
-
-
 本项目原hysteria2地址请点击[hysteria](https://github.com/apernet/hysteria)
-
 
 安卓端推荐：
 
