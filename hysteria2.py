@@ -230,30 +230,30 @@ def hysteria2_config():     #hysteria2配置
                                     dns_name = input("dns名称:\n1.Cloudflare\n2.Duck DNS\n3.Gandi.net\n4.Godaddy\n5.Name.com\n6.Vultr\n请输入您的选项：")
                                     if dns_name == '1':
                                         dns_token = input("请输入Cloudflare的Global api_token:")
-                                        acme_dns = f"type: dns\ndns:\n  name: cloudflare\n  config:\n    cloudflare_api_token: {dns_token}"
+                                        acme_dns = f"  type: dns\ndns:\n  name: cloudflare\n  config:\n    cloudflare_api_token: {dns_token}"
                                         break
                                     elif dns_name == '2':
                                         dns_token = input("请输入Duck DNS的api_token:")
                                         override_domain = input("请输入Duck DNS的override_domain:")
-                                        acme_dns = f"type: dns\ndns:\n  name: duckdns\n  config:\n    duckdns_api_token: {dns_token}\n    duckdns_override_domain: {override_domain}"
+                                        acme_dns = f"  type: dns\ndns:\n  name: duckdns\n  config:\n    duckdns_api_token: {dns_token}\n    duckdns_override_domain: {override_domain}"
                                         break
                                     elif dns_name == '3':
                                         dns_token = input("请输入Gandi.net的api_token:")
-                                        acme_dns = f"type: dns\ndns:\n  name: gandi\n  config:\n    gandi_api_token: {dns_token}"
+                                        acme_dns = f"  type: dns\ndns:\n  name: gandi\n  config:\n    gandi_api_token: {dns_token}"
                                         break
                                     elif dns_name == '4':
                                         dns_token = input("请输入Godaddy的api_token:")
-                                        acme_dns = f"type: dns\ndns:\n  name: godaddy\n  config:\n    godaddy_api_token: {dns_token}"
+                                        acme_dns = f"  type: dns\ndns:\n  name: godaddy\n  config:\n    godaddy_api_token: {dns_token}"
                                         break
                                     elif dns_name == '5':
                                         dns_token = input("请输入Name.com的namedotcom_token:")
                                         dns_user = input("请输入Name.com的namedotcom_user:")
                                         namedotcom_server = input("请输入Name.com的namedotcom_server:")
-                                        acme_dns = f"type: dns\ndns:\n  name: {dns_name}\n  config:\n    namedotcom_token: {dns_token}\n    namedotcom_user: {dns_user}\n    namedotcom_server: {namedotcom_server}"
+                                        acme_dns = f"  type: dns\ndns:\n  name: {dns_name}\n  config:\n    namedotcom_token: {dns_token}\n    namedotcom_user: {dns_user}\n    namedotcom_server: {namedotcom_server}"
                                         break
                                     elif dns_name == '6':
                                         dns_token = input("请输入Vultr的API Key:")
-                                        acme_dns = f"type: dns\ndns:\n  name: {dns_name}\n  config:\n    vultr_api_key: {dns_token}"
+                                        acme_dns = f"  type: dns\ndns:\n  name: {dns_name}\n  config:\n    vultr_api_key: {dns_token}"
                                         break
                                     else:
                                         print("输入错误，请重新输入")
@@ -264,7 +264,7 @@ def hysteria2_config():     #hysteria2配置
                             else:
                                 print("输入错误，请重新输入")
                         insecure = "&insecure=0"
-                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n  {acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n{sniff_mode}\n")
+                        hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n{acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n{sniff_mode}\n")
                         break
                     elif choice_2 == "2":    #获取ipv4地址
                         def get_ipv4_info():
