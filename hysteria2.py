@@ -107,7 +107,7 @@ def hysteria2_config():     #hysteria2配置
     hy2_config = Path(r"/etc/hysteria/config.yaml")  # 配置文件路径
     hy2_url_scheme = Path(r"/etc/hy2config/hy2_url_scheme.txt")  # 配置文件路径
     while True:
-        choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 返回\n请输入选项：")
+        choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 性能优化(可选,推荐安装xanmod内核)\n5. 返回\n请输入选项：")
         if choice_1 == "1":
             while True:
                     try:
@@ -403,6 +403,8 @@ def hysteria2_config():     #hysteria2配置
             os.system("systemctl restart hysteria-server.service")
             print("hy2服务已启动")
         elif choice_1 == "4":
+            os.system("wget -O tcpx.sh 'https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh' && chmod +x tcpx.sh && ./tcpx.sh")
+        elif choice_1 == "5":
             break
         else:
             print("\033[91m请重新输入\033[m")
