@@ -387,7 +387,7 @@ def hysteria2_config():     #hysteria2配置
                 os.system(f'echo "{hy2_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                 print(f"\n\n\033[91m您的hy2链接为: {hy2_v2ray}\n请使用v2ray/nekobox/v2rayNG/nekoray软件导入\033[m\n\n")
                 hy2_url_scheme.write_text(f"您的 v2ray hy2配置链接为：{hy2_v2ray}\n")
-                print("正在下载 clash,sing-bo,surge 配置文件到/etc/hy2config/clash.yaml")
+                print("正在下载 clash,sing-box,surge 配置文件到/etc/hy2config/clash.yaml")
                 hy2_v2ray_url = urllib.parse.quote(hy2_v2ray)
                 url_rule = "%0A&ua=&selectedRules=%5B%22Ad%20Block%22%2C%22AI%20Services%22%2C%22Youtube%22%2C%22Google%22%2C%22Private%22%2C%22Location%3ACN%22%2C%22Telegram%22%2C%22Apple%22%2C%22Non-China%22%5D&customRules=%5B%5D"
                 os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}{url_rule}'")
