@@ -80,7 +80,7 @@ def hysteria2_uninstall():   #卸载hysteria2
 
 def server_manage():   #hysteria2服务管理
     while True:
-            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 日志查询\n6. 查看hy2版本具体信息\n7. 返回")
+            print("1. 启动服务(自动设置为开机自启动)\n2. 停止服务\n3. 重启服务\n4. 查看服务状态\n5. 日志查询\n6. 查看hy2版本具体信息\n0. 返回")
             choice_2 = input("请输入选项：")
             if choice_2 == "1":
                 print(subprocess.run("systemctl enable --now hysteria-server.service",shell=True))
@@ -95,7 +95,7 @@ def server_manage():   #hysteria2服务管理
                 print(subprocess.run("journalctl --no-pager -e -u hysteria-server.service",shell=True))
             elif choice_2 == "6":
                 os.system("/usr/local/bin/hysteria version")
-            elif choice_2 == "7":
+            elif choice_2 == "0":
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
@@ -107,7 +107,7 @@ def hysteria2_config():     #hysteria2配置
     hy2_config = Path(r"/etc/hysteria/config.yaml")  # 配置文件路径
     hy2_url_scheme = Path(r"/etc/hy2config/hy2_url_scheme.txt")  # 配置文件路径
     while True:
-        choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 性能优化(可选,推荐安装xanmod内核)\n5. 返回\n请输入选项：")
+        choice_1 = input("1. hy2配置查看\n2. hy2配置一键修改\n3. 手动修改hy2配置\n4. 性能优化(可选,推荐安装xanmod内核)\n0. 返回\n请输入选项：")
         if choice_1 == "1":
             while True:
                     try:
@@ -387,7 +387,7 @@ def hysteria2_config():     #hysteria2配置
                 os.system(f'echo "{hy2_v2ray}" | qrencode -s 1 -m 1 -t ANSI256 -o -')
                 print(f"\n\n\033[91m您的hy2链接为: {hy2_v2ray}\n请使用v2ray/nekobox/v2rayNG/nekoray软件导入\033[m\n\n")
                 hy2_url_scheme.write_text(f"您的 v2ray hy2配置链接为：{hy2_v2ray}\n")
-                print("正在下载clash配置文件到/etc/hy2config/clash.yaml")
+                print("正在下载 clash,sing-bo,surge 配置文件到/etc/hy2config/clash.yaml")
                 hy2_v2ray_url = urllib.parse.quote(hy2_v2ray)
                 url_rule = "%0A&ua=&selectedRules=%5B%22Ad%20Block%22%2C%22AI%20Services%22%2C%22Youtube%22%2C%22Google%22%2C%22Private%22%2C%22Location%3ACN%22%2C%22Telegram%22%2C%22Apple%22%2C%22Non-China%22%5D&customRules=%5B%5D"
                 os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}{url_rule}'")
@@ -407,7 +407,7 @@ def hysteria2_config():     #hysteria2配置
             print("hy2服务已启动")
         elif choice_1 == "4":
             os.system("wget -O tcpx.sh 'https://github.com/ylx2016/Linux-NetSpeed/raw/master/tcpx.sh' && chmod +x tcpx.sh && ./tcpx.sh")
-        elif choice_1 == "5":
+        elif choice_1 == "0":
             break
         else:
             print("\033[91m请重新输入\033[m")
@@ -430,7 +430,7 @@ agree_treaty()
 while True:
     os.system("clear")
     print("\033[91mHELLO HYSTERIA2 !\033[m  (输入hy2快捷启动)")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
-    print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2配置\n4. hysteria2服务管理\n5. 退出")
+    print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2配置\n4. hysteria2服务管理\n0. 退出")
     choice = input("请输入选项：")
     if choice == "1":
         os.system("clear")
@@ -445,7 +445,7 @@ while True:
         os.system("clear")
         check_hysteria2_version()
         server_manage()
-    elif choice == "5":
+    elif choice == "0":
         print("已退出")
         sys.exit()
     else:
