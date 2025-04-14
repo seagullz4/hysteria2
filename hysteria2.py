@@ -389,8 +389,11 @@ def hysteria2_config():     #hysteria2配置
                 hy2_url_scheme.write_text(f"您的 v2ray hy2配置链接为：{hy2_v2ray}\n")
                 print("正在下载clash配置文件到/etc/hy2config/clash.yaml")
                 hy2_v2ray_url = urllib.parse.quote(hy2_v2ray)
-                os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}&ua=&selectedRules=%22balanced%22&customRules=%5B%5D'")
-                print("clash配置文件已保存到/etc/hy2config/clash.yaml")
+                url_rule = "%0A&ua=&selectedRules=%5B%22Ad%20Block%22%2C%22AI%20Services%22%2C%22Youtube%22%2C%22Google%22%2C%22Private%22%2C%22Location%3ACN%22%2C%22Telegram%22%2C%22Apple%22%2C%22Non-China%22%5D&customRules=%5B%5D"
+                os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}{url_rule}'")
+                os.system(f"curl -o /etc/hy2config/sing-box.yaml 'https://sub.crazyact.com/singbox?config={hy2_v2ray_url}{url_rule}'")
+                os.system(f"curl -o /etc/hy2config/surge.yaml 'https://sub.crazyact.com/surge?config={hy2_v2ray_url}{url_rule}'")
+                print("\033[91m clash,sing-box,surge配置文件已保存到 /etc/hy2config/ 目录下 ！！ \033[m")
                 os.system("systemctl enable --now hysteria-server.service")
                 os.system("systemctl restart hysteria-server.service")
 
