@@ -115,7 +115,7 @@ def hysteria2_config():     #hysteria2配置
                         print("您的官方配置文件为：\n")
                         print(hy2_config.read_text())
                         print(hy2_url_scheme.read_text())
-                        print("clash,surge,singbox模板在/etc/hy2config/下，请自行查看")
+                        print("clash,surge,singbox模板在/etc/hy2config/下，请自行查看\n")
                         break
                     except FileNotFoundError:     #捕获错误，如果找不到配置文件则输出未找到配置文件
                         print("\033[91m未找到配置文件\033[m")
@@ -394,7 +394,7 @@ def hysteria2_config():     #hysteria2配置
                 os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}{url_rule}'")
                 os.system(f"curl -o /etc/hy2config/sing-box.yaml 'https://sub.crazyact.com/singbox?config={hy2_v2ray_url}{url_rule}'")
                 os.system(f"curl -o /etc/hy2config/surge.yaml 'https://sub.crazyact.com/surge?config={hy2_v2ray_url}{url_rule}'")
-                print("\033[91m clash,sing-box,surge配置文件已保存到 /etc/hy2config/ 目录下 ！！ \033[m")
+                print("\033[91m \nclash,sing-box,surge配置文件已保存到 /etc/hy2config/ 目录下 ！！\n\n \033[m")
                 os.system("systemctl enable --now hysteria-server.service")
                 os.system("systemctl restart hysteria-server.service")
 
