@@ -115,6 +115,7 @@ def hysteria2_config():     #hysteria2配置
                         print("您的官方配置文件为：\n")
                         print(hy2_config.read_text())
                         print(hy2_url_scheme.read_text())
+                        print("clash,surge,singbox模板在/etc/hy2config/下，请自行查看")
                         break
                     except FileNotFoundError:     #捕获错误，如果找不到配置文件则输出未找到配置文件
                         print("\033[91m未找到配置文件\033[m")
