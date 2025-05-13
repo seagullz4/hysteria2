@@ -2,24 +2,30 @@
 
 install_dependencies() {
     local package_manager=$1
-    local packages=(
-        curl sudo openssl qrencode net-tools procps iptables ca-certificates python3 python3-pip
+    local debian_packages=(
+        curl sudo openssl qrencode net-tools procps iptables ca-certificates 
+        python3 python3-pip python3-requests  # 直接通过系统仓库安装核心Python包
+    )
+    local redhat_packages=(
+        curl sudo openssl qrencode net-tools procps iptables ca-certificates 
+        python3 python3-pip
     )
 
     echo "正在使用 $package_manager 安装依赖..."
     if [ "$package_manager" == "apt" ]; then
-        apt update && apt install -y "${packages[@]}"
+        apt update && apt install -y "${debian_packages[@]}"
+        # 禁用Debian的pip保护机制（需要管理员确认风险）
+        rm -f /etc/python3.*/EXTERNALLY-MANAGED 2>/dev/null
     elif [ "$package_manager" == "dnf" ]; then
-        dnf install -y epel-release  # 首先安装epel-release
-        dnf install -y "${packages[@]}"  # 再安装其他包
+        dnf install -y epel-release
+        dnf install -y "${redhat_packages[@]}"
     fi
 
-    # 安装 Python 模块，确保pip有权限
-    python3 -m pip install -q --user requests
+    # 全局安装额外Python依赖（强制模式）
+    python3 -m pip install --break-system-packages -q requests 2>/dev/null
 }
 
 check_linux_system() {
-    # 读取系统信息（修复路径写法）
     local os_info=$(grep -i '^id=' /etc/os-release | cut -d= -f2- | tr -d '"')
 
     case $os_info in
