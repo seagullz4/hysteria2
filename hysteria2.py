@@ -200,6 +200,12 @@ def hysteria2_config():     #hysteria2配置
                                         break
                                     else:
                                         print("\033[91m输入错误请重新输入\033[m")
+                                script_path = "/etc/hy2config/jump_port_back.sh"  #检恢复脚本是否存在
+                                if os.path.exists(script_path):
+                                    os.system(script_path)
+                                    os.system("rm -rf /etc/hy2config/jump_port_back.sh")
+                                else:
+                                    pass
                                 os.system(f"iptables -t nat -A PREROUTING -i {interface_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
                                 os.system("touch /etc/hy2config/jump_port_back.sh")
                                 jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
