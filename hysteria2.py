@@ -437,7 +437,7 @@ agree_treaty()
 while True:
     os.system("clear")
     print("\033[91mHELLO HYSTERIA2 !\033[m  (输入hy2快捷启动)")  # 其中 print("\033[91m你需要输入的文字\033[0m") 为ANSI转义码 输出红色文本
-    print("1. 安装hysteria2\n2. 卸载hysteria2\n3. hysteria2配置\n4. hysteria2服务管理\n0. 退出")
+    print("1. 安装/更新hysteria2\n2. 卸载hysteria2\n3. hysteria2配置\n4. hysteria2服务管理\n0. 退出")
     choice = input("请输入选项：")
     if choice == "1":
         os.system("clear")
