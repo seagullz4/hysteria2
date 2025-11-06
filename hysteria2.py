@@ -44,7 +44,9 @@ def hysteria2_install():    #安装hysteria2
             if choice_2 == "1":
                 hy2_install = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/)",shell = True,executable="/bin/bash")  # 调用hy2官方脚本进行安装
                 print(hy2_install)
-                print("hysteria2安装完成,请进行配置一键修改")
+                print("--------------")
+                print("\033[91mhysteria2安装完成,请进行配置一键修改\033[m")
+                print("--------------")
                 hysteria2_config()
                 break
             elif choice_2 == "2":
@@ -460,4 +462,5 @@ while True:
     else:
         print("\033[91m输入错误，请重新输入\033[m")
         time.sleep(1)
+
 
