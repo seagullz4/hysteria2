@@ -298,6 +298,19 @@ def hysteria2_config():     #hysteria2配置
 
                             except requests.RequestException as e:
                                 print(f"请求失败: {e}")
+                                print("尝试使用备用方法获取IP地址...")
+                                # 使用备用方法获取IP地址
+                                try:
+                                    result = subprocess.run("curl -4 -s ifconfig.me", shell=True, capture_output=True, text=True, timeout=5)
+                                    if result.returncode == 0 and result.stdout.strip():
+                                        hy2_domain = result.stdout.strip()
+                                        print(f"IPV4 WAN IP: {hy2_domain}")
+                                    else:
+                                        # 如果还是失败，让用户手动输入
+                                        hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：")
+                                except Exception:
+                                    # 如果备用方法也失败，让用户手动输入
+                                    hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：")
 
                         def get_ipv6_info():    #获取ipv6地址
                             global hy2_domain
@@ -320,6 +333,21 @@ def hysteria2_config():     #hysteria2配置
 
                             except requests.RequestException as e:
                                 print(f"请求失败: {e}")
+                                print("尝试使用备用方法获取IP地址...")
+                                # 使用备用方法获取IPv6地址
+                                try:
+                                    result = subprocess.run("curl -6 -s ifconfig.me", shell=True, capture_output=True, text=True, timeout=5)
+                                    if result.returncode == 0 and result.stdout.strip():
+                                        hy2_domain = f"[{result.stdout.strip()}]"
+                                        print(f"IPV6 WAN IP: {hy2_domain}")
+                                    else:
+                                        # 如果还是失败，让用户手动输入
+                                        ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：")
+                                        hy2_domain = f"[{ipv6_input}]"
+                                except Exception:
+                                    # 如果备用方法也失败，让用户手动输入
+                                    ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：")
+                                    hy2_domain = f"[{ipv6_input}]"
 
                         def generate_certificate():      #生成自签证书
                             global domain_name
