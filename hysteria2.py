@@ -125,14 +125,28 @@ def server_manage():   #hysteria2服务管理
 
 def create_iptables_persistence_service():
     """创建systemd服务以在启动时恢复iptables规则"""
+    # 创建恢复脚本
+    restore_script_content = """#!/bin/bash
+# Hysteria2 iptables rules restoration script
+
+if [ -f /etc/hy2config/iptables-rules.v4 ]; then
+    iptables-restore < /etc/hy2config/iptables-rules.v4
+fi
+
+if [ -f /etc/hy2config/iptables-rules.v6 ]; then
+    ip6tables-restore < /etc/hy2config/iptables-rules.v6
+fi
+"""
+    restore_script_path = Path("/etc/hy2config/restore-iptables.sh")
+    
+    # 创建systemd服务
     service_content = """[Unit]
 Description=Restore Hysteria2 iptables rules
 After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'if [ -f /etc/hy2config/iptables-rules.v4 ]; then iptables-restore < /etc/hy2config/iptables-rules.v4; fi'
-ExecStart=/bin/bash -c 'if [ -f /etc/hy2config/iptables-rules.v6 ]; then ip6tables-restore < /etc/hy2config/iptables-rules.v6; fi'
+ExecStart=/etc/hy2config/restore-iptables.sh
 RemainAfterExit=true
 
 [Install]
@@ -140,7 +154,13 @@ WantedBy=multi-user.target
 """
     service_path = Path("/etc/systemd/system/hysteria-iptables.service")
     try:
+        # 写入恢复脚本
+        restore_script_path.write_text(restore_script_content)
+        restore_script_path.chmod(0o755)
+        
+        # 写入服务文件
         service_path.write_text(service_content)
+        
         # 重新加载systemd并启用服务
         subprocess.run(["systemctl", "daemon-reload"], check=True)
         subprocess.run(["systemctl", "enable", "hysteria-iptables.service"], check=True)
@@ -157,12 +177,12 @@ def save_iptables_rules():
         
         # 保存IPv4规则
         with open("/etc/hy2config/iptables-rules.v4", "w") as f:
-            result = subprocess.run(["iptables-save"], stdout=f, check=True, text=True)
+            subprocess.run(["iptables-save"], stdout=f, check=True, text=True)
         print("已保存IPv4 iptables规则")
         
         # 保存IPv6规则
         with open("/etc/hy2config/iptables-rules.v6", "w") as f:
-            result = subprocess.run(["ip6tables-save"], stdout=f, check=True, text=True)
+            subprocess.run(["ip6tables-save"], stdout=f, check=True, text=True)
         print("已保存IPv6 ip6tables规则")
         
         return True
