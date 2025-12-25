@@ -301,14 +301,14 @@ def hysteria2_config():     #hysteria2配置
                                 print("尝试使用备用方法获取IP地址...")
                                 # 使用备用方法获取IP地址
                                 try:
-                                    result = subprocess.run("curl -4 -s ifconfig.me", shell=True, capture_output=True, text=True, timeout=5)
+                                    result = subprocess.run(['curl', '-4', '-s', 'ifconfig.me'], capture_output=True, text=True, timeout=5)
                                     if result.returncode == 0 and result.stdout.strip():
                                         hy2_domain = result.stdout.strip()
                                         print(f"IPV4 WAN IP: {hy2_domain}")
                                     else:
                                         # 如果还是失败，让用户手动输入
                                         hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：")
-                                except Exception:
+                                except (subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError, FileNotFoundError):
                                     # 如果备用方法也失败，让用户手动输入
                                     hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：")
 
@@ -336,7 +336,7 @@ def hysteria2_config():     #hysteria2配置
                                 print("尝试使用备用方法获取IP地址...")
                                 # 使用备用方法获取IPv6地址
                                 try:
-                                    result = subprocess.run("curl -6 -s ifconfig.me", shell=True, capture_output=True, text=True, timeout=5)
+                                    result = subprocess.run(['curl', '-6', '-s', 'ifconfig.me'], capture_output=True, text=True, timeout=5)
                                     if result.returncode == 0 and result.stdout.strip():
                                         hy2_domain = f"[{result.stdout.strip()}]"
                                         print(f"IPV6 WAN IP: {hy2_domain}")
@@ -344,7 +344,7 @@ def hysteria2_config():     #hysteria2配置
                                         # 如果还是失败，让用户手动输入
                                         ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：")
                                         hy2_domain = f"[{ipv6_input}]"
-                                except Exception:
+                                except (subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError, FileNotFoundError):
                                     # 如果备用方法也失败，让用户手动输入
                                     ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：")
                                     hy2_domain = f"[{ipv6_input}]"
