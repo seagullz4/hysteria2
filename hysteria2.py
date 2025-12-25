@@ -144,17 +144,37 @@ def server_manage():   #hysteria2服务管理
 
 def create_iptables_persistence_service():
     """创建systemd服务以在启动时恢复iptables规则"""
-    # 创建恢复脚本
+    # 创建恢复脚本，包含错误处理
     restore_script_content = """#!/bin/bash
 # Hysteria2 iptables rules restoration script
 
+set -e  # 遇到错误时退出
+
+# 验证并恢复IPv4规则
 if [ -f /etc/hy2config/iptables-rules.v4 ]; then
-    iptables-restore < /etc/hy2config/iptables-rules.v4
+    if [ -s /etc/hy2config/iptables-rules.v4 ]; then
+        if iptables-restore -t < /etc/hy2config/iptables-rules.v4 2>/dev/null; then
+            iptables-restore < /etc/hy2config/iptables-rules.v4
+            echo "IPv4 iptables规则恢复成功" | logger -t hysteria2-iptables
+        else
+            echo "IPv4 iptables规则文件无效，跳过恢复" | logger -t hysteria2-iptables
+        fi
+    fi
 fi
 
+# 验证并恢复IPv6规则
 if [ -f /etc/hy2config/iptables-rules.v6 ]; then
-    ip6tables-restore < /etc/hy2config/iptables-rules.v6
+    if [ -s /etc/hy2config/iptables-rules.v6 ]; then
+        if ip6tables-restore -t < /etc/hy2config/iptables-rules.v6 2>/dev/null; then
+            ip6tables-restore < /etc/hy2config/iptables-rules.v6
+            echo "IPv6 ip6tables规则恢复成功" | logger -t hysteria2-iptables
+        else
+            echo "IPv6 ip6tables规则文件无效，跳过恢复" | logger -t hysteria2-iptables
+        fi
+    fi
 fi
+
+exit 0
 """
     restore_script_path = Path("/etc/hy2config/restore-iptables.sh")
     
@@ -283,7 +303,15 @@ def hysteria2_config():     #hysteria2配置
                     jump_port_choice = input("是否开启端口跳跃(y/n)：")
                     if jump_port_choice == "y":
                         print("请选择你的v4网络接口（默认eth0, 一般不是lo接口）")
-                        subprocess.run(["ip", "-o", "addr"], check=False)
+                        # 显示可用网络接口
+                        result = subprocess.run(["ip", "-o", "link", "show"], capture_output=True, text=True)
+                        if result.returncode == 0:
+                            for line in result.stdout.strip().split('\n'):
+                                # 提取接口名称
+                                if ':' in line:
+                                    parts = line.split(':', 2)
+                                    if len(parts) >= 2:
+                                        print(f"  - {parts[1].strip()}")
                         interface_name = input("请输入您的网络接口名称：")
                         try:
                             first_port = int(input("请输入起始端口号："))
@@ -295,11 +323,22 @@ def hysteria2_config():     #hysteria2配置
                             elif first_port > last_port:
                                 print("起始端口号不能大于结束端口号，请重新输入")
                             else:
+                                # 初始化IPv6变量
+                                has_ipv6 = False
+                                ipv6_interface = None
+                                
                                 while True:
                                     jump_port_ipv6 = input("是否开启ipv6端口跳跃(y/n)：")
                                     if jump_port_ipv6 == "y":
                                         print("请选择你的v6网络接口:")
-                                        subprocess.run(["ip", "-o", "addr"], check=False)
+                                        # 显示可用网络接口
+                                        result = subprocess.run(["ip", "-o", "link", "show"], capture_output=True, text=True)
+                                        if result.returncode == 0:
+                                            for line in result.stdout.strip().split('\n'):
+                                                if ':' in line:
+                                                    parts = line.split(':', 2)
+                                                    if len(parts) >= 2:
+                                                        print(f"  - {parts[1].strip()}")
                                         interface6_name = input("请输入您的v6网络接口名称：")
                                         subprocess.run(["ip6tables", "-t", "nat", "-A", "PREROUTING", "-i", interface6_name,
                                                       "-p", "udp", "--dport", f"{first_port}:{last_port}",
