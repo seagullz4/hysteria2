@@ -312,8 +312,8 @@ def hysteria2_config():     #hysteria2配置
                                 isp = ip_data.get('isp', '')
 
                                 if 'cloudflare' in isp.lower():
-                                    new_ip = input("检测到Warp，请输入正确的服务器 IP：")
-                                    hy2_domain = new_ip
+                                    print("检测到Warp，请输入正确的服务器 IPv4 地址")
+                                    hy2_domain = validate_and_get_ipv4()
                                 else:
                                     hy2_domain = ip_data.get('query', '')
 
@@ -354,8 +354,9 @@ def hysteria2_config():     #hysteria2配置
                                 isp = ip_data.get('isp', '')
 
                                 if 'cloudflare' in isp.lower():
-                                    new_ip = input("检测到Warp，请输入正确的服务器 IP：")
-                                    hy2_domain = f"[{new_ip}]"
+                                    print("检测到Warp，请输入正确的服务器 IPv6 地址")
+                                    ipv6_input = validate_and_get_ipv6()
+                                    hy2_domain = f"[{ipv6_input}]"
                                 else:
                                     hy2_domain = f"[{ip_data.get('ip', '')}]"
 
