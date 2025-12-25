@@ -1,7 +1,9 @@
 # hysteria2  一键安装脚本
+import glob
 import ipaddress
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -73,8 +75,43 @@ def hysteria2_uninstall():   #卸载hysteria2
         if choice_1 == "y":
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
-            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria; rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service; rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service; systemctl daemon-reload; /etc/hy2config/jump_port_back.sh; rm -rf /etc/ssl/private/; rm -rf /etc/hy2config; rm -rf /usr/local/bin/hy2",shell=True)  # 删除禁用systemd服务
-            print(hy2_uninstall_1_2)
+            # 停止并禁用iptables恢复服务
+            subprocess.run(["systemctl", "stop", "hysteria-iptables.service"], stderr=subprocess.DEVNULL)
+            subprocess.run(["systemctl", "disable", "hysteria-iptables.service"], stderr=subprocess.DEVNULL)
+            # 清理iptables规则
+            subprocess.run(["/bin/bash", "/etc/hy2config/jump_port_back.sh"], stderr=subprocess.DEVNULL)
+            # 删除所有配置文件和服务
+            
+            # 使用glob处理通配符模式
+            wildcard_paths = glob.glob("/etc/systemd/system/multi-user.target.wants/hysteria-server@*.service")
+            for path in wildcard_paths:
+                try:
+                    Path(path).unlink(missing_ok=True)
+                except Exception:
+                    pass
+            
+            # 删除其他路径
+            paths_to_remove = [
+                "/etc/hysteria",
+                "/etc/systemd/system/multi-user.target.wants/hysteria-server.service",
+                "/etc/systemd/system/hysteria-iptables.service",
+                "/etc/hy2config/iptables-rules.v4",
+                "/etc/hy2config/iptables-rules.v6",
+                "/etc/ssl/private/",
+                "/etc/hy2config",
+                "/usr/local/bin/hy2"
+            ]
+            for path_str in paths_to_remove:
+                try:
+                    path = Path(path_str)
+                    if path.is_file():
+                        path.unlink(missing_ok=True)
+                    elif path.is_dir():
+                        shutil.rmtree(path, ignore_errors=True)
+                except Exception:
+                    pass
+            
+            subprocess.run(["systemctl", "daemon-reload"])
             print("卸载hysteria2完成")
             sys.exit()
         elif choice_1 == "n":
@@ -104,6 +141,94 @@ def server_manage():   #hysteria2服务管理
                 break
             else:
                 print("\033[91m输入错误，请重新输入\033[m")
+
+def create_iptables_persistence_service():
+    """创建systemd服务以在启动时恢复iptables规则"""
+    # 创建恢复脚本，包含错误处理
+    restore_script_content = """#!/bin/bash
+# Hysteria2 iptables rules restoration script
+
+set -e  # 遇到错误时退出
+
+# 验证并恢复IPv4规则
+if [ -f /etc/hy2config/iptables-rules.v4 ]; then
+    if [ -s /etc/hy2config/iptables-rules.v4 ]; then
+        if iptables-restore -t < /etc/hy2config/iptables-rules.v4 2>/dev/null; then
+            iptables-restore < /etc/hy2config/iptables-rules.v4
+            echo "IPv4 iptables规则恢复成功" | logger -t hysteria2-iptables
+        else
+            echo "IPv4 iptables规则文件无效，跳过恢复" | logger -t hysteria2-iptables
+        fi
+    fi
+fi
+
+# 验证并恢复IPv6规则
+if [ -f /etc/hy2config/iptables-rules.v6 ]; then
+    if [ -s /etc/hy2config/iptables-rules.v6 ]; then
+        if ip6tables-restore -t < /etc/hy2config/iptables-rules.v6 2>/dev/null; then
+            ip6tables-restore < /etc/hy2config/iptables-rules.v6
+            echo "IPv6 ip6tables规则恢复成功" | logger -t hysteria2-iptables
+        else
+            echo "IPv6 ip6tables规则文件无效，跳过恢复" | logger -t hysteria2-iptables
+        fi
+    fi
+fi
+
+exit 0
+"""
+    restore_script_path = Path("/etc/hy2config/restore-iptables.sh")
+    
+    # 创建systemd服务
+    service_content = """[Unit]
+Description=Restore Hysteria2 iptables rules
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/hy2config/restore-iptables.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+"""
+    service_path = Path("/etc/systemd/system/hysteria-iptables.service")
+    try:
+        # 写入恢复脚本
+        restore_script_path.write_text(restore_script_content)
+        restore_script_path.chmod(0o755)
+        
+        # 写入服务文件
+        service_path.write_text(service_content)
+        
+        # 重新加载systemd并启用服务
+        subprocess.run(["systemctl", "daemon-reload"], check=True)
+        subprocess.run(["systemctl", "enable", "hysteria-iptables.service"], check=True)
+        print("已创建iptables持久化服务")
+    except Exception as e:
+        print(f"\033[91m创建iptables持久化服务失败: {e}\033[m")
+
+def save_iptables_rules():
+    """保存当前的iptables和ip6tables规则"""
+    try:
+        # 创建配置目录
+        config_dir = Path("/etc/hy2config")
+        config_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 保存IPv4规则
+        with open("/etc/hy2config/iptables-rules.v4", "w") as f:
+            subprocess.run(["iptables-save"], stdout=f, check=True, text=True)
+        print("已保存IPv4 iptables规则")
+        
+        # 保存IPv6规则
+        with open("/etc/hy2config/iptables-rules.v6", "w") as f:
+            subprocess.run(["ip6tables-save"], stdout=f, check=True, text=True)
+        print("已保存IPv6 ip6tables规则")
+        
+        return True
+    except Exception as e:
+        print(f"\033[91m保存iptables规则失败: {e}\033[m")
+        return False
+
 hy2_domain = "你很帅"   #这两个变量纯纯是为了夸奖正在观看我的代码的你
 domain_name = "超级帅"
 insecure = "你真帅"
@@ -178,7 +303,15 @@ def hysteria2_config():     #hysteria2配置
                     jump_port_choice = input("是否开启端口跳跃(y/n)：")
                     if jump_port_choice == "y":
                         print("请选择你的v4网络接口（默认eth0, 一般不是lo接口）")
-                        os.system("ip -o addr | awk '{print $2}' | sort -u")
+                        # 显示可用网络接口
+                        result = subprocess.run(["ip", "-o", "link", "show"], capture_output=True, text=True)
+                        if result.returncode == 0:
+                            for line in result.stdout.strip().split('\n'):
+                                # 提取接口名称
+                                if ':' in line:
+                                    parts = line.split(':', 2)
+                                    if len(parts) >= 2:
+                                        print(f"  - {parts[1].strip()}")
                         interface_name = input("请输入您的网络接口名称：")
                         try:
                             first_port = int(input("请输入起始端口号："))
@@ -190,32 +323,67 @@ def hysteria2_config():     #hysteria2配置
                             elif first_port > last_port:
                                 print("起始端口号不能大于结束端口号，请重新输入")
                             else:
+                                # 初始化IPv6变量
+                                has_ipv6 = False
+                                ipv6_interface = None
+                                
                                 while True:
                                     jump_port_ipv6 = input("是否开启ipv6端口跳跃(y/n)：")
                                     if jump_port_ipv6 == "y":
                                         print("请选择你的v6网络接口:")
-                                        os.system("ip -o addr | awk '{print $2}' | sort -u")
+                                        # 显示可用网络接口
+                                        result = subprocess.run(["ip", "-o", "link", "show"], capture_output=True, text=True)
+                                        if result.returncode == 0:
+                                            for line in result.stdout.strip().split('\n'):
+                                                if ':' in line:
+                                                    parts = line.split(':', 2)
+                                                    if len(parts) >= 2:
+                                                        print(f"  - {parts[1].strip()}")
                                         interface6_name = input("请输入您的v6网络接口名称：")
-                                        hy2_jump_port_ipv6 = f"ip6tables -t nat -A PREROUTING -i {interface6_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}"
-                                        os.system(hy2_jump_port_ipv6)
-                                        jump_port_back_v6 = f"&& ip6tables -t nat -D PREROUTING -i {interface6_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}\n"
+                                        subprocess.run(["ip6tables", "-t", "nat", "-A", "PREROUTING", "-i", interface6_name,
+                                                      "-p", "udp", "--dport", f"{first_port}:{last_port}",
+                                                      "-j", "REDIRECT", "--to-ports", str(hy2_port)])
+                                        # 记录IPv6配置信息用于清理脚本
+                                        has_ipv6 = True
+                                        ipv6_interface = interface6_name
                                         break
                                     elif jump_port_ipv6 == "n":
-                                        jump_port_back_v6 = ""
+                                        has_ipv6 = False
+                                        ipv6_interface = None
                                         break
                                     else:
                                         print("\033[91m输入错误请重新输入\033[m")
-                                script_path = "/etc/hy2config/jump_port_back.sh"  #检恢复脚本是否存在
-                                if os.path.exists(script_path):
-                                    os.system(script_path)
-                                    os.system("rm -rf /etc/hy2config/jump_port_back.sh")
+                                script_path = Path("/etc/hy2config/jump_port_back.sh")  #检恢复脚本是否存在
+                                if script_path.exists():
+                                    subprocess.run(["/bin/bash", str(script_path)], stderr=subprocess.DEVNULL)
+                                    script_path.unlink(missing_ok=True)
+                                
+                                # 应用iptables规则
+                                subprocess.run(["iptables", "-t", "nat", "-A", "PREROUTING", "-i", interface_name, 
+                                              "-p", "udp", "--dport", f"{first_port}:{last_port}", 
+                                              "-j", "REDIRECT", "--to-ports", str(hy2_port)])
+                                
+                                # 创建清理脚本
+                                jump_port_back = Path("/etc/hy2config/jump_port_back.sh")
+                                cleanup_script = f"""#!/bin/sh
+# Hysteria2 port hopping cleanup script
+iptables -t nat -D PREROUTING -i {interface_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}
+"""
+                                if has_ipv6 and ipv6_interface:
+                                    cleanup_script += f"ip6tables -t nat -D PREROUTING -i {ipv6_interface} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}\n"
+                                
+                                jump_port_back.write_text(cleanup_script)
+                                jump_port_back.chmod(0o755)  # 更安全的权限设置
+                                
+                                # 保存iptables规则以实现持久化
+                                print("正在保存iptables规则以实现重启后自动恢复...")
+                                if save_iptables_rules():
+                                    # 创建systemd服务以在启动时恢复规则
+                                    create_iptables_persistence_service()
+                                    print("\033[92m端口跳跃规则已配置并持久化，系统重启后将自动恢复\033[m")
                                 else:
-                                    pass
-                                os.system(f"iptables -t nat -A PREROUTING -i {interface_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}")
-                                os.system("touch /etc/hy2config/jump_port_back.sh")
-                                jump_port_back = Path(r"/etc/hy2config/jump_port_back.sh")
-                                jump_port_back.write_text(f"#!/bin/sh\niptables -t nat -D PREROUTING -i {interface_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} {jump_port_back_v6}")
-                                os.system("chmod 777 /etc/hy2config/jump_port_back.sh")
+                                    print("\033[91m警告：iptables规则已应用但持久化失败，系统重启后可能需要重新配置\033[m")
+                                
                                 jump_ports_hy2 = f"&mport={first_port}-{last_port}"
                                 break
                         except ValueError:  # 收集错误，判断用户是否输入为数字，上面int已经转换为数字，输入小数点或者其他字符串都会引发这个报错
