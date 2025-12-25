@@ -1,4 +1,5 @@
 # hysteria2  一键安装脚本
+import ipaddress
 import os
 import re
 import subprocess
@@ -277,6 +278,28 @@ def hysteria2_config():     #hysteria2配置
                         hy2_config.write_text(f"listen: :{hy2_port} \n\nacme:\n  domains:\n    - {hy2_domain} \n  email: {hy2_email} \n  {acme_dns} \n\nauth:\n  type: password\n  password: {hy2_passwd} \n\nmasquerade: \n  type: proxy\n  proxy:\n    url: {hy2_url} \n    rewriteHost: true\n\nignoreClientBandwidth: {brutal_mode}\n\n{obfs_mode}\n{sniff_mode}\n")
                         break
                     elif choice_2 == "2":    #获取ipv4地址
+                        def validate_and_get_ipv4():
+                            """Helper function to get and validate IPv4 address from user"""
+                            while True:
+                                ip_input = input("无法自动获取IP，请手动输入服务器的IPv4地址：").strip()
+                                try:
+                                    # 验证是否为有效的IPv4地址
+                                    ipaddress.IPv4Address(ip_input)
+                                    return ip_input
+                                except ipaddress.AddressValueError:
+                                    print(f"\033[91m无效的IPv4地址: {ip_input}，请重新输入\033[m")
+                        
+                        def validate_and_get_ipv6():
+                            """Helper function to get and validate IPv6 address from user"""
+                            while True:
+                                ip_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：").strip()
+                                try:
+                                    # 验证是否为有效的IPv6地址
+                                    ipaddress.IPv6Address(ip_input)
+                                    return ip_input
+                                except ipaddress.AddressValueError:
+                                    print(f"\033[91m无效的IPv6地址: {ip_input}，请重新输入\033[m")
+                        
                         def get_ipv4_info():
                             global hy2_domain
                             headers = {
@@ -305,18 +328,19 @@ def hysteria2_config():     #hysteria2配置
                                     if result.returncode == 0 and result.stdout.strip():
                                         ip = result.stdout.strip()
                                         # 验证IPv4格式
-                                        if re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip):
+                                        try:
+                                            ipaddress.IPv4Address(ip)
                                             hy2_domain = ip
                                             print(f"IPV4 WAN IP: {hy2_domain}")
-                                        else:
+                                        except ipaddress.AddressValueError:
                                             # 格式无效，让用户手动输入
-                                            hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：").strip()
+                                            hy2_domain = validate_and_get_ipv4()
                                     else:
                                         # 如果还是失败，让用户手动输入
-                                        hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：").strip()
+                                        hy2_domain = validate_and_get_ipv4()
                                 except (subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError, FileNotFoundError):
                                     # 如果备用方法也失败，让用户手动输入
-                                    hy2_domain = input("无法自动获取IP，请手动输入服务器的IPv4地址：").strip()
+                                    hy2_domain = validate_and_get_ipv4()
 
                         def get_ipv6_info():    #获取ipv6地址
                             global hy2_domain
@@ -345,21 +369,22 @@ def hysteria2_config():     #hysteria2配置
                                     result = subprocess.run(['curl', '-6', '-s', 'ifconfig.me'], capture_output=True, text=True, timeout=5)
                                     if result.returncode == 0 and result.stdout.strip():
                                         ip = result.stdout.strip()
-                                        # 验证IPv6格式 (基本验证 - 检查是否包含冒号)
-                                        if ':' in ip and re.match(r'^[0-9a-fA-F:]+$', ip):
+                                        # 验证IPv6格式
+                                        try:
+                                            ipaddress.IPv6Address(ip)
                                             hy2_domain = f"[{ip}]"
                                             print(f"IPV6 WAN IP: {hy2_domain}")
-                                        else:
+                                        except ipaddress.AddressValueError:
                                             # 格式无效，让用户手动输入
-                                            ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：").strip()
+                                            ipv6_input = validate_and_get_ipv6()
                                             hy2_domain = f"[{ipv6_input}]"
                                     else:
                                         # 如果还是失败，让用户手动输入
-                                        ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：").strip()
+                                        ipv6_input = validate_and_get_ipv6()
                                         hy2_domain = f"[{ipv6_input}]"
                                 except (subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError, FileNotFoundError):
                                     # 如果备用方法也失败，让用户手动输入
-                                    ipv6_input = input("无法自动获取IP，请手动输入服务器的IPv6地址：").strip()
+                                    ipv6_input = validate_and_get_ipv6()
                                     hy2_domain = f"[{ipv6_input}]"
 
                         def generate_certificate():      #生成自签证书
