@@ -81,8 +81,6 @@ def hysteria2_uninstall():   #卸载hysteria2
             # 清理iptables规则
             subprocess.run(["/bin/bash", "/etc/hy2config/jump_port_back.sh"], stderr=subprocess.DEVNULL)
             # 删除所有配置文件和服务
-            import shutil
-            import glob
             
             # 使用glob处理通配符模式
             wildcard_paths = glob.glob("/etc/systemd/system/multi-user.target.wants/hysteria-server@*.service")
@@ -306,10 +304,13 @@ def hysteria2_config():     #hysteria2配置
                                         subprocess.run(["ip6tables", "-t", "nat", "-A", "PREROUTING", "-i", interface6_name,
                                                       "-p", "udp", "--dport", f"{first_port}:{last_port}",
                                                       "-j", "REDIRECT", "--to-ports", str(hy2_port)])
-                                        jump_port_back_v6 = f"&& ip6tables -t nat -D PREROUTING -i {interface6_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}\n"
+                                        # 记录IPv6配置信息用于清理脚本
+                                        has_ipv6 = True
+                                        ipv6_interface = interface6_name
                                         break
                                     elif jump_port_ipv6 == "n":
-                                        jump_port_back_v6 = ""
+                                        has_ipv6 = False
+                                        ipv6_interface = None
                                         break
                                     else:
                                         print("\033[91m输入错误请重新输入\033[m")
@@ -325,7 +326,14 @@ def hysteria2_config():     #hysteria2配置
                                 
                                 # 创建清理脚本
                                 jump_port_back = Path("/etc/hy2config/jump_port_back.sh")
-                                jump_port_back.write_text(f"#!/bin/sh\niptables -t nat -D PREROUTING -i {interface_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port} {jump_port_back_v6}")
+                                cleanup_script = f"""#!/bin/sh
+# Hysteria2 port hopping cleanup script
+iptables -t nat -D PREROUTING -i {interface_name} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}
+"""
+                                if has_ipv6 and ipv6_interface:
+                                    cleanup_script += f"ip6tables -t nat -D PREROUTING -i {ipv6_interface} -p udp --dport {first_port}:{last_port} -j REDIRECT --to-ports {hy2_port}\n"
+                                
+                                jump_port_back.write_text(cleanup_script)
                                 jump_port_back.chmod(0o755)  # 更安全的权限设置
                                 
                                 # 保存iptables规则以实现持久化
