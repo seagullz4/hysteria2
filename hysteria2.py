@@ -74,13 +74,25 @@ def hysteria2_uninstall():   #卸载hysteria2
             hy2_uninstall_1 = subprocess.run("bash <(curl -fsSL https://get.hy2.sh/) --remove",shell = True,executable="/bin/bash")   #调用hy2官方脚本进行卸载
             print(hy2_uninstall_1)
             # 停止并禁用iptables恢复服务
-            subprocess.run("systemctl stop hysteria-iptables.service 2>/dev/null", shell=True)
-            subprocess.run("systemctl disable hysteria-iptables.service 2>/dev/null", shell=True)
+            subprocess.run(["systemctl", "stop", "hysteria-iptables.service"], stderr=subprocess.DEVNULL)
+            subprocess.run(["systemctl", "disable", "hysteria-iptables.service"], stderr=subprocess.DEVNULL)
             # 清理iptables规则
-            subprocess.run("/etc/hy2config/jump_port_back.sh 2>/dev/null", shell=True)
+            subprocess.run(["/bin/bash", "/etc/hy2config/jump_port_back.sh"], stderr=subprocess.DEVNULL)
             # 删除所有配置文件和服务
-            hy2_uninstall_1_2 = subprocess.run("rm -rf /etc/hysteria; rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server.service; rm -rf /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service; rm -rf /etc/systemd/system/hysteria-iptables.service; rm -rf /etc/hy2config/iptables-rules.v4; rm -rf /etc/hy2config/iptables-rules.v6; systemctl daemon-reload; rm -rf /etc/ssl/private/; rm -rf /etc/hy2config; rm -rf /usr/local/bin/hy2",shell=True)  # 删除禁用systemd服务
-            print(hy2_uninstall_1_2)
+            paths_to_remove = [
+                "/etc/hysteria",
+                "/etc/systemd/system/multi-user.target.wants/hysteria-server.service",
+                "/etc/systemd/system/multi-user.target.wants/hysteria-server@*.service",
+                "/etc/systemd/system/hysteria-iptables.service",
+                "/etc/hy2config/iptables-rules.v4",
+                "/etc/hy2config/iptables-rules.v6",
+                "/etc/ssl/private/",
+                "/etc/hy2config",
+                "/usr/local/bin/hy2"
+            ]
+            for path in paths_to_remove:
+                subprocess.run(["rm", "-rf", path], stderr=subprocess.DEVNULL)
+            subprocess.run(["systemctl", "daemon-reload"])
             print("卸载hysteria2完成")
             sys.exit()
         elif choice_1 == "n":
@@ -130,8 +142,8 @@ WantedBy=multi-user.target
     try:
         service_path.write_text(service_content)
         # 重新加载systemd并启用服务
-        subprocess.run("systemctl daemon-reload", shell=True, check=True)
-        subprocess.run("systemctl enable hysteria-iptables.service", shell=True, check=True)
+        subprocess.run(["systemctl", "daemon-reload"], check=True)
+        subprocess.run(["systemctl", "enable", "hysteria-iptables.service"], check=True)
         print("已创建iptables持久化服务")
     except Exception as e:
         print(f"\033[91m创建iptables持久化服务失败: {e}\033[m")
@@ -144,11 +156,13 @@ def save_iptables_rules():
         config_dir.mkdir(parents=True, exist_ok=True)
         
         # 保存IPv4规则
-        subprocess.run("iptables-save > /etc/hy2config/iptables-rules.v4", shell=True, check=True)
+        with open("/etc/hy2config/iptables-rules.v4", "w") as f:
+            result = subprocess.run(["iptables-save"], stdout=f, check=True, text=True)
         print("已保存IPv4 iptables规则")
         
         # 保存IPv6规则
-        subprocess.run("ip6tables-save > /etc/hy2config/iptables-rules.v6", shell=True, check=True)
+        with open("/etc/hy2config/iptables-rules.v6", "w") as f:
+            result = subprocess.run(["ip6tables-save"], stdout=f, check=True, text=True)
         print("已保存IPv6 ip6tables规则")
         
         return True
