@@ -70,6 +70,8 @@ hiddfy,Shadowrocket等
 
 akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
+海外账号购买平台(包括飞机号)
+[账号](https://love.tghao.im/)
 
 ## 欢迎添加小⭐⭐
 
