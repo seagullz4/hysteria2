@@ -636,9 +636,9 @@ iptables -t nat -D PREROUTING -i {interface_name} -p udp --dport {first_port}:{l
                 print("正在下载 clash,sing-box,surge 配置文件到/etc/hy2config/clash.yaml")
                 hy2_v2ray_url = urllib.parse.quote(hy2_v2ray)
                 url_rule = "&ua=&selectedRules=%22balanced%22&customRules=%5B%5D"
-                os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.crazyact.com/clash?config={hy2_v2ray_url}{url_rule}'")
-                os.system(f"curl -o /etc/hy2config/sing-box.yaml 'https://sub.crazyact.com/singbox?config={hy2_v2ray_url}{url_rule}'")
-                os.system(f"curl -o /etc/hy2config/surge.yaml 'https://sub.crazyact.com/surge?config={hy2_v2ray_url}{url_rule}'")
+                os.system(f"curl -o /etc/hy2config/clash.yaml 'https://sub.baibaicat.site/clash?config={hy2_v2ray_url}{url_rule}'")
+                os.system(f"curl -o /etc/hy2config/sing-box.yaml 'https://sub.baibaicat.site/singbox?config={hy2_v2ray_url}{url_rule}'")
+                os.system(f"curl -o /etc/hy2config/surge.yaml 'https://sub.baibaicat.site/surge?config={hy2_v2ray_url}{url_rule}'")
                 print("\033[91m \nclash,sing-box,surge配置文件已保存到 /etc/hy2config/ 目录下 ！！\n\n \033[m")
                 os.system("systemctl enable --now hysteria-server.service")
                 os.system("systemctl restart hysteria-server.service")
@@ -697,5 +697,6 @@ while True:
     else:
         print("\033[91m输入错误，请重新输入\033[m")
         time.sleep(1)
+
 
 
