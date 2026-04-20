@@ -36,7 +36,7 @@ wget -O hy2.py https://raw.githubusercontent.com/seagullz4/hysteria2/main/hyster
 
 **新增快捷方式终端输入hy2一键执行脚本**
 
-**我的联系方式:[电报](https://t.me/seagullz44)**
+**我的联系方式:[电报](https://t.me/ruilaopop)**
 
 本项目原hysteria2地址请点击[hysteria](https://github.com/apernet/hysteria)
 
@@ -68,7 +68,7 @@ hiddfy,Shadowrocket等
 
 ## 服务器推荐
 
-akile的dns解锁流媒体vps [akile](https://akile.io/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
+akile的dns解锁流媒体vps [akile](https://akile.ai/register?aff_code=99532291-0323-491e-bdd7-fbcfebbd1fa5)
 
 ai账号会员购买(源头批发价)
 [ai会员](https://ycy.baibaicat.site/cat/1)
